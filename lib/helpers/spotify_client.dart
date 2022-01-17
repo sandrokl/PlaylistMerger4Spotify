@@ -19,7 +19,7 @@ class SpotifyClient {
         grantType: OAuth2Helper.AUTHORIZATION_CODE,
         clientId: secrets.spotify_clientId,
         clientSecret: secrets.spotify_clientSecret,
-        scopes: secrest.spotify_scopes);
+        scopes: secrets.spotify_scopes);
   }
 
   Future<http.Response> get(String url) async {
