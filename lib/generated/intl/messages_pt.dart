@@ -24,6 +24,17 @@ class MessageLookup extends MessageLookupByLibrary {
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "appTitle":
             MessageLookupByLibrary.simpleMessage("PlaylistMerger 4 Spotify"),
-        "spotifyUser": MessageLookupByLibrary.simpleMessage("Usuário Spotify")
+        "carefulexclamation":
+            MessageLookupByLibrary.simpleMessage("Attention!"),
+        "makeSureToChooseAPlaylistYouDontDirectlyAdd":
+            MessageLookupByLibrary.simpleMessage(
+                "Make sure to choose a playlist you don\'t directly add your music as destination.\\nIt will be completly erased with the merging results."),
+        "ok": MessageLookupByLibrary.simpleMessage("OK"),
+        "pleaseLoginToSpotify":
+            MessageLookupByLibrary.simpleMessage("Please login to Spotify"),
+        "spotifyUser": MessageLookupByLibrary.simpleMessage("Usuário Spotify"),
+        "we_will_open_login": MessageLookupByLibrary.simpleMessage(
+            "To begin, We will open the Spotify login page next"),
+        "welcome": MessageLookupByLibrary.simpleMessage("Welcome")
       };
 }

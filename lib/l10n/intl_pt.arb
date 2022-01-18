@@ -1,4 +1,10 @@
 {
   "appTitle": "PlaylistMerger 4 Spotify",
-  "spotifyUser": "Usuário Spotify"
+  "spotifyUser": "Usuário Spotify",
+  "ok": "OK",
+  "pleaseLoginToSpotify": "Please login to Spotify",
+  "welcome": "Welcome",
+  "we_will_open_login": "To begin, We will open the Spotify login page next",
+  "makeSureToChooseAPlaylistYouDontDirectlyAdd": "Make sure to choose a playlist you don't directly add your music as destination.\\nIt will be completly erased with the merging results.",
+  "carefulexclamation": "Attention!"
 }

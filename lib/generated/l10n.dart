@@ -69,6 +69,66 @@ class S {
       args: [],
     );
   }
+
+  /// `OK`
+  String get ok {
+    return Intl.message(
+      'OK',
+      name: 'ok',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please login to Spotify`
+  String get pleaseLoginToSpotify {
+    return Intl.message(
+      'Please login to Spotify',
+      name: 'pleaseLoginToSpotify',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Welcome`
+  String get welcome {
+    return Intl.message(
+      'Welcome',
+      name: 'welcome',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `To begin, we will open the Spotify login page next`
+  String get we_will_open_login {
+    return Intl.message(
+      'To begin, we will open the Spotify login page next',
+      name: 'we_will_open_login',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `When asked to choose your DESTINATION PLAYLIST, make sure to choose a playlist that doesn't already contain your music.\nIt will be completely erased and replaced with the new merging results.`
+  String get makeSureToChooseAPlaylistYouDontDirectlyAdd {
+    return Intl.message(
+      'When asked to choose your DESTINATION PLAYLIST, make sure to choose a playlist that doesn\'t already contain your music.\nIt will be completely erased and replaced with the new merging results.',
+      name: 'makeSureToChooseAPlaylistYouDontDirectlyAdd',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Careful!`
+  String get carefulexclamation {
+    return Intl.message(
+      'Careful!',
+      name: 'carefulexclamation',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
