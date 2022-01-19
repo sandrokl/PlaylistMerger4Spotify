@@ -14,7 +14,7 @@ Future<void> migrateDataFromV1() async {
     Database? oldDB;
 
     try {
-      oldDB = await openDatabase(await _getDbName(), readOnly: true);
+      oldDB = await openDatabase(await _getDbName());
 
       // get all the playlists from the previous version
       var playlistsFromDB = await oldDB.query('UserPlaylists');
@@ -46,11 +46,11 @@ Future<void> migrateDataFromV1() async {
       newDB.batch((batch) => batch.insertAllOnConflictUpdate(
           newDB.playlistsToMerge, playlistToMergeToInsert));
 
+      await oldDB.close();
       await dbFile.delete();
+      oldDB = null;
     } finally {
       if (oldDB != null && oldDB.isOpen) await oldDB.close();
     }
-
-    await openDatabase(await _getDbName(), readOnly: true);
   }
 }
