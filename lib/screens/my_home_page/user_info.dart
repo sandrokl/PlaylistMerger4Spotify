@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:playlistmerger_4_spotify/store/spotify_user_store.dart';
+import 'package:playlistmerger4spotify/store/spotify_user_store.dart';
 import 'package:provider/provider.dart';
-import 'package:playlistmerger_4_spotify/generated/l10n.dart';
+import 'package:playlistmerger4spotify/generated/l10n.dart';
 
 class UserInfo extends StatelessWidget {
   const UserInfo({

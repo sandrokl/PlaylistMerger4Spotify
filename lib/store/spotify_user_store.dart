@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:playlistmerger_4_spotify/models/spotify_user.dart';
+import 'package:playlistmerger4spotify/models/spotify_user.dart';
 
 class SpotifyUserStore extends ChangeNotifier {
   SpotifyUser? _user;

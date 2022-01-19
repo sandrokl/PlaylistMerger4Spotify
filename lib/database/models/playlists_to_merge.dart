@@ -1,5 +1,5 @@
 import 'package:drift/drift.dart';
-import 'package:playlistmerger_4_spotify/database/models/playlists.dart';
+import 'package:playlistmerger4spotify/database/models/playlists.dart';
 
 @DataClassName("PlaylistToMerge")
 class PlaylistsToMerge extends Table {

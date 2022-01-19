@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:introduction_screen/introduction_screen.dart';
-import 'package:playlistmerger_4_spotify/generated/l10n.dart';
-import 'package:playlistmerger_4_spotify/screens/my_home_page/my_home_page.dart';
+import 'package:playlistmerger4spotify/generated/l10n.dart';
+import 'package:playlistmerger4spotify/screens/my_home_page/my_home_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Onboarding extends StatelessWidget {
   const Onboarding({Key? key}) : super(key: key);
@@ -49,7 +50,10 @@ class Onboarding extends StatelessWidget {
         next: const Icon(Icons.arrow_forward),
         done: Text(S.of(context).ok,
             style: const TextStyle(fontWeight: FontWeight.w600)),
-        onDone: () {
+        onDone: () async {
+          final sharedPrefs = await SharedPreferences.getInstance();
+          await sharedPrefs.setBool("isFirstTime", false);
+
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(builder: (_) => const MyHomePage()),

@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:playlistmerger_4_spotify/helpers/spotify_client.dart';
+import 'package:playlistmerger4spotify/helpers/spotify_client.dart';
 
 class SpotifyUser {
   late String id;

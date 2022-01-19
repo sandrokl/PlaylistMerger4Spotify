@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:playlistmerger_4_spotify/database/database.dart';
-import 'package:playlistmerger_4_spotify/generated/l10n.dart';
-import 'package:playlistmerger_4_spotify/models/spotify_user.dart';
-import 'package:playlistmerger_4_spotify/screens/my_home_page/user_info.dart';
-import 'package:playlistmerger_4_spotify/store/spotify_user_store.dart';
+import 'package:playlistmerger4spotify/database/database.dart';
+import 'package:playlistmerger4spotify/generated/l10n.dart';
+import 'package:playlistmerger4spotify/models/spotify_user.dart';
+import 'package:playlistmerger4spotify/screens/my_home_page/user_info.dart';
+import 'package:playlistmerger4spotify/store/spotify_user_store.dart';
 import 'package:provider/provider.dart';
 
 class MyHomePage extends StatefulWidget {

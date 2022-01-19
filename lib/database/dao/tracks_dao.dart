@@ -1,6 +1,6 @@
 import 'package:drift/drift.dart';
-import 'package:playlistmerger_4_spotify/database/database.dart';
-import 'package:playlistmerger_4_spotify/database/models/tracks.dart';
+import 'package:playlistmerger4spotify/database/database.dart';
+import 'package:playlistmerger4spotify/database/models/tracks.dart';
 
 part 'tracks_dao.g.dart';
 
