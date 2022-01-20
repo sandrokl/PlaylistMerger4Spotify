@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:playlistmerger4spotify/database/database.dart';
 import 'package:playlistmerger4spotify/generated/l10n.dart';
 import 'package:playlistmerger4spotify/helpers/spotify_client.dart';
-import 'package:playlistmerger4spotify/models/spotify_user.dart';
 import 'package:playlistmerger4spotify/screens/my_home_page/user_info.dart';
 import 'package:playlistmerger4spotify/store/spotify_user_store.dart';
 import 'package:provider/provider.dart';
@@ -20,18 +19,20 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
 
     final spotifyClient = SpotifyClient();
-    spotifyClient.getUserFromSession().then((user) {
+    spotifyClient.getUserFromSession().then((user) async {
       context.read<SpotifyUserStore>().setUser(user);
+
+      final listPlaylistsFromSpotify = await spotifyClient.getUserPlaylists();
+
+      final dao = context.read<AppDatabase>().playlistsDao;
+      await dao.invalidateAllPlaylists();
+      await dao.insertAll(listPlaylistsFromSpotify);
+      await dao.deleteAllInvalidatedPlaylists();
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    // TODO: remove later. here to force the database creation only
-    context.read<AppDatabase>().playlistsDao.getAllUserPlaylists().then((resp) {
-      // do nothing
-    });
-
     return Scaffold(
       appBar: AppBar(
         title: Text(S.of(context).appTitle),

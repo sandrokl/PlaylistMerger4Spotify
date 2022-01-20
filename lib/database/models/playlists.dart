@@ -1,6 +1,5 @@
 import 'package:drift/drift.dart';
 
-@DataClassName("Playlist")
 class Playlists extends Table {
   TextColumn get playlistId => text()();
   TextColumn get name => text()();

@@ -12,4 +12,19 @@ class PlaylistsDao extends DatabaseAccessor<AppDatabase>
   Future<List<Playlist>> getAllUserPlaylists() {
     return select(playlists).get();
   }
+
+  Future<void> invalidateAllPlaylists() async {
+    await (update(playlists)..where((tbl) => tbl.isValidated))
+        .write(const PlaylistsCompanion(isValidated: Value(false)));
+  }
+
+  Future<void> insertAll(List<Playlist> listToInsert) async {
+    await batch((batch) {
+      batch.insertAllOnConflictUpdate(playlists, listToInsert);
+    });
+  }
+
+  Future<void> deleteAllInvalidatedPlaylists() async {
+    await (delete(playlists)..where((tbl) => tbl.isValidated.not())).go();
+  }
 }
