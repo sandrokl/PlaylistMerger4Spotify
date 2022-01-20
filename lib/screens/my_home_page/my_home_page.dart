@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:playlistmerger4spotify/database/database.dart';
 import 'package:playlistmerger4spotify/generated/l10n.dart';
+import 'package:playlistmerger4spotify/helpers/spotify_client.dart';
 import 'package:playlistmerger4spotify/models/spotify_user.dart';
 import 'package:playlistmerger4spotify/screens/my_home_page/user_info.dart';
 import 'package:playlistmerger4spotify/store/spotify_user_store.dart';
@@ -18,7 +19,8 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
 
-    SpotifyUser.getFromSession().then((user) {
+    final spotifyClient = SpotifyClient();
+    spotifyClient.getUserFromSession().then((user) {
       context.read<SpotifyUserStore>().setUser(user);
     });
   }

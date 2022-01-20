@@ -1,9 +1,12 @@
+import 'dart:convert';
 import 'package:oauth2_client/oauth2_helper.dart';
 import 'package:oauth2_client/spotify_oauth2_client.dart';
-import 'package:http/http.dart' as http;
+import 'package:playlistmerger4spotify/models/spotify_user.dart';
 import '../spotify_secrets.dart' as secrets;
 
 class SpotifyClient {
+  final _apiUrlBase = "https://api.spotify.com/v1";
+
   late OAuth2Helper _httpHelper;
 
   static final SpotifyClient _singleton = SpotifyClient._internal();
@@ -22,7 +25,8 @@ class SpotifyClient {
         scopes: secrets.spotify_scopes);
   }
 
-  Future<http.Response> get(String url) async {
-    return await _httpHelper.get(url);
+  Future<SpotifyUser> getUserFromSession() async {
+    var httpResponse = await _httpHelper.get("$_apiUrlBase/me");
+    return SpotifyUser.fromJson(jsonDecode(httpResponse.body));
   }
 }

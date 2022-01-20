@@ -40,15 +40,15 @@ Future<void> migrateDataFromV1() async {
       });
 
       final newDB = AppDatabase();
-      newDB.batch((batch) =>
-          batch.insertAllOnConflictUpdate(newDB.playlists, playlistsToInsert));
-
-      newDB.batch((batch) => batch.insertAllOnConflictUpdate(
-          newDB.playlistsToMerge, playlistToMergeToInsert));
+      newDB.batch((batch) {
+        batch.insertAllOnConflictUpdate(newDB.playlists, playlistsToInsert);
+        batch.insertAllOnConflictUpdate(
+            newDB.playlistsToMerge, playlistToMergeToInsert);
+      });
 
       await oldDB.close();
-      await dbFile.delete();
       oldDB = null;
+      await dbFile.delete();
     } finally {
       if (oldDB != null && oldDB.isOpen) await oldDB.close();
     }
