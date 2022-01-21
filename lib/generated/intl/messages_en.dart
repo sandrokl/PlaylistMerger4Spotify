@@ -28,6 +28,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "makeSureToChooseAPlaylistYouDontDirectlyAdd":
             MessageLookupByLibrary.simpleMessage(
                 "When asked to choose your DESTINATION PLAYLIST, make sure to choose a playlist that doesn\'t already contain your music.\nIt will be completely erased and replaced with the new merging results."),
+        "nothingHereForNow": MessageLookupByLibrary.simpleMessage(
+            "Nothing here for now. Start creating your mergings using the button below."),
         "ok": MessageLookupByLibrary.simpleMessage("OK"),
         "pleaseLoginToSpotify":
             MessageLookupByLibrary.simpleMessage("Please login to Spotify"),

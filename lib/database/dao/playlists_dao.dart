@@ -36,7 +36,9 @@ class PlaylistsDao extends DatabaseAccessor<AppDatabase>
         .get();
 
     if (values.isEmpty) return [];
-    return (select(playlists)..where((tbl) => tbl.playlistId.isIn(values)))
+    return (select(playlists)
+          ..where((tbl) => tbl.playlistId.isIn(values))
+          ..orderBy([(p) => OrderingTerm(expression: p.name)]))
         .get();
   }
 }

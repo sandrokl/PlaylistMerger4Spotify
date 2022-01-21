@@ -75,42 +75,70 @@ class _MyHomePageState extends State<MyHomePage> {
                   case ConnectionState.active:
                   case ConnectionState.done:
                     if (snapshot.hasData) {
-                      return Expanded(
-                        child: ListView.builder(
-                          itemCount: snapshot.data!.length,
-                          itemBuilder: (context, index) {
-                            var p = snapshot.data![index];
-                            return Dismissible(
-                              key: Key(p.name +
-                                  DateTime.now()
-                                      .millisecondsSinceEpoch
-                                      .toString()),
-                              direction: DismissDirection.endToStart,
-                              background: Container(
-                                color: Colors.red,
-                                padding: const EdgeInsets.only(right: 10.0),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: const [
-                                    Icon(
-                                      Icons.delete,
-                                      color: Colors.white,
-                                    ),
-                                  ],
+                      return snapshot.data!.isEmpty
+                          ? Expanded(
+                              child: Center(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(30.0),
+                                  child: Text(
+                                    S.of(context).nothingHereForNow,
+                                    style:
+                                        Theme.of(context).textTheme.headline6,
+                                  ),
                                 ),
                               ),
-                              child: ListTile(
-                                title: Text(p.name),
+                            )
+                          : Expanded(
+                              child: ListView.builder(
+                                itemCount: snapshot.data!.length,
+                                itemBuilder: (context, index) {
+                                  var p = snapshot.data![index];
+                                  return Dismissible(
+                                    key: Key(p.name +
+                                        DateTime.now()
+                                            .millisecondsSinceEpoch
+                                            .toString()),
+                                    direction: DismissDirection.endToStart,
+                                    background: Container(
+                                      color: Colors.red,
+                                      padding:
+                                          const EdgeInsets.only(right: 10.0),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.end,
+                                        children: const [
+                                          Icon(
+                                            Icons.delete,
+                                            color: Colors.white,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    child: ListTile(
+                                      title: Text(p.name),
+                                    ),
+                                  );
+                                },
                               ),
                             );
-                          },
+                    } else if (snapshot.hasError) {
+                      return Expanded(
+                        child: Center(
+                          child: Text(snapshot.error.toString()),
                         ),
                       );
-                    } else if (snapshot.hasError) {
-                      return Text(snapshot.error.toString());
                     } else {
-                      return Container();
-                      // TODO implement no data and no error (empty list)
+                      return Expanded(
+                        child: Center(
+                          child: Padding(
+                            padding: const EdgeInsets.all(30.0),
+                            child: Text(
+                              S.of(context).nothingHereForNow,
+                              style: Theme.of(context).textTheme.headline6,
+                            ),
+                          ),
+                        ),
+                      );
                     }
                 }
               },

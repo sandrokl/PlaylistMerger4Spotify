@@ -129,6 +129,16 @@ class S {
       args: [],
     );
   }
+
+  /// `Nothing here for now. Start creating your mergings using the button below.`
+  String get nothingHereForNow {
+    return Intl.message(
+      'Nothing here for now. Start creating your mergings using the button below.',
+      name: 'nothingHereForNow',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
@@ -137,8 +147,6 @@ class AppLocalizationDelegate extends LocalizationsDelegate<S> {
   List<Locale> get supportedLocales {
     return const <Locale>[
       Locale.fromSubtags(languageCode: 'en'),
-      Locale.fromSubtags(languageCode: 'fr'),
-      Locale.fromSubtags(languageCode: 'pt'),
     ];
   }
 
