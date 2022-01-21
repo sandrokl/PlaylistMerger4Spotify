@@ -42,6 +42,19 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  Future<void> _removeMergedPlaylist(int index) async {
+    var list = await listMergedPlaylists;
+    var id = list![index].playlistId;
+
+    await context
+        .read<AppDatabase>()
+        .playlistsToMergeDao
+        .deleteMergedPlaylist(id);
+    setState(() {
+      list.removeAt(index);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -98,8 +111,56 @@ class _MyHomePageState extends State<MyHomePage> {
                                         DateTime.now()
                                             .millisecondsSinceEpoch
                                             .toString()),
-                                    direction: DismissDirection.endToStart,
-                                    background: Container(
+                                    direction: DismissDirection.horizontal,
+                                    confirmDismiss:
+                                        (DismissDirection direction) async {
+                                      return await showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return AlertDialog(
+                                            title: Text(S.of(context).confirm),
+                                            content: RichText(
+                                              text: TextSpan(
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyText2,
+                                                text: S
+                                                    .of(context)
+                                                    .areYouSureYouWishToDelete_start,
+                                                children: <TextSpan>[
+                                                  TextSpan(
+                                                    text: p.name,
+                                                    style: const TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                  ),
+                                                  TextSpan(
+                                                      text: S
+                                                          .of(context)
+                                                          .areYouSureYouWishToDelete_end),
+                                                ],
+                                              ),
+                                            ),
+                                            actions: <Widget>[
+                                              TextButton(
+                                                  onPressed: () =>
+                                                      Navigator.of(context)
+                                                          .pop(true),
+                                                  child: Text(
+                                                      S.of(context).delete)),
+                                              TextButton(
+                                                onPressed: () =>
+                                                    Navigator.of(context)
+                                                        .pop(false),
+                                                child:
+                                                    Text(S.of(context).cancel),
+                                              ),
+                                            ],
+                                          );
+                                        },
+                                      );
+                                    },
+                                    secondaryBackground: Container(
                                       color: Colors.red,
                                       padding:
                                           const EdgeInsets.only(right: 10.0),
@@ -114,6 +175,24 @@ class _MyHomePageState extends State<MyHomePage> {
                                         ],
                                       ),
                                     ),
+                                    background: Container(
+                                      color: Colors.red,
+                                      padding:
+                                          const EdgeInsets.only(left: 10.0),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: const [
+                                          Icon(
+                                            Icons.delete,
+                                            color: Colors.white,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    onDismissed: (direction) {
+                                      _removeMergedPlaylist(index);
+                                    },
                                     child: ListTile(
                                       title: Text(p.name),
                                     ),

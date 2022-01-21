@@ -24,12 +24,19 @@ class MessageLookup extends MessageLookupByLibrary {
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "appTitle":
             MessageLookupByLibrary.simpleMessage("PlaylistMerger 4 Spotify"),
+        "areYouSureYouWishToDelete_end": MessageLookupByLibrary.simpleMessage(
+            "\'s merging rule? This will not delete the playlist in Spotify."),
+        "areYouSureYouWishToDelete_start": MessageLookupByLibrary.simpleMessage(
+            "Are you sure you want to delete "),
+        "cancel": MessageLookupByLibrary.simpleMessage("CANCEL"),
         "carefulexclamation": MessageLookupByLibrary.simpleMessage("Careful!"),
+        "confirm": MessageLookupByLibrary.simpleMessage("Confirm"),
+        "delete": MessageLookupByLibrary.simpleMessage("DELETE"),
         "makeSureToChooseAPlaylistYouDontDirectlyAdd":
             MessageLookupByLibrary.simpleMessage(
                 "When asked to choose your DESTINATION PLAYLIST, make sure to choose a playlist that doesn\'t already contain your music.\nIt will be completely erased and replaced with the new merging results."),
         "nothingHereForNow": MessageLookupByLibrary.simpleMessage(
-            "Nothing here for now. Start creating your mergings using the button below."),
+            "Nothing here for now. Start creating your merged playlists using the button below."),
         "ok": MessageLookupByLibrary.simpleMessage("OK"),
         "pleaseLoginToSpotify":
             MessageLookupByLibrary.simpleMessage("Please login to Spotify"),

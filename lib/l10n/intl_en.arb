@@ -7,5 +7,10 @@
   "we_will_open_login": "To begin, we will open the Spotify login page next",
   "makeSureToChooseAPlaylistYouDontDirectlyAdd": "When asked to choose your DESTINATION PLAYLIST, make sure to choose a playlist that doesn't already contain your music.\nIt will be completely erased and replaced with the new merging results.",
   "carefulexclamation": "Careful!",
-  "nothingHereForNow": "Nothing here for now. Start creating your mergings using the button below."
+  "nothingHereForNow": "Nothing here for now. Start creating your merged playlists using the button below.",
+  "confirm": "Confirm",
+  "delete": "DELETE",
+  "cancel": "CANCEL",
+  "areYouSureYouWishToDelete_start": "Are you sure you want to delete ",
+  "areYouSureYouWishToDelete_end": "'s merging rule? This will not delete the playlist in Spotify."
 }

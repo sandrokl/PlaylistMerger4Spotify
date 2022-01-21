@@ -12,4 +12,10 @@ class PlaylistsToMergeDao extends DatabaseAccessor<AppDatabase>
   Future<List<PlaylistToMerge>> getAllPlaylistsToMerge() {
     return select(playlistsToMerge).get();
   }
+
+  Future<void> deleteMergedPlaylist(String playlistId) async {
+    await (delete(playlistsToMerge)
+          ..where((p) => p.destinationPlaylistId.equals(playlistId)))
+        .go();
+  }
 }

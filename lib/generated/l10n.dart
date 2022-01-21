@@ -130,11 +130,61 @@ class S {
     );
   }
 
-  /// `Nothing here for now. Start creating your mergings using the button below.`
+  /// `Nothing here for now. Start creating your merged playlists using the button below.`
   String get nothingHereForNow {
     return Intl.message(
-      'Nothing here for now. Start creating your mergings using the button below.',
+      'Nothing here for now. Start creating your merged playlists using the button below.',
       name: 'nothingHereForNow',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Confirm`
+  String get confirm {
+    return Intl.message(
+      'Confirm',
+      name: 'confirm',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `DELETE`
+  String get delete {
+    return Intl.message(
+      'DELETE',
+      name: 'delete',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `CANCEL`
+  String get cancel {
+    return Intl.message(
+      'CANCEL',
+      name: 'cancel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Are you sure you want to delete `
+  String get areYouSureYouWishToDelete_start {
+    return Intl.message(
+      'Are you sure you want to delete ',
+      name: 'areYouSureYouWishToDelete_start',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `'s merging rule? This will not delete the playlist in Spotify.`
+  String get areYouSureYouWishToDelete_end {
+    return Intl.message(
+      '\'s merging rule? This will not delete the playlist in Spotify.',
+      name: 'areYouSureYouWishToDelete_end',
       desc: '',
       args: [],
     );
