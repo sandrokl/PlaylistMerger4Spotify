@@ -14,6 +14,8 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  Future<List<Playlist>>? listMergedPlaylists;
+
   @override
   void initState() {
     super.initState();
@@ -28,6 +30,15 @@ class _MyHomePageState extends State<MyHomePage> {
       await dao.invalidateAllPlaylists();
       await dao.insertAll(listPlaylistsFromSpotify);
       await dao.deleteAllInvalidatedPlaylists();
+
+      _updateListMergedPlaylists();
+    });
+  }
+
+  _updateListMergedPlaylists() {
+    setState(() {
+      listMergedPlaylists =
+          context.read<AppDatabase>().playlistsDao.getMergedPlaylists();
     });
   }
 
@@ -37,14 +48,72 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: Text(S.of(context).appTitle),
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
+        child: const Icon(Icons.add),
+      ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: const <Widget>[
-            Padding(
+          children: <Widget>[
+            const Padding(
               padding: EdgeInsets.all(8.0),
               child: UserInfo(),
+            ),
+            FutureBuilder<List<Playlist>>(
+              future: listMergedPlaylists,
+              builder: (context, snapshot) {
+                switch (snapshot.connectionState) {
+                  case ConnectionState.none:
+                  case ConnectionState.waiting:
+                    return const Expanded(
+                      child: Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                    );
+                  case ConnectionState.active:
+                  case ConnectionState.done:
+                    if (snapshot.hasData) {
+                      return Expanded(
+                        child: ListView.builder(
+                          itemCount: snapshot.data!.length,
+                          itemBuilder: (context, index) {
+                            var p = snapshot.data![index];
+                            return Dismissible(
+                              key: Key(p.name +
+                                  DateTime.now()
+                                      .millisecondsSinceEpoch
+                                      .toString()),
+                              direction: DismissDirection.endToStart,
+                              background: Container(
+                                color: Colors.red,
+                                padding: const EdgeInsets.only(right: 10.0),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: const [
+                                    Icon(
+                                      Icons.delete,
+                                      color: Colors.white,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              child: ListTile(
+                                title: Text(p.name),
+                              ),
+                            );
+                          },
+                        ),
+                      );
+                    } else if (snapshot.hasError) {
+                      return Text(snapshot.error.toString());
+                    } else {
+                      return Container();
+                      // TODO implement no data and no error (empty list)
+                    }
+                }
+              },
             ),
           ],
         ),

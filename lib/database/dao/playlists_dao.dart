@@ -27,4 +27,16 @@ class PlaylistsDao extends DatabaseAccessor<AppDatabase>
   Future<void> deleteAllInvalidatedPlaylists() async {
     await (delete(playlists)..where((tbl) => tbl.isValidated.not())).go();
   }
+
+  Future<List<Playlist>> getMergedPlaylists() async {
+    var query1 = selectOnly(db.playlistsToMerge, distinct: true)
+      ..addColumns([db.playlistsToMerge.destinationPlaylistId]);
+    var values = await query1
+        .map((p) => p.read(db.playlistsToMerge.destinationPlaylistId))
+        .get();
+
+    if (values.isEmpty) return [];
+    return (select(playlists)..where((tbl) => tbl.playlistId.isIn(values)))
+        .get();
+  }
 }
