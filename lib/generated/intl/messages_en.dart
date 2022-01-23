@@ -40,6 +40,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "ok": MessageLookupByLibrary.simpleMessage("OK"),
         "pleaseLoginToSpotify":
             MessageLookupByLibrary.simpleMessage("Please login to Spotify"),
+        "saving_threedots": MessageLookupByLibrary.simpleMessage("Saving..."),
         "spotifyUser": MessageLookupByLibrary.simpleMessage("Spotify user"),
         "we_will_open_login": MessageLookupByLibrary.simpleMessage(
             "To begin, we will open the Spotify login page next"),

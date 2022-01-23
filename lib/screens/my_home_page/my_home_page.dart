@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:playlistmerger4spotify/database/database.dart';
 import 'package:playlistmerger4spotify/generated/l10n.dart';
 import 'package:playlistmerger4spotify/helpers/spotify_client.dart';
+import 'package:playlistmerger4spotify/screens/merging_definition/merging_definition.dart';
 import 'package:playlistmerger4spotify/screens/my_home_page/user_info.dart';
 import 'package:playlistmerger4spotify/store/spotify_user_store.dart';
 import 'package:provider/provider.dart';
@@ -62,7 +63,17 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(S.of(context).appTitle),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () async {
+          await Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) {
+                return const MergingDefinition();
+              },
+            ),
+          );
+          _updateListMergedPlaylists();
+        },
         child: const Icon(Icons.add),
       ),
       body: Center(

@@ -12,5 +12,6 @@
   "delete": "DELETE",
   "cancel": "CANCEL",
   "areYouSureYouWishToDelete_start": "Are you sure you want to delete ",
-  "areYouSureYouWishToDelete_end": "'s merging rule? This will not delete the playlist in Spotify."
+  "areYouSureYouWishToDelete_end": "'s merging rule? This will not delete the playlist in Spotify.",
+  "saving_threedots": "Saving..."
 }

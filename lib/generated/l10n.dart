@@ -189,6 +189,16 @@ class S {
       args: [],
     );
   }
+
+  /// `Saving...`
+  String get saving_threedots {
+    return Intl.message(
+      'Saving...',
+      name: 'saving_threedots',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
