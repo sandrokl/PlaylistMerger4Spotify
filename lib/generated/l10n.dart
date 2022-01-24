@@ -199,6 +199,26 @@ class S {
       args: [],
     );
   }
+
+  /// `Open in Spotify`
+  String get openInSpotify {
+    return Intl.message(
+      'Open in Spotify',
+      name: 'openInSpotify',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Modify this merging rule`
+  String get modifyThisMergingRule {
+    return Intl.message(
+      'Modify this merging rule',
+      name: 'modifyThisMergingRule',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

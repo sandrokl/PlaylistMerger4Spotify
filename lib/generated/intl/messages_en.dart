@@ -35,9 +35,13 @@ class MessageLookup extends MessageLookupByLibrary {
         "makeSureToChooseAPlaylistYouDontDirectlyAdd":
             MessageLookupByLibrary.simpleMessage(
                 "When asked to choose your DESTINATION PLAYLIST, make sure to choose a playlist that doesn\'t already contain your music.\nIt will be completely erased and replaced with the new merging results."),
+        "modifyThisMergingRule":
+            MessageLookupByLibrary.simpleMessage("Modify this merging rule"),
         "nothingHereForNow": MessageLookupByLibrary.simpleMessage(
             "Nothing here for now. Start creating your merged playlists using the button below."),
         "ok": MessageLookupByLibrary.simpleMessage("OK"),
+        "openInSpotify":
+            MessageLookupByLibrary.simpleMessage("Open in Spotify"),
         "pleaseLoginToSpotify":
             MessageLookupByLibrary.simpleMessage("Please login to Spotify"),
         "saving_threedots": MessageLookupByLibrary.simpleMessage("Saving..."),

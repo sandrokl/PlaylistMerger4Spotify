@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:playlistmerger4spotify/generated/l10n.dart';
 
 class MergingDefinition extends StatefulWidget {
-  const MergingDefinition({String? playlistId, Key? key}) : super(key: key);
+  final String? editingPlaylistId;
+
+  const MergingDefinition({this.editingPlaylistId, Key? key}) : super(key: key);
 
   @override
   _MergingDefinitionState createState() => _MergingDefinitionState();

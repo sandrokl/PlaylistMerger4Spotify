@@ -6,6 +6,7 @@ import 'package:playlistmerger4spotify/screens/merging_definition/merging_defini
 import 'package:playlistmerger4spotify/screens/my_home_page/user_info.dart';
 import 'package:playlistmerger4spotify/store/spotify_user_store.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key}) : super(key: key);
@@ -154,17 +155,18 @@ class _MyHomePageState extends State<MyHomePage> {
                                             ),
                                             actions: <Widget>[
                                               TextButton(
-                                                  onPressed: () =>
-                                                      Navigator.of(context)
-                                                          .pop(true),
-                                                  child: Text(
-                                                      S.of(context).delete)),
-                                              TextButton(
                                                 onPressed: () =>
                                                     Navigator.of(context)
                                                         .pop(false),
                                                 child:
                                                     Text(S.of(context).cancel),
+                                              ),
+                                              TextButton(
+                                                onPressed: () =>
+                                                    Navigator.of(context)
+                                                        .pop(true),
+                                                child:
+                                                    Text(S.of(context).delete),
                                               ),
                                             ],
                                           );
@@ -204,8 +206,84 @@ class _MyHomePageState extends State<MyHomePage> {
                                     onDismissed: (direction) {
                                       _removeMergedPlaylist(index);
                                     },
-                                    child: ListTile(
-                                      title: Text(p.name),
+                                    child: GestureDetector(
+                                      onTap: () async {
+                                        await showDialog(
+                                            context: context,
+                                            builder: (context) {
+                                              return AlertDialog(
+                                                title: Text(p.name),
+                                                contentPadding:
+                                                    const EdgeInsets.symmetric(
+                                                        vertical: 8.0,
+                                                        horizontal: 16.0),
+                                                content: Column(
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
+                                                  children: [
+                                                    ListTile(
+                                                      visualDensity:
+                                                          VisualDensity.compact,
+                                                      contentPadding:
+                                                          const EdgeInsets.all(
+                                                              4.0),
+                                                      dense: true,
+                                                      onTap: () async {
+                                                        Navigator.pop(context);
+                                                        launch(p.playUrl);
+                                                      },
+                                                      title: Text(
+                                                        S
+                                                            .of(context)
+                                                            .openInSpotify,
+                                                        style: Theme.of(context)
+                                                            .textTheme
+                                                            .bodyText2,
+                                                      ),
+                                                      leading: const Icon(Icons
+                                                          .play_circle_fill_outlined),
+                                                    ),
+                                                    ListTile(
+                                                      visualDensity:
+                                                          VisualDensity.compact,
+                                                      contentPadding:
+                                                          const EdgeInsets.all(
+                                                              4.0),
+                                                      dense: true,
+                                                      onTap: () async {
+                                                        Navigator.pop(context);
+                                                        Navigator.push(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                            builder: (context) =>
+                                                                MergingDefinition(
+                                                              editingPlaylistId:
+                                                                  p.playlistId,
+                                                            ),
+                                                          ),
+                                                        );
+                                                      },
+                                                      title: Text(
+                                                        S
+                                                            .of(context)
+                                                            .modifyThisMergingRule,
+                                                        style: Theme.of(context)
+                                                            .textTheme
+                                                            .bodyText2,
+                                                      ),
+                                                      leading: const Icon(
+                                                          Icons.edit_rounded),
+                                                    ),
+                                                  ],
+                                                ),
+                                              );
+                                            });
+                                      },
+                                      child: ListTile(
+                                        title: Text(p.name),
+                                        trailing: const Icon(
+                                            Icons.arrow_right_outlined),
+                                      ),
                                     ),
                                   );
                                 },
