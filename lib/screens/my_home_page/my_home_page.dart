@@ -16,7 +16,8 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  Future<List<Playlist>>? listMergedPlaylists;
+  Future<List<Playlist>>? _listMergedPlaylists;
+  bool _fabVisible = false;
 
   @override
   void initState() {
@@ -39,13 +40,14 @@ class _MyHomePageState extends State<MyHomePage> {
 
   _updateListMergedPlaylists() {
     setState(() {
-      listMergedPlaylists =
+      _listMergedPlaylists =
           context.read<AppDatabase>().playlistsDao.getMergedPlaylists();
+      _fabVisible = true;
     });
   }
 
   Future<void> _removeMergedPlaylist(int index) async {
-    var list = await listMergedPlaylists;
+    var list = await _listMergedPlaylists;
     var id = list![index].playlistId;
 
     await context
@@ -63,19 +65,22 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: Text(S.of(context).appTitle),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          await Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) {
-                return const MergingDefinition();
-              },
-            ),
-          );
-          _updateListMergedPlaylists();
-        },
-        child: const Icon(Icons.add),
+      floatingActionButton: Visibility(
+        visible: _fabVisible,
+        child: FloatingActionButton(
+          onPressed: () async {
+            await Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) {
+                  return const MergingDefinition();
+                },
+              ),
+            );
+            _updateListMergedPlaylists();
+          },
+          child: const Icon(Icons.add),
+        ),
       ),
       body: Center(
         child: Column(
@@ -87,7 +92,7 @@ class _MyHomePageState extends State<MyHomePage> {
               child: UserInfo(),
             ),
             FutureBuilder<List<Playlist>>(
-              future: listMergedPlaylists,
+              future: _listMergedPlaylists,
               builder: (context, snapshot) {
                 switch (snapshot.connectionState) {
                   case ConnectionState.none:
@@ -282,7 +287,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                       child: ListTile(
                                         title: Text(p.name),
                                         trailing: const Icon(
-                                            Icons.arrow_right_outlined),
+                                          Icons.more_vert,
+                                        ),
                                       ),
                                     ),
                                   );
