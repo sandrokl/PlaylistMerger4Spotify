@@ -32,6 +32,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "carefulexclamation": MessageLookupByLibrary.simpleMessage("Careful!"),
         "confirm": MessageLookupByLibrary.simpleMessage("Confirm"),
         "delete": MessageLookupByLibrary.simpleMessage("DELETE"),
+        "destinationPlaylist":
+            MessageLookupByLibrary.simpleMessage("Destination playlist"),
         "makeSureToChooseAPlaylistYouDontDirectlyAdd":
             MessageLookupByLibrary.simpleMessage(
                 "When asked to choose your DESTINATION PLAYLIST, make sure to choose a playlist that doesn\'t already contain your music.\nIt will be completely erased and replaced with the new merging results."),
@@ -45,6 +47,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "pleaseLoginToSpotify":
             MessageLookupByLibrary.simpleMessage("Please login to Spotify"),
         "saving_threedots": MessageLookupByLibrary.simpleMessage("Saving..."),
+        "selectAPlaylist":
+            MessageLookupByLibrary.simpleMessage("-- Select a playlist -- "),
+        "sourcePlaylists":
+            MessageLookupByLibrary.simpleMessage("Source playlists"),
         "spotifyUser": MessageLookupByLibrary.simpleMessage("Spotify user"),
         "we_will_open_login": MessageLookupByLibrary.simpleMessage(
             "To begin, we will open the Spotify login page next"),

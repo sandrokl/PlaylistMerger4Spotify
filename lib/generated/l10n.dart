@@ -219,6 +219,36 @@ class S {
       args: [],
     );
   }
+
+  /// `-- Select a playlist -- `
+  String get selectAPlaylist {
+    return Intl.message(
+      '-- Select a playlist -- ',
+      name: 'selectAPlaylist',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Destination playlist`
+  String get destinationPlaylist {
+    return Intl.message(
+      'Destination playlist',
+      name: 'destinationPlaylist',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Source playlists`
+  String get sourcePlaylists {
+    return Intl.message(
+      'Source playlists',
+      name: 'sourcePlaylists',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

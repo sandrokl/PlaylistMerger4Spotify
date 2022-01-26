@@ -9,8 +9,12 @@ class PlaylistsToMergeDao extends DatabaseAccessor<AppDatabase>
     with _$PlaylistsToMergeDaoMixin {
   PlaylistsToMergeDao(AppDatabase db) : super(db);
 
-  Future<List<PlaylistToMerge>> getAllPlaylistsToMerge() {
-    return select(playlistsToMerge).get();
+  Future<List<PlaylistToMerge>> getPlaylistsToMergeByDestinationId(
+      String destinationPlaylistId) {
+    return (select(playlistsToMerge)
+          ..where(
+              (tbl) => tbl.destinationPlaylistId.equals(destinationPlaylistId)))
+        .get();
   }
 
   Future<void> deleteMergedPlaylist(String playlistId) async {

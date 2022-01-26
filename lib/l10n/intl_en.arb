@@ -15,5 +15,8 @@
   "areYouSureYouWishToDelete_end": "'s merging rule? This will not delete the playlist in Spotify.",
   "saving_threedots": "Saving...",
   "openInSpotify": "Open in Spotify",
-  "modifyThisMergingRule": "Modify this merging rule"
+  "modifyThisMergingRule": "Modify this merging rule",
+  "selectAPlaylist": "-- Select a playlist -- ",
+  "destinationPlaylist": "Destination playlist",
+  "sourcePlaylists": "Source playlists"
 }
