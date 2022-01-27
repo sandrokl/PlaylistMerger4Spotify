@@ -18,5 +18,8 @@
   "modifyThisMergingRule": "Modify this merging rule",
   "selectAPlaylist": "-- Select a playlist -- ",
   "destinationPlaylist": "Destination playlist",
-  "sourcePlaylists": "Source playlists"
+  "sourcePlaylists": "Source playlists",
+  "dismiss": "DISMISS",
+  "doNotShowAgain": "Do not show again",
+  "changesSaved": "Definition changes saved. You can run the merging again to update it in Spotify."
 }

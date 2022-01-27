@@ -30,10 +30,15 @@ class MessageLookup extends MessageLookupByLibrary {
             "Are you sure you want to delete "),
         "cancel": MessageLookupByLibrary.simpleMessage("CANCEL"),
         "carefulexclamation": MessageLookupByLibrary.simpleMessage("Careful!"),
+        "changesSaved": MessageLookupByLibrary.simpleMessage(
+            "Definition changes saved. You can run the merging again to update it in Spotify."),
         "confirm": MessageLookupByLibrary.simpleMessage("Confirm"),
         "delete": MessageLookupByLibrary.simpleMessage("DELETE"),
         "destinationPlaylist":
             MessageLookupByLibrary.simpleMessage("Destination playlist"),
+        "dismiss": MessageLookupByLibrary.simpleMessage("DISMISS"),
+        "doNotShowAgain":
+            MessageLookupByLibrary.simpleMessage("Do not show again"),
         "makeSureToChooseAPlaylistYouDontDirectlyAdd":
             MessageLookupByLibrary.simpleMessage(
                 "When asked to choose your DESTINATION PLAYLIST, make sure to choose a playlist that doesn\'t already contain your music.\nIt will be completely erased and replaced with the new merging results."),

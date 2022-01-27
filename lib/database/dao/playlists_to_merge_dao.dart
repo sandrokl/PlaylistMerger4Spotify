@@ -22,4 +22,21 @@ class PlaylistsToMergeDao extends DatabaseAccessor<AppDatabase>
           ..where((p) => p.destinationPlaylistId.equals(playlistId)))
         .go();
   }
+
+  Future<void> updateMergedPlaylist(
+      String destinationPlaylistId, List<String> sourcePlaylistsId) async {
+    await batch((batch) {
+      batch.deleteWhere(
+          playlistsToMerge,
+          (_) => playlistsToMerge.destinationPlaylistId
+              .equals(destinationPlaylistId));
+      batch.insertAll(
+          playlistsToMerge,
+          sourcePlaylistsId
+              .map((e) => PlaylistsToMergeCompanion(
+                  destinationPlaylistId: Value(destinationPlaylistId),
+                  sourcePlaylistId: Value(e)))
+              .toList());
+    });
+  }
 }

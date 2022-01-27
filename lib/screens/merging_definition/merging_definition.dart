@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:playlistmerger4spotify/store/spotify_user_store.dart';
 import 'package:provider/provider.dart';
@@ -19,6 +21,8 @@ class _MergingDefinitionState extends State<MergingDefinition> {
 
   String? _selectedDestinationPlaylist;
   List<String> _selectedSourcePlaylists = [];
+
+  bool _doNotShowAgainChecked = false;
 
   @override
   void initState() {
@@ -47,6 +51,61 @@ class _MergingDefinitionState extends State<MergingDefinition> {
     setState(() {
       _sourcePlaylistsOptions = _db.playlistsDao.getAllUserPlaylists();
     });
+
+    Timer.run(() {
+      if (widget.editingPlaylistId == null) {
+        showDialog(
+            barrierDismissible: false,
+            context: context,
+            builder: (context) => StatefulBuilder(
+                  builder: (context, setState) {
+                    return AlertDialog(
+                      title: Text(S.of(context).carefulexclamation),
+                      content: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(S
+                              .of(context)
+                              .makeSureToChooseAPlaylistYouDontDirectlyAdd),
+                          CheckboxListTile(
+                            visualDensity: VisualDensity.compact,
+                            contentPadding: EdgeInsets.zero,
+                            title: Text(
+                              S.of(context).doNotShowAgain,
+                              style: Theme.of(context).textTheme.subtitle1,
+                            ),
+                            value: _doNotShowAgainChecked,
+                            onChanged: (newValue) {
+                              setState(() {
+                                _doNotShowAgainChecked = newValue!;
+                              });
+                            },
+                          )
+                        ],
+                      ),
+                      actionsPadding: EdgeInsets.zero,
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: Text(S.of(context).dismiss),
+                        ),
+                      ],
+                    );
+                  },
+                ));
+      }
+    });
+  }
+
+  Future<void> saveChanges() async {
+    if (_selectedDestinationPlaylist != null) {
+      await Provider.of<AppDatabase>(context, listen: false)
+          .playlistsToMergeDao
+          .updateMergedPlaylist(
+              _selectedDestinationPlaylist!, _selectedSourcePlaylists);
+    }
   }
 
   @override
@@ -58,8 +117,13 @@ class _MergingDefinitionState extends State<MergingDefinition> {
             content: Text(S.of(context).saving_threedots),
           ),
         );
-        await Future.delayed(const Duration(seconds: 2));
+        await saveChanges();
         ScaffoldMessenger.of(context).hideCurrentSnackBar();
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(S.of(context).changesSaved),
+          ),
+        );
         return true;
       },
       child: Scaffold(
@@ -102,6 +166,7 @@ class _MergingDefinitionState extends State<MergingDefinition> {
                             ? (newValue) {
                                 setState(() {
                                   _selectedDestinationPlaylist = newValue;
+                                  _selectedSourcePlaylists.remove(newValue);
                                 });
                               }
                             : null,
@@ -134,11 +199,29 @@ class _MergingDefinitionState extends State<MergingDefinition> {
                                 contentPadding: const EdgeInsets.only(
                                     right: 0.0, left: 0.0),
                                 visualDensity: VisualDensity.compact,
-                                value: false,
+                                value: (e.playlistId !=
+                                        _selectedDestinationPlaylist &&
+                                    _selectedSourcePlaylists
+                                        .contains(e.playlistId)),
                                 title: Text(e.name),
                                 onChanged:
                                     _selectedDestinationPlaylist != e.playlistId
-                                        ? (newValue) {}
+                                        ? (newValue) {
+                                            if (e.playlistId !=
+                                                _selectedDestinationPlaylist) {
+                                              setState(() {
+                                                if (newValue != null) {
+                                                  if (newValue) {
+                                                    _selectedSourcePlaylists
+                                                        .add(e.playlistId);
+                                                  } else {
+                                                    _selectedSourcePlaylists
+                                                        .remove(e.playlistId);
+                                                  }
+                                                }
+                                              });
+                                            }
+                                          }
                                         : null,
                               );
                             }).toList(),

@@ -249,6 +249,36 @@ class S {
       args: [],
     );
   }
+
+  /// `DISMISS`
+  String get dismiss {
+    return Intl.message(
+      'DISMISS',
+      name: 'dismiss',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Do not show again`
+  String get doNotShowAgain {
+    return Intl.message(
+      'Do not show again',
+      name: 'doNotShowAgain',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Definition changes saved. You can run the merging again to update it in Spotify.`
+  String get changesSaved {
+    return Intl.message(
+      'Definition changes saved. You can run the merging again to update it in Spotify.',
+      name: 'changesSaved',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
