@@ -270,11 +270,21 @@ class S {
     );
   }
 
-  /// `Definition changes saved. You can run the merging again to update it in Spotify.`
+  /// `Changes saved. You can run the merging again to update it in Spotify.`
   String get changesSaved {
     return Intl.message(
-      'Definition changes saved. You can run the merging again to update it in Spotify.',
+      'Changes saved. You can run the merging again to update it in Spotify.',
       name: 'changesSaved',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Delete this merging rule`
+  String get deleteThisMergingRule {
+    return Intl.message(
+      'Delete this merging rule',
+      name: 'deleteThisMergingRule',
       desc: '',
       args: [],
     );

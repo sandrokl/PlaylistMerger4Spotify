@@ -5,6 +5,7 @@ import 'package:playlistmerger4spotify/store/spotify_user_store.dart';
 import 'package:provider/provider.dart';
 import 'package:playlistmerger4spotify/database/database.dart';
 import 'package:playlistmerger4spotify/generated/l10n.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MergingDefinition extends StatefulWidget {
   final String? editingPlaylistId;
@@ -52,8 +53,11 @@ class _MergingDefinitionState extends State<MergingDefinition> {
       _sourcePlaylistsOptions = _db.playlistsDao.getAllUserPlaylists();
     });
 
-    Timer.run(() {
-      if (widget.editingPlaylistId == null) {
+    Timer.run(() async {
+      final sp = await SharedPreferences.getInstance();
+      final doNotShowAgain = sp.getBool("doNotShowAgain") ?? false;
+
+      if (widget.editingPlaylistId == null && !doNotShowAgain) {
         showDialog(
             barrierDismissible: false,
             context: context,
@@ -70,6 +74,7 @@ class _MergingDefinitionState extends State<MergingDefinition> {
                           CheckboxListTile(
                             visualDensity: VisualDensity.compact,
                             contentPadding: EdgeInsets.zero,
+                            controlAffinity: ListTileControlAffinity.leading,
                             title: Text(
                               S.of(context).doNotShowAgain,
                               style: Theme.of(context).textTheme.subtitle1,
@@ -86,7 +91,12 @@ class _MergingDefinitionState extends State<MergingDefinition> {
                       actionsPadding: EdgeInsets.zero,
                       actions: [
                         TextButton(
-                          onPressed: () {
+                          onPressed: () async {
+                            if (_doNotShowAgainChecked) {
+                              final sp = await SharedPreferences.getInstance();
+                              await sp.setBool("doNotShowAgain", true);
+                            }
+
                             Navigator.pop(context);
                           },
                           child: Text(S.of(context).dismiss),
@@ -119,11 +129,14 @@ class _MergingDefinitionState extends State<MergingDefinition> {
         );
         await saveChanges();
         ScaffoldMessenger.of(context).hideCurrentSnackBar();
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(S.of(context).changesSaved),
-          ),
-        );
+        if (_selectedDestinationPlaylist != null &&
+            _selectedDestinationPlaylist!.isNotEmpty) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(S.of(context).changesSaved),
+            ),
+          );
+        }
         return true;
       },
       child: Scaffold(

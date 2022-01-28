@@ -257,7 +257,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                                       dense: true,
                                                       onTap: () async {
                                                         Navigator.pop(context);
-                                                        Navigator.push(
+                                                        await Navigator.push(
                                                           context,
                                                           MaterialPageRoute(
                                                             builder: (context) =>
@@ -267,6 +267,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                                             ),
                                                           ),
                                                         );
+                                                        _updateListMergedPlaylists();
                                                       },
                                                       title: Text(
                                                         S
@@ -278,6 +279,88 @@ class _MyHomePageState extends State<MyHomePage> {
                                                       ),
                                                       leading: const Icon(
                                                           Icons.edit_rounded),
+                                                    ),
+                                                    ListTile(
+                                                      visualDensity:
+                                                          VisualDensity.compact,
+                                                      contentPadding:
+                                                          const EdgeInsets.all(
+                                                              4.0),
+                                                      dense: true,
+                                                      onTap: () async {
+                                                        await showDialog(
+                                                          context: context,
+                                                          builder: (BuildContext
+                                                              context) {
+                                                            return AlertDialog(
+                                                              title: Text(S
+                                                                  .of(context)
+                                                                  .confirm),
+                                                              content: RichText(
+                                                                text: TextSpan(
+                                                                  style: Theme.of(
+                                                                          context)
+                                                                      .textTheme
+                                                                      .bodyText2,
+                                                                  text: S
+                                                                      .of(context)
+                                                                      .areYouSureYouWishToDelete_start,
+                                                                  children: <
+                                                                      TextSpan>[
+                                                                    TextSpan(
+                                                                      text: p
+                                                                          .name,
+                                                                      style: const TextStyle(
+                                                                          fontWeight:
+                                                                              FontWeight.bold),
+                                                                    ),
+                                                                    TextSpan(
+                                                                        text: S
+                                                                            .of(context)
+                                                                            .areYouSureYouWishToDelete_end),
+                                                                  ],
+                                                                ),
+                                                              ),
+                                                              actions: <Widget>[
+                                                                TextButton(
+                                                                  onPressed: () =>
+                                                                      Navigator.of(
+                                                                              context)
+                                                                          .pop(),
+                                                                  child: Text(S
+                                                                      .of(context)
+                                                                      .cancel),
+                                                                ),
+                                                                TextButton(
+                                                                  onPressed:
+                                                                      () async {
+                                                                    await _removeMergedPlaylist(
+                                                                        index);
+                                                                    Navigator.popUntil(
+                                                                        context,
+                                                                        (Route<dynamic>
+                                                                                route) =>
+                                                                            route.isFirst);
+                                                                  },
+                                                                  child: Text(S
+                                                                      .of(context)
+                                                                      .delete),
+                                                                ),
+                                                              ],
+                                                            );
+                                                          },
+                                                        );
+                                                      },
+                                                      title: Text(
+                                                        S
+                                                            .of(context)
+                                                            .deleteThisMergingRule,
+                                                        style: Theme.of(context)
+                                                            .textTheme
+                                                            .bodyText2,
+                                                      ),
+                                                      leading: const Icon(
+                                                          Icons.delete),
                                                     ),
                                                   ],
                                                 ),

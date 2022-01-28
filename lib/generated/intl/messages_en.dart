@@ -31,9 +31,11 @@ class MessageLookup extends MessageLookupByLibrary {
         "cancel": MessageLookupByLibrary.simpleMessage("CANCEL"),
         "carefulexclamation": MessageLookupByLibrary.simpleMessage("Careful!"),
         "changesSaved": MessageLookupByLibrary.simpleMessage(
-            "Definition changes saved. You can run the merging again to update it in Spotify."),
+            "Changes saved. You can run the merging again to update it in Spotify."),
         "confirm": MessageLookupByLibrary.simpleMessage("Confirm"),
         "delete": MessageLookupByLibrary.simpleMessage("DELETE"),
+        "deleteThisMergingRule":
+            MessageLookupByLibrary.simpleMessage("Delete this merging rule"),
         "destinationPlaylist":
             MessageLookupByLibrary.simpleMessage("Destination playlist"),
         "dismiss": MessageLookupByLibrary.simpleMessage("DISMISS"),
