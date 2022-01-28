@@ -130,7 +130,8 @@ class _MergingDefinitionState extends State<MergingDefinition> {
         await saveChanges();
         ScaffoldMessenger.of(context).hideCurrentSnackBar();
         if (_selectedDestinationPlaylist != null &&
-            _selectedDestinationPlaylist!.isNotEmpty) {
+            _selectedDestinationPlaylist!.isNotEmpty &&
+            _selectedSourcePlaylists.isNotEmpty) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(S.of(context).changesSaved),
@@ -159,30 +160,45 @@ class _MergingDefinitionState extends State<MergingDefinition> {
                       snapshot.hasData) {
                     return Padding(
                       padding: const EdgeInsets.only(top: 8.0),
-                      child: DropdownButton<String>(
-                        items: snapshot.data!.map((e) {
-                          return DropdownMenuItem<String>(
-                            child: Text(e.name),
-                            value: e.playlistId,
-                          );
-                        }).toList(),
-                        isExpanded: true,
-                        hint: widget.editingPlaylistId != null
-                            ? null
-                            : Text(
-                                S.of(context).selectAPlaylist,
-                                style: const TextStyle(color: Colors.grey),
-                                textAlign: TextAlign.start,
-                              ),
-                        value: _selectedDestinationPlaylist,
-                        onChanged: widget.editingPlaylistId == null
-                            ? (newValue) {
-                                setState(() {
-                                  _selectedDestinationPlaylist = newValue;
-                                  _selectedSourcePlaylists.remove(newValue);
-                                });
-                              }
-                            : null,
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: DropdownButton<String>(
+                              items: snapshot.data!.map((e) {
+                                return DropdownMenuItem<String>(
+                                  child: Text(e.name),
+                                  value: e.playlistId,
+                                );
+                              }).toList(),
+                              isExpanded: true,
+                              hint: widget.editingPlaylistId != null
+                                  ? null
+                                  : Text(
+                                      S.of(context).selectAPlaylist,
+                                      style:
+                                          const TextStyle(color: Colors.grey),
+                                      textAlign: TextAlign.start,
+                                    ),
+                              value: _selectedDestinationPlaylist,
+                              onChanged: widget.editingPlaylistId == null
+                                  ? (newValue) {
+                                      setState(() {
+                                        _selectedDestinationPlaylist = newValue;
+                                        _selectedSourcePlaylists
+                                            .remove(newValue);
+                                      });
+                                    }
+                                  : null,
+                            ),
+                          ),
+                          IconButton(
+                            padding:
+                                const EdgeInsets.fromLTRB(8.0, 8.0, 0.0, 8.0),
+                            onPressed:
+                                widget.editingPlaylistId != null ? null : () {},
+                            icon: const Icon(Icons.add_circle_outline),
+                          ),
+                        ],
                       ),
                     );
                   } else {
