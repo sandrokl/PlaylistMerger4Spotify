@@ -1,7 +1,9 @@
 import 'dart:convert';
+import 'package:flutter/material.dart';
 import 'package:oauth2_client/oauth2_helper.dart';
 import 'package:oauth2_client/spotify_oauth2_client.dart';
 import 'package:playlistmerger4spotify/database/database.dart';
+import 'package:playlistmerger4spotify/generated/l10n.dart';
 import 'package:playlistmerger4spotify/models/spotify_user.dart';
 import 'package:playlistmerger4spotify/spotify_secrets.dart' as secrets;
 import 'package:playlistmerger4spotify/helpers/spotify_json_parser.dart';
@@ -54,5 +56,20 @@ class SpotifyClient {
     } while (next != null);
 
     return list;
+  }
+
+  Future<Playlist> createNewPlaylist(
+      BuildContext context, String userId, String playlistName) async {
+    var httpResponse =
+        await _httpHelper.post("$_apiUrlBase/users/$userId/playlists",
+            body: jsonEncode(<String, dynamic>{
+              "name": playlistName,
+              "description":
+                  S.of(context).playlistCreatedWithPlaylistmerger4Spotify,
+              "public": false,
+              "collaborative": false
+            }));
+    var responseJson = jsonDecode(httpResponse.body);
+    return playlistFromSpotifyJson(responseJson);
   }
 }

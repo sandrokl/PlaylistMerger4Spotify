@@ -11,14 +11,14 @@ class PlaylistsDao extends DatabaseAccessor<AppDatabase>
 
   Future<List<Playlist>> getAllUserPlaylists() {
     return (select(playlists)
-          ..orderBy([(p) => OrderingTerm(expression: p.name)]))
+          ..orderBy([(p) => OrderingTerm(expression: p.name.upper())]))
         .get();
   }
 
   Future<List<Playlist>> getPlaylistsByIdList(List<String> ids) {
     return (select(playlists)
           ..where((p) => p.playlistId.isIn(ids))
-          ..orderBy([(p) => OrderingTerm(expression: p.name)]))
+          ..orderBy([(p) => OrderingTerm(expression: p.name.upper())]))
         .get();
   }
 
@@ -28,7 +28,7 @@ class PlaylistsDao extends DatabaseAccessor<AppDatabase>
           ..where((p) =>
               p.ownerId.equals(userId) &
               p.playlistId.isNotIn(alreadyUsedPlaylists))
-          ..orderBy([(p) => OrderingTerm(expression: p.name)]))
+          ..orderBy([(p) => OrderingTerm(expression: p.name.upper())]))
         .get();
   }
 
@@ -53,7 +53,7 @@ class PlaylistsDao extends DatabaseAccessor<AppDatabase>
     if (values.isEmpty) return [];
     return (select(playlists)
           ..where((tbl) => tbl.playlistId.isIn(values))
-          ..orderBy([(p) => OrderingTerm(expression: p.name)]))
+          ..orderBy([(p) => OrderingTerm(expression: p.name.upper())]))
         .get();
   }
 

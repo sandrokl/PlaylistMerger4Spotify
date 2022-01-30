@@ -28,11 +28,14 @@ class MessageLookup extends MessageLookupByLibrary {
             "\'s merging rule? This will not delete the playlist in Spotify."),
         "areYouSureYouWishToDelete_start": MessageLookupByLibrary.simpleMessage(
             "Are you sure you want to delete "),
-        "cancel": MessageLookupByLibrary.simpleMessage("CANCEL"),
+        "cancel": MessageLookupByLibrary.simpleMessage("cancel"),
         "carefulexclamation": MessageLookupByLibrary.simpleMessage("Careful!"),
         "changesSaved": MessageLookupByLibrary.simpleMessage(
             "Changes saved. You can run the merging again to update it in Spotify."),
         "confirm": MessageLookupByLibrary.simpleMessage("Confirm"),
+        "createIt": MessageLookupByLibrary.simpleMessage("CREATE IT"),
+        "createNewPlaylist":
+            MessageLookupByLibrary.simpleMessage("Create new playlist"),
         "delete": MessageLookupByLibrary.simpleMessage("DELETE"),
         "deleteThisMergingRule":
             MessageLookupByLibrary.simpleMessage("Delete this merging rule"),
@@ -46,11 +49,18 @@ class MessageLookup extends MessageLookupByLibrary {
                 "When asked to choose your DESTINATION PLAYLIST, make sure to choose a playlist that doesn\'t already contain your music.\nIt will be completely erased and replaced with the new merging results."),
         "modifyThisMergingRule":
             MessageLookupByLibrary.simpleMessage("Modify this merging rule"),
+        "nameOfThePlaylist":
+            MessageLookupByLibrary.simpleMessage("New playlist\'s name"),
         "nothingHereForNow": MessageLookupByLibrary.simpleMessage(
             "Nothing here for now. Start creating your merged playlists using the button below."),
         "ok": MessageLookupByLibrary.simpleMessage("OK"),
         "openInSpotify":
             MessageLookupByLibrary.simpleMessage("Open in Spotify"),
+        "playlistCreatedWithPlaylistmerger4Spotify":
+            MessageLookupByLibrary.simpleMessage(
+                "Playlist created with PlaylistMerger 4 Spotify"),
+        "pleaseEnterThePlaylistName": MessageLookupByLibrary.simpleMessage(
+            "Please enter the playlist name"),
         "pleaseLoginToSpotify":
             MessageLookupByLibrary.simpleMessage("Please login to Spotify"),
         "saving_threedots": MessageLookupByLibrary.simpleMessage("Saving..."),

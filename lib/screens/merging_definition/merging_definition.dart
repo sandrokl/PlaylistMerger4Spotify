@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:playlistmerger4spotify/helpers/spotify_client.dart';
 import 'package:playlistmerger4spotify/store/spotify_user_store.dart';
 import 'package:provider/provider.dart';
 import 'package:playlistmerger4spotify/database/database.dart';
@@ -25,10 +26,93 @@ class _MergingDefinitionState extends State<MergingDefinition> {
 
   bool _doNotShowAgainChecked = false;
 
-  @override
-  void initState() {
-    super.initState();
+  final _formKey = GlobalKey<FormState>();
+  final _newPlaylistName = TextEditingController();
 
+  void _showCreateNewPlaylist() {
+    showModalBottomSheet(
+      isScrollControlled: true,
+      context: context,
+      isDismissible: false,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24.0)),
+      ),
+      builder: (context) {
+        return Padding(
+          padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 8.0),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  S.of(context).createNewPlaylist,
+                  style: Theme.of(context).textTheme.headline6,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 12.0),
+                  child: TextFormField(
+                    controller: _newPlaylistName,
+                    textCapitalization: TextCapitalization.sentences,
+                    decoration: InputDecoration(
+                      hintText: S.of(context).nameOfThePlaylist,
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return S.of(context).pleaseEnterThePlaylistName;
+                      }
+                      return null;
+                    },
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(
+                      bottom: MediaQuery.of(context).viewInsets.bottom),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: Text(S.of(context).cancel),
+                      ),
+                      TextButton(
+                        onPressed: () async {
+                          if (_formKey.currentState!.validate()) {
+                            await _createNewPlaylist(_newPlaylistName.text);
+                            Navigator.of(context).pop();
+                          }
+                        },
+                        child: Text(S.of(context).createIt),
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> _createNewPlaylist(String playlistName) async {
+    final userId =
+        Provider.of<SpotifyUserStore>(context, listen: false).user!.id;
+    var spotifyClient = SpotifyClient();
+    var createdPlaylist =
+        await spotifyClient.createNewPlaylist(context, userId, playlistName);
+    await Provider.of<AppDatabase>(context, listen: false)
+        .playlistsDao
+        .insertAll([createdPlaylist]);
+    _loadPlaylistsForScreen();
+    _selectedDestinationPlaylist = createdPlaylist.playlistId;
+    _newPlaylistName.text = "";
+  }
+
+  void _loadPlaylistsForScreen() {
     final _db = context.read<AppDatabase>();
     final _userId = context.read<SpotifyUserStore>().user!.id;
 
@@ -52,6 +136,13 @@ class _MergingDefinitionState extends State<MergingDefinition> {
     setState(() {
       _sourcePlaylistsOptions = _db.playlistsDao.getAllUserPlaylists();
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    _loadPlaylistsForScreen();
 
     Timer.run(() async {
       final sp = await SharedPreferences.getInstance();
@@ -194,8 +285,9 @@ class _MergingDefinitionState extends State<MergingDefinition> {
                           IconButton(
                             padding:
                                 const EdgeInsets.fromLTRB(8.0, 8.0, 0.0, 8.0),
-                            onPressed:
-                                widget.editingPlaylistId != null ? null : () {},
+                            onPressed: widget.editingPlaylistId != null
+                                ? null
+                                : _showCreateNewPlaylist,
                             icon: const Icon(Icons.add_circle_outline),
                           ),
                         ],

@@ -10,7 +10,7 @@
   "nothingHereForNow": "Nothing here for now. Start creating your merged playlists using the button below.",
   "confirm": "Confirm",
   "delete": "DELETE",
-  "cancel": "CANCEL",
+  "cancel": "cancel",
   "areYouSureYouWishToDelete_start": "Are you sure you want to delete ",
   "areYouSureYouWishToDelete_end": "'s merging rule? This will not delete the playlist in Spotify.",
   "saving_threedots": "Saving...",
@@ -22,5 +22,10 @@
   "dismiss": "DISMISS",
   "doNotShowAgain": "Do not show again",
   "changesSaved": "Changes saved. You can run the merging again to update it in Spotify.",
-  "deleteThisMergingRule": "Delete this merging rule"
+  "deleteThisMergingRule": "Delete this merging rule",
+  "createIt": "CREATE IT",
+  "nameOfThePlaylist": "New playlist's name",
+  "createNewPlaylist": "Create new playlist",
+  "pleaseEnterThePlaylistName": "Please enter the playlist name",
+  "playlistCreatedWithPlaylistmerger4Spotify": "Playlist created with PlaylistMerger 4 Spotify"
 }

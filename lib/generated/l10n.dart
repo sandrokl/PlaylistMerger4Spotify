@@ -160,10 +160,10 @@ class S {
     );
   }
 
-  /// `CANCEL`
+  /// `cancel`
   String get cancel {
     return Intl.message(
-      'CANCEL',
+      'cancel',
       name: 'cancel',
       desc: '',
       args: [],
@@ -285,6 +285,56 @@ class S {
     return Intl.message(
       'Delete this merging rule',
       name: 'deleteThisMergingRule',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `CREATE IT`
+  String get createIt {
+    return Intl.message(
+      'CREATE IT',
+      name: 'createIt',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `New playlist's name`
+  String get nameOfThePlaylist {
+    return Intl.message(
+      'New playlist\'s name',
+      name: 'nameOfThePlaylist',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Create new playlist`
+  String get createNewPlaylist {
+    return Intl.message(
+      'Create new playlist',
+      name: 'createNewPlaylist',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please enter the playlist name`
+  String get pleaseEnterThePlaylistName {
+    return Intl.message(
+      'Please enter the playlist name',
+      name: 'pleaseEnterThePlaylistName',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Playlist created with PlaylistMerger 4 Spotify`
+  String get playlistCreatedWithPlaylistmerger4Spotify {
+    return Intl.message(
+      'Playlist created with PlaylistMerger 4 Spotify',
+      name: 'playlistCreatedWithPlaylistmerger4Spotify',
       desc: '',
       args: [],
     );
