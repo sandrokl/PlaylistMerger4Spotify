@@ -74,6 +74,7 @@ class _MergingDefinitionState extends State<MergingDefinition> {
                     children: [
                       TextButton(
                         onPressed: () {
+                          _newPlaylistName.text = "";
                           Navigator.of(context).pop();
                         },
                         child: Text(S.of(context).cancel),
@@ -82,6 +83,7 @@ class _MergingDefinitionState extends State<MergingDefinition> {
                         onPressed: () async {
                           if (_formKey.currentState!.validate()) {
                             await _createNewPlaylist(_newPlaylistName.text);
+                            _newPlaylistName.text = "";
                             Navigator.of(context).pop();
                           }
                         },
@@ -109,7 +111,6 @@ class _MergingDefinitionState extends State<MergingDefinition> {
         .insertAll([createdPlaylist]);
     _loadPlaylistsForScreen();
     _selectedDestinationPlaylist = createdPlaylist.playlistId;
-    _newPlaylistName.text = "";
   }
 
   void _loadPlaylistsForScreen() {
