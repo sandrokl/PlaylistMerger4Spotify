@@ -25,7 +25,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "appTitle":
             MessageLookupByLibrary.simpleMessage("PlaylistMerger 4 Spotify"),
         "areYouSureYouWishToDelete_end": MessageLookupByLibrary.simpleMessage(
-            "\'s merging rule? This will not delete the playlist in Spotify."),
+            "\'s merging definition? This will not delete the playlist in Spotify."),
         "areYouSureYouWishToDelete_start": MessageLookupByLibrary.simpleMessage(
             "Are you sure you want to delete "),
         "cancel": MessageLookupByLibrary.simpleMessage("cancel"),
@@ -37,18 +37,22 @@ class MessageLookup extends MessageLookupByLibrary {
         "createNewPlaylist":
             MessageLookupByLibrary.simpleMessage("Create new playlist"),
         "delete": MessageLookupByLibrary.simpleMessage("DELETE"),
-        "deleteThisMergingRule":
-            MessageLookupByLibrary.simpleMessage("Delete this merging rule"),
+        "deleteThisMergingRule": MessageLookupByLibrary.simpleMessage(
+            "Delete this merging definition"),
         "destinationPlaylist":
             MessageLookupByLibrary.simpleMessage("Destination playlist"),
         "dismiss": MessageLookupByLibrary.simpleMessage("DISMISS"),
         "doNotShowAgain":
             MessageLookupByLibrary.simpleMessage("Do not show again"),
+        "exportMergingDefinitions":
+            MessageLookupByLibrary.simpleMessage("Export merging definitions"),
+        "importMergingDefinitions":
+            MessageLookupByLibrary.simpleMessage("Import merging definitions"),
         "makeSureToChooseAPlaylistYouDontDirectlyAdd":
             MessageLookupByLibrary.simpleMessage(
                 "When asked to choose your DESTINATION PLAYLIST, make sure to choose a playlist that doesn\'t already contain your music.\nIt will be completely erased and replaced with the new merging results."),
-        "modifyThisMergingRule":
-            MessageLookupByLibrary.simpleMessage("Modify this merging rule"),
+        "modifyThisMergingRule": MessageLookupByLibrary.simpleMessage(
+            "Modify this merging definition"),
         "nameOfThePlaylist":
             MessageLookupByLibrary.simpleMessage("New playlist\'s name"),
         "nothingHereForNow": MessageLookupByLibrary.simpleMessage(
@@ -66,9 +70,12 @@ class MessageLookup extends MessageLookupByLibrary {
         "saving_threedots": MessageLookupByLibrary.simpleMessage("Saving..."),
         "selectAPlaylist":
             MessageLookupByLibrary.simpleMessage("-- Select a playlist -- "),
+        "settings": MessageLookupByLibrary.simpleMessage("Settings..."),
         "sourcePlaylists":
             MessageLookupByLibrary.simpleMessage("Source playlists"),
         "spotifyUser": MessageLookupByLibrary.simpleMessage("Spotify user"),
+        "updateThisInSpotify":
+            MessageLookupByLibrary.simpleMessage("Update this in Spotify"),
         "we_will_open_login": MessageLookupByLibrary.simpleMessage(
             "To begin, we will open the Spotify login page next"),
         "welcome": MessageLookupByLibrary.simpleMessage("Welcome")

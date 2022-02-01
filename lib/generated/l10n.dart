@@ -180,10 +180,10 @@ class S {
     );
   }
 
-  /// `'s merging rule? This will not delete the playlist in Spotify.`
+  /// `'s merging definition? This will not delete the playlist in Spotify.`
   String get areYouSureYouWishToDelete_end {
     return Intl.message(
-      '\'s merging rule? This will not delete the playlist in Spotify.',
+      '\'s merging definition? This will not delete the playlist in Spotify.',
       name: 'areYouSureYouWishToDelete_end',
       desc: '',
       args: [],
@@ -210,10 +210,10 @@ class S {
     );
   }
 
-  /// `Modify this merging rule`
+  /// `Modify this merging definition`
   String get modifyThisMergingRule {
     return Intl.message(
-      'Modify this merging rule',
+      'Modify this merging definition',
       name: 'modifyThisMergingRule',
       desc: '',
       args: [],
@@ -280,10 +280,10 @@ class S {
     );
   }
 
-  /// `Delete this merging rule`
+  /// `Delete this merging definition`
   String get deleteThisMergingRule {
     return Intl.message(
-      'Delete this merging rule',
+      'Delete this merging definition',
       name: 'deleteThisMergingRule',
       desc: '',
       args: [],
@@ -335,6 +335,46 @@ class S {
     return Intl.message(
       'Playlist created with PlaylistMerger 4 Spotify',
       name: 'playlistCreatedWithPlaylistmerger4Spotify',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Import merging definitions`
+  String get importMergingDefinitions {
+    return Intl.message(
+      'Import merging definitions',
+      name: 'importMergingDefinitions',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Export merging definitions`
+  String get exportMergingDefinitions {
+    return Intl.message(
+      'Export merging definitions',
+      name: 'exportMergingDefinitions',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Settings...`
+  String get settings {
+    return Intl.message(
+      'Settings...',
+      name: 'settings',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Update this in Spotify`
+  String get updateThisInSpotify {
+    return Intl.message(
+      'Update this in Spotify',
+      name: 'updateThisInSpotify',
       desc: '',
       args: [],
     );
