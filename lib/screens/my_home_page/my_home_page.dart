@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:playlistmerger4spotify/database/database.dart';
 import 'package:playlistmerger4spotify/generated/l10n.dart';
+import 'package:playlistmerger4spotify/helpers/import_export_helper.dart';
 import 'package:playlistmerger4spotify/helpers/spotify_client.dart';
 import 'package:playlistmerger4spotify/screens/merging_definition/merging_definition.dart';
 import 'package:playlistmerger4spotify/screens/my_home_page/appbar_popup_menu_items.dart';
@@ -56,8 +57,13 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  void _handleMenuItemSelect(String value) {
-    // TODO
+  void _handleMenuItemSelect(String value) async {
+    if (value == "export") {
+      await exportMergingDefinitions(context);
+    } else if (value == "import") {
+      await importMergingDefinitions(context);
+      _updateListMergedPlaylists();
+    }
   }
 
   @override
