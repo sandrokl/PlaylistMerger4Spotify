@@ -5,14 +5,11 @@ import 'package:playlistmerger4spotify/database/models/playlists.dart';
 part 'playlists_dao.g.dart';
 
 @DriftAccessor(tables: [Playlists])
-class PlaylistsDao extends DatabaseAccessor<AppDatabase>
-    with _$PlaylistsDaoMixin {
+class PlaylistsDao extends DatabaseAccessor<AppDatabase> with _$PlaylistsDaoMixin {
   PlaylistsDao(AppDatabase db) : super(db);
 
   Future<List<Playlist>> getAllUserPlaylists() {
-    return (select(playlists)
-          ..orderBy([(p) => OrderingTerm(expression: p.name.upper())]))
-        .get();
+    return (select(playlists)..orderBy([(p) => OrderingTerm(expression: p.name.upper())])).get();
   }
 
   Future<List<Playlist>> getPlaylistsByIdList(List<String> ids) {
@@ -25,9 +22,7 @@ class PlaylistsDao extends DatabaseAccessor<AppDatabase>
   Future<List<Playlist>> getPossibleNewMergingPlaylists(String userId) async {
     var alreadyUsedPlaylists = await getCurrentDestinationPlaylistsIds();
     return (select(playlists)
-          ..where((p) =>
-              p.ownerId.equals(userId) &
-              p.playlistId.isNotIn(alreadyUsedPlaylists))
+          ..where((p) => p.ownerId.equals(userId) & p.playlistId.isNotIn(alreadyUsedPlaylists))
           ..orderBy([(p) => OrderingTerm(expression: p.name.upper())]))
         .get();
   }
@@ -58,12 +53,9 @@ class PlaylistsDao extends DatabaseAccessor<AppDatabase>
   }
 
   Future<List<String?>> getCurrentDestinationPlaylistsIds() async {
-    var queryDestinationPlaylists =
-        selectOnly(db.playlistsToMerge, distinct: true)
-          ..addColumns([db.playlistsToMerge.destinationPlaylistId]);
-    var values = await queryDestinationPlaylists
-        .map((p) => p.read(db.playlistsToMerge.destinationPlaylistId))
-        .get();
+    var queryDestinationPlaylists = selectOnly(db.playlistsToMerge, distinct: true)
+      ..addColumns([db.playlistsToMerge.destinationPlaylistId]);
+    var values = await queryDestinationPlaylists.map((p) => p.read(db.playlistsToMerge.destinationPlaylistId)).get();
     return values;
   }
 }

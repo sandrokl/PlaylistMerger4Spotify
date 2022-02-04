@@ -19,12 +19,12 @@ void main() async {
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(
-          create: (context) => SpotifyUserStore(),
+        Provider(
+          create: (_) => SpotifyUserStore(),
         ),
         Provider<AppDatabase>(
-          create: (context) => AppDatabase(),
-          dispose: (context, db) => db.close(),
+          create: (_) => AppDatabase(),
+          dispose: (_, db) => db.close(),
         ),
       ],
       child: const MyApp(),
