@@ -53,7 +53,7 @@ android {
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
-        setProperty("archivesBaseName", "playlistmerger4spotify-$versionCode")
+        // setProperty("archivesBaseName", "playlistmerger4spotify-$versionCode")
     }
 
     signingConfigs {
