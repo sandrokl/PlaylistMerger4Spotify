@@ -3,7 +3,7 @@ description: PlaylistMerger 4 Spotify
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 22.02.021+202202021
+version: 22.02.051+202202051
 
 environment:
   sdk: '>=2.15.1 <3.0.0'
@@ -28,6 +28,7 @@ dependencies:
   package_info_plus: ^1.3.0
   mobx: ^2.0.6+1
   flutter_mobx: ^2.0.4
+  share_plus: ^3.0.4
 
 dev_dependencies:
   flutter_test:
