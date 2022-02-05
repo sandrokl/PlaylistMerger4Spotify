@@ -31,5 +31,6 @@
   "importMergingDefinitions": "Import merging definitions",
   "exportMergingDefinitions": "Export merging definitions",
   "settings": "Settings...",
-  "updateThisInSpotify": "Update this in Spotify"
+  "updateThisInSpotify": "Update this in Spotify",
+  "mergingDefinitionsSavedSuccessfully": "Merging definitions exported successfully"
 }

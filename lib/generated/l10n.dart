@@ -379,6 +379,16 @@ class S {
       args: [],
     );
   }
+
+  /// `Merging definitions exported successfully`
+  String get mergingDefinitionsSavedSuccessfully {
+    return Intl.message(
+      'Merging definitions exported successfully',
+      name: 'mergingDefinitionsSavedSuccessfully',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

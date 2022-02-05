@@ -2,7 +2,7 @@ class BackupInfo {
   String? appId;
   String? version;
   String? date;
-  List<Rules>? rules;
+  List<Rule>? rules;
 
   BackupInfo({this.appId, this.version, this.date, this.rules});
 
@@ -11,9 +11,9 @@ class BackupInfo {
     version = json['version'];
     date = json['date'];
     if (json['rules'] != null) {
-      rules = <Rules>[];
+      rules = <Rule>[];
       json['rules'].forEach((v) {
-        rules!.add(Rules.fromJson(v));
+        rules!.add(Rule.fromJson(v));
       });
     }
   }
@@ -30,20 +30,20 @@ class BackupInfo {
   }
 }
 
-class Rules {
+class Rule {
   String? destinationId;
   String? destinationName;
-  List<Sources>? sources;
+  List<Source>? sources;
 
-  Rules({this.destinationId, this.destinationName, this.sources});
+  Rule({this.destinationId, this.destinationName, this.sources});
 
-  Rules.fromJson(Map<String, dynamic> json) {
+  Rule.fromJson(Map<String, dynamic> json) {
     destinationId = json['destinationId'];
     destinationName = json['destinationName'];
     if (json['sources'] != null) {
-      sources = <Sources>[];
+      sources = <Source>[];
       json['sources'].forEach((v) {
-        sources!.add(Sources.fromJson(v));
+        sources!.add(Source.fromJson(v));
       });
     }
   }
@@ -59,14 +59,14 @@ class Rules {
   }
 }
 
-class Sources {
+class Source {
   String? id;
   String? name;
   String? owner;
 
-  Sources({this.id, this.name, this.owner});
+  Source({this.id, this.name, this.owner});
 
-  Sources.fromJson(Map<String, dynamic> json) {
+  Source.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
     owner = json['owner'];

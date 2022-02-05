@@ -51,6 +51,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "makeSureToChooseAPlaylistYouDontDirectlyAdd":
             MessageLookupByLibrary.simpleMessage(
                 "When asked to choose your DESTINATION PLAYLIST, make sure to choose a playlist that doesn\'t already contain your music.\nIt will be completely erased and replaced with the new merging results."),
+        "mergingDefinitionsSavedSuccessfully":
+            MessageLookupByLibrary.simpleMessage(
+                "Merging definitions exported successfully"),
         "modifyThisMergingRule": MessageLookupByLibrary.simpleMessage(
             "Modify this merging definition"),
         "nameOfThePlaylist":
