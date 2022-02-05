@@ -29,6 +29,10 @@ class _MergingDefinitionState extends State<MergingDefinition> {
   final _formKey = GlobalKey<FormState>();
   final _newPlaylistName = TextEditingController();
 
+  late final SpotifyUserStore _userStore;
+
+  final _doNotShowAgainKey = "doNotShowAgain";
+
   void _showCreateNewPlaylist() {
     showModalBottomSheet(
       isScrollControlled: true,
@@ -67,8 +71,7 @@ class _MergingDefinitionState extends State<MergingDefinition> {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(
-                      bottom: MediaQuery.of(context).viewInsets.bottom),
+                  padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
@@ -101,35 +104,26 @@ class _MergingDefinitionState extends State<MergingDefinition> {
   }
 
   Future<void> _createNewPlaylist(String playlistName) async {
-    final userId =
-        Provider.of<SpotifyUserStore>(context, listen: false).user!.id;
+    final userId = _userStore.user!.id;
     var spotifyClient = SpotifyClient();
-    var createdPlaylist =
-        await spotifyClient.createNewPlaylist(context, userId, playlistName);
-    await Provider.of<AppDatabase>(context, listen: false)
-        .playlistsDao
-        .insertAll([createdPlaylist]);
+    var createdPlaylist = await spotifyClient.createNewPlaylist(context, userId, playlistName);
+    await Provider.of<AppDatabase>(context, listen: false).playlistsDao.insertAll([createdPlaylist]);
     _loadPlaylistsForScreen();
     _selectedDestinationPlaylist = createdPlaylist.playlistId;
   }
 
   void _loadPlaylistsForScreen() {
     final _db = context.read<AppDatabase>();
-    final _userId = context.read<SpotifyUserStore>().user!.id;
+    final _userId = _userStore.user!.id;
 
     if (widget.editingPlaylistId == null) {
-      _destinationPlaylistOptions =
-          _db.playlistsDao.getPossibleNewMergingPlaylists(_userId);
+      _destinationPlaylistOptions = _db.playlistsDao.getPossibleNewMergingPlaylists(_userId);
     } else {
       _selectedDestinationPlaylist = widget.editingPlaylistId!;
-      _destinationPlaylistOptions =
-          _db.playlistsDao.getPlaylistsByIdList([widget.editingPlaylistId!]);
-      _db.playlistsToMergeDao
-          .getPlaylistsToMergeByDestinationId(widget.editingPlaylistId!)
-          .then((list) {
+      _destinationPlaylistOptions = _db.playlistsDao.getPlaylistsByIdList([widget.editingPlaylistId!]);
+      _db.playlistsToMergeDao.getPlaylistsToMergeByDestinationId(widget.editingPlaylistId!).then((list) {
         setState(() {
-          _selectedSourcePlaylists =
-              list.map((p) => p.sourcePlaylistId).toList();
+          _selectedSourcePlaylists = list.map((p) => p.sourcePlaylistId).toList();
         });
       });
     }
@@ -143,11 +137,13 @@ class _MergingDefinitionState extends State<MergingDefinition> {
   void initState() {
     super.initState();
 
+    _userStore = Provider.of<SpotifyUserStore>(context, listen: false);
+
     _loadPlaylistsForScreen();
 
     Timer.run(() async {
       final sp = await SharedPreferences.getInstance();
-      final doNotShowAgain = sp.getBool("doNotShowAgain") ?? false;
+      final doNotShowAgain = sp.getBool(_doNotShowAgainKey) ?? false;
 
       if (widget.editingPlaylistId == null && !doNotShowAgain) {
         showDialog(
@@ -160,9 +156,7 @@ class _MergingDefinitionState extends State<MergingDefinition> {
                       content: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Text(S
-                              .of(context)
-                              .makeSureToChooseAPlaylistYouDontDirectlyAdd),
+                          Text(S.of(context).makeSureToChooseAPlaylistYouDontDirectlyAdd),
                           CheckboxListTile(
                             visualDensity: VisualDensity.compact,
                             contentPadding: EdgeInsets.zero,
@@ -186,7 +180,7 @@ class _MergingDefinitionState extends State<MergingDefinition> {
                           onPressed: () async {
                             if (_doNotShowAgainChecked) {
                               final sp = await SharedPreferences.getInstance();
-                              await sp.setBool("doNotShowAgain", true);
+                              await sp.setBool(_doNotShowAgainKey, true);
                             }
 
                             Navigator.pop(context);
@@ -205,8 +199,7 @@ class _MergingDefinitionState extends State<MergingDefinition> {
     if (_selectedDestinationPlaylist != null) {
       await Provider.of<AppDatabase>(context, listen: false)
           .playlistsToMergeDao
-          .updateMergedPlaylist(
-              _selectedDestinationPlaylist!, _selectedSourcePlaylists);
+          .updateMergedPlaylist(_selectedDestinationPlaylist!, _selectedSourcePlaylists);
     }
   }
 
@@ -248,8 +241,7 @@ class _MergingDefinitionState extends State<MergingDefinition> {
               FutureBuilder<List<Playlist>>(
                 future: _destinationPlaylistOptions,
                 builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.done &&
-                      snapshot.hasData) {
+                  if (snapshot.connectionState == ConnectionState.done && snapshot.hasData) {
                     return Padding(
                       padding: const EdgeInsets.only(top: 8.0),
                       child: Row(
@@ -267,8 +259,7 @@ class _MergingDefinitionState extends State<MergingDefinition> {
                                   ? null
                                   : Text(
                                       S.of(context).selectAPlaylist,
-                                      style:
-                                          const TextStyle(color: Colors.grey),
+                                      style: const TextStyle(color: Colors.grey),
                                       textAlign: TextAlign.start,
                                     ),
                               value: _selectedDestinationPlaylist,
@@ -276,19 +267,15 @@ class _MergingDefinitionState extends State<MergingDefinition> {
                                   ? (newValue) {
                                       setState(() {
                                         _selectedDestinationPlaylist = newValue;
-                                        _selectedSourcePlaylists
-                                            .remove(newValue);
+                                        _selectedSourcePlaylists.remove(newValue);
                                       });
                                     }
                                   : null,
                             ),
                           ),
                           IconButton(
-                            padding:
-                                const EdgeInsets.fromLTRB(8.0, 8.0, 0.0, 8.0),
-                            onPressed: widget.editingPlaylistId != null
-                                ? null
-                                : _showCreateNewPlaylist,
+                            padding: const EdgeInsets.fromLTRB(8.0, 8.0, 0.0, 8.0),
+                            onPressed: widget.editingPlaylistId != null ? null : _showCreateNewPlaylist,
                             icon: const Icon(Icons.add_circle_outline),
                           ),
                         ],
@@ -310,41 +297,33 @@ class _MergingDefinitionState extends State<MergingDefinition> {
                 child: FutureBuilder<List<Playlist>>(
                   future: _sourcePlaylistsOptions,
                   builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.done &&
-                        snapshot.hasData) {
+                    if (snapshot.connectionState == ConnectionState.done && snapshot.hasData) {
                       return Padding(
                         padding: const EdgeInsets.only(top: 8.0),
                         child: SingleChildScrollView(
                           child: Column(
                             children: snapshot.data!.map((e) {
                               return CheckboxListTile(
-                                contentPadding: const EdgeInsets.only(
-                                    right: 0.0, left: 0.0),
+                                contentPadding: const EdgeInsets.only(right: 0.0, left: 0.0),
                                 visualDensity: VisualDensity.compact,
-                                value: (e.playlistId !=
-                                        _selectedDestinationPlaylist &&
-                                    _selectedSourcePlaylists
-                                        .contains(e.playlistId)),
+                                value: (e.playlistId != _selectedDestinationPlaylist &&
+                                    _selectedSourcePlaylists.contains(e.playlistId)),
                                 title: Text(e.name),
-                                onChanged:
-                                    _selectedDestinationPlaylist != e.playlistId
-                                        ? (newValue) {
-                                            if (e.playlistId !=
-                                                _selectedDestinationPlaylist) {
-                                              setState(() {
-                                                if (newValue != null) {
-                                                  if (newValue) {
-                                                    _selectedSourcePlaylists
-                                                        .add(e.playlistId);
-                                                  } else {
-                                                    _selectedSourcePlaylists
-                                                        .remove(e.playlistId);
-                                                  }
-                                                }
-                                              });
+                                onChanged: _selectedDestinationPlaylist != e.playlistId
+                                    ? (newValue) {
+                                        if (e.playlistId != _selectedDestinationPlaylist) {
+                                          setState(() {
+                                            if (newValue != null) {
+                                              if (newValue) {
+                                                _selectedSourcePlaylists.add(e.playlistId);
+                                              } else {
+                                                _selectedSourcePlaylists.remove(e.playlistId);
+                                              }
                                             }
-                                          }
-                                        : null,
+                                          });
+                                        }
+                                      }
+                                    : null,
                               );
                             }).toList(),
                           ),

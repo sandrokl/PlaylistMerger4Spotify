@@ -19,7 +19,7 @@ void main() async {
   runApp(
     MultiProvider(
       providers: [
-        Provider(
+        Provider<SpotifyUserStore>(
           create: (_) => SpotifyUserStore(),
         ),
         Provider<AppDatabase>(
