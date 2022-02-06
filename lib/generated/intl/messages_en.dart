@@ -22,6 +22,9 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+        "anUpdateToYourPlaylistIsBeingMadeInSpotify":
+            MessageLookupByLibrary.simpleMessage(
+                "An update to your playlist is being made in Spotify. We\'ll let you know when it\'s finished."),
         "appTitle":
             MessageLookupByLibrary.simpleMessage("PlaylistMerger 4 Spotify"),
         "areYouSureYouWishToDelete_end": MessageLookupByLibrary.simpleMessage(

@@ -389,6 +389,16 @@ class S {
       args: [],
     );
   }
+
+  /// `An update to your playlist is being made in Spotify. We'll let you know when it's finished.`
+  String get anUpdateToYourPlaylistIsBeingMadeInSpotify {
+    return Intl.message(
+      'An update to your playlist is being made in Spotify. We\'ll let you know when it\'s finished.',
+      name: 'anUpdateToYourPlaylistIsBeingMadeInSpotify',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

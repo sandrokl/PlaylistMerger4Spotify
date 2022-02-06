@@ -3,12 +3,14 @@ import 'package:playlistmerger4spotify/database/database.dart';
 import 'package:playlistmerger4spotify/generated/l10n.dart';
 import 'package:playlistmerger4spotify/helpers/import_export_helper.dart';
 import 'package:playlistmerger4spotify/helpers/spotify_client.dart';
+import 'package:playlistmerger4spotify/helpers/work_manager_helper.dart';
 import 'package:playlistmerger4spotify/screens/merging_definition/merging_definition.dart';
 import 'package:playlistmerger4spotify/screens/my_home_page/appbar_popup_menu_items.dart';
 import 'package:playlistmerger4spotify/screens/my_home_page/user_info.dart';
 import 'package:playlistmerger4spotify/store/spotify_user_store.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:workmanager/workmanager.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key}) : super(key: key);
@@ -73,7 +75,13 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(S.of(context).appTitle),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Workmanager().registerOneOffTask(
+                DateTime.now().millisecond.toString(),
+                WorkManagerHelper.TASK_DO_MERGING_NOW_ALL,
+                tag: WorkManagerHelper.TAG_DO_MERGING_NOW,
+              );
+            },
             icon: const Icon(Icons.call_merge),
             iconSize: 30.0,
           ),
@@ -223,7 +231,23 @@ class _MyHomePageState extends State<MyHomePage> {
                                                       visualDensity: VisualDensity.compact,
                                                       contentPadding: const EdgeInsets.all(4.0),
                                                       dense: true,
-                                                      onTap: () async {},
+                                                      onTap: () {
+                                                        Workmanager().registerOneOffTask(
+                                                            DateTime.now().millisecond.toString(),
+                                                            WorkManagerHelper.TASK_DO_MERGING_NOW_SPECIFIC,
+                                                            tag: WorkManagerHelper.TAG_DO_MERGING_NOW,
+                                                            inputData: {
+                                                              "playlistId": p.playlistId,
+                                                            });
+                                                        ScaffoldMessenger.of(context).showSnackBar(
+                                                          SnackBar(
+                                                            content: Text(S
+                                                                .of(context)
+                                                                .anUpdateToYourPlaylistIsBeingMadeInSpotify),
+                                                          ),
+                                                        );
+                                                        Navigator.pop(context);
+                                                      },
                                                       title: Text(
                                                         S.of(context).updateThisInSpotify,
                                                         style: Theme.of(context).textTheme.bodyText2,
@@ -246,28 +270,6 @@ class _MyHomePageState extends State<MyHomePage> {
                                                         style: Theme.of(context).textTheme.bodyText2,
                                                       ),
                                                       leading: const Icon(Icons.play_circle_fill_outlined),
-                                                    ),
-                                                    ListTile(
-                                                      visualDensity: VisualDensity.compact,
-                                                      contentPadding: const EdgeInsets.all(4.0),
-                                                      dense: true,
-                                                      onTap: () async {
-                                                        Navigator.pop(context);
-                                                        await Navigator.push(
-                                                          context,
-                                                          MaterialPageRoute(
-                                                            builder: (context) => MergingDefinition(
-                                                              editingPlaylistId: p.playlistId,
-                                                            ),
-                                                          ),
-                                                        );
-                                                        _updateListMergedPlaylists();
-                                                      },
-                                                      title: Text(
-                                                        S.of(context).modifyThisMergingRule,
-                                                        style: Theme.of(context).textTheme.bodyText2,
-                                                      ),
-                                                      leading: const Icon(Icons.edit_rounded),
                                                     ),
                                                     ListTile(
                                                       visualDensity: VisualDensity.compact,
@@ -319,6 +321,28 @@ class _MyHomePageState extends State<MyHomePage> {
                                                         style: Theme.of(context).textTheme.bodyText2,
                                                       ),
                                                       leading: const Icon(Icons.delete),
+                                                    ),
+                                                    ListTile(
+                                                      visualDensity: VisualDensity.compact,
+                                                      contentPadding: const EdgeInsets.all(4.0),
+                                                      dense: true,
+                                                      onTap: () async {
+                                                        Navigator.pop(context);
+                                                        await Navigator.push(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                            builder: (context) => MergingDefinition(
+                                                              editingPlaylistId: p.playlistId,
+                                                            ),
+                                                          ),
+                                                        );
+                                                        _updateListMergedPlaylists();
+                                                      },
+                                                      title: Text(
+                                                        S.of(context).modifyThisMergingRule,
+                                                        style: Theme.of(context).textTheme.bodyText2,
+                                                      ),
+                                                      leading: const Icon(Icons.edit_rounded),
                                                     ),
                                                   ],
                                                 ),

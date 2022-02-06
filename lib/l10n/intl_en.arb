@@ -32,5 +32,6 @@
   "exportMergingDefinitions": "Export merging definitions",
   "settings": "Settings...",
   "updateThisInSpotify": "Update this in Spotify",
-  "mergingDefinitionsImportedSuccessfully": "Merging definitions imported successfully, as much as possible, respecting your current playlists."
+  "mergingDefinitionsImportedSuccessfully": "Merging definitions imported successfully, as much as possible, respecting your current playlists.",
+  "anUpdateToYourPlaylistIsBeingMadeInSpotify": "An update to your playlist is being made in Spotify. We'll let you know when it's finished."
 }
