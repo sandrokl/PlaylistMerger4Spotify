@@ -11,6 +11,7 @@ import 'package:playlistmerger4spotify/generated/l10n.dart';
 import 'package:playlistmerger4spotify/models/backup_info.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:intl/intl.dart';
 
 Future<void> exportMergingDefinitions(BuildContext context) async {
   final info = await PackageInfo.fromPlatform();
@@ -30,30 +31,19 @@ Future<void> exportMergingDefinitions(BuildContext context) async {
     for (var source in sources) {
       r.sources!.add(Source(id: source.playlistId, name: source.name, owner: source.ownerId));
     }
-
     backupInfo.rules!.add(r);
   }
 
-  final fileName = "pm4s-export-${(DateTime.now().millisecondsSinceEpoch / 1000).floor()}.json";
+  final fileName = "playlistmerger4spotify-${DateFormat('yyyyMMdd-HHmm').format(DateTime.now())}.json";
   final directory = await getTemporaryDirectory();
   final destinationFile = join(directory.path, fileName);
 
   final file = File(destinationFile);
   const jsonEncoder = JsonEncoder.withIndent("  ");
-  final stringContent = jsonEncoder.convert(backupInfo);
+  final stringContent = jsonEncoder.convert(backupInfo.toJson());
   await file.writeAsString(stringContent);
 
-  await Share.shareFiles(
-    [file.path],
-    mimeTypes: ["application/json"],
-    subject: "teste1",
-    text: "teste2",
-  );
-  ScaffoldMessenger.of(context).showSnackBar(
-    SnackBar(
-      content: Text(S.of(context).mergingDefinitionsSavedSuccessfully),
-    ),
-  );
+  await Share.shareFiles([file.path], mimeTypes: ["application/json"], subject: fileName);
 }
 
 Future<void> importMergingDefinitions(BuildContext context) async {
@@ -63,9 +53,22 @@ Future<void> importMergingDefinitions(BuildContext context) async {
     var file = File(result.files.first.path!);
     var jsonString = await file.readAsString();
     var jsonObj = jsonDecode(jsonString);
-
     var backup = BackupInfo.fromJson(jsonObj);
 
-    // TODO : add to database
+    final db = Provider.of<AppDatabase>(context, listen: false);
+    if (backup.rules != null && backup.rules!.isNotEmpty) {
+      for (var destination in backup.rules!) {
+        if (destination.sources != null && destination.sources!.isNotEmpty) {
+          await db.playlistsToMergeDao.updateMergedPlaylist(
+              destination.destinationId!, destination.sources!.map((e) => e.id!).toList(),
+              deleteBeforeInsert: false);
+        }
+      }
+    }
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(S.of(context).mergingDefinitionsImportedSuccessfully),
+      ),
+    );
   }
 }

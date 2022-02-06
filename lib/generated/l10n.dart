@@ -380,11 +380,11 @@ class S {
     );
   }
 
-  /// `Merging definitions exported successfully`
-  String get mergingDefinitionsSavedSuccessfully {
+  /// `Merging definitions imported successfully, as much as possible, respecting your current playlists.`
+  String get mergingDefinitionsImportedSuccessfully {
     return Intl.message(
-      'Merging definitions exported successfully',
-      name: 'mergingDefinitionsSavedSuccessfully',
+      'Merging definitions imported successfully, as much as possible, respecting your current playlists.',
+      name: 'mergingDefinitionsImportedSuccessfully',
       desc: '',
       args: [],
     );
