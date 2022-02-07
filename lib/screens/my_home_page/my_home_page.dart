@@ -1,7 +1,10 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:playlistmerger4spotify/database/database.dart';
 import 'package:playlistmerger4spotify/generated/l10n.dart';
 import 'package:playlistmerger4spotify/helpers/import_export_helper.dart';
+import 'package:playlistmerger4spotify/helpers/notifications_helper.dart';
 import 'package:playlistmerger4spotify/helpers/spotify_client.dart';
 import 'package:playlistmerger4spotify/helpers/work_manager_helper.dart';
 import 'package:playlistmerger4spotify/screens/merging_definition/merging_definition.dart';
@@ -26,6 +29,20 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
+
+    AwesomeNotifications().initialize(
+      'resource://drawable/res_ic_notification',
+      [
+        NotificationChannel(
+          channelKey: NotificationsHelper.CHANNEL_KEY_MERGING_RESULTS,
+          channelName: S.current.updatePlaylistsResults,
+          channelDescription: S.current.statusOfYourMergingRequestsUpdates,
+          playSound: false,
+          enableVibration: false,
+        )
+      ],
+      debug: kDebugMode,
+    );
 
     final spotifyClient = SpotifyClient();
     spotifyClient.getUserFromSession().then((user) async {
@@ -231,8 +248,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                                       visualDensity: VisualDensity.compact,
                                                       contentPadding: const EdgeInsets.all(4.0),
                                                       dense: true,
-                                                      onTap: () {
-                                                        Workmanager().registerOneOffTask(
+                                                      onTap: () async {
+                                                        await Workmanager().registerOneOffTask(
                                                             DateTime.now().millisecond.toString(),
                                                             WorkManagerHelper.TASK_DO_MERGING_NOW_SPECIFIC,
                                                             tag: WorkManagerHelper.TAG_DO_MERGING_NOW,

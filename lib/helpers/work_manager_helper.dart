@@ -1,6 +1,9 @@
 // ignore_for_file: constant_identifier_names
 
-import 'package:workmanager/workmanager.dart';
+import 'dart:math';
+
+import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:playlistmerger4spotify/helpers/notifications_helper.dart';
 
 class WorkManagerHelper {
   static const TAG_DO_MERGING_NOW = "doMergingNow";
@@ -12,11 +15,18 @@ class WorkManagerHelper {
 
   static Future<bool> handleTaskRequest(String task, Map<String, dynamic>? inputData) async {
     if (task == TASK_DO_MERGING_NOW_ALL) {
-      await Workmanager().cancelByTag(TAG_DO_MERGING_NOW);
     } else if (task == TASK_DO_MERGING_NOW_SPECIFIC) {
       final String playlistId = inputData?["playlistId"];
-      await Workmanager().cancelByTag(TAG_DO_MERGING_NOW);
     }
+
+    await AwesomeNotifications().createNotification(
+      content: NotificationContent(
+        id: Random().nextInt(999999),
+        channelKey: NotificationsHelper.CHANNEL_KEY_MERGING_RESULTS,
+        body: 'Simple body',
+      ),
+    );
+
     return true;
   }
 }

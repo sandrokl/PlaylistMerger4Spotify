@@ -32,8 +32,6 @@ if (keystorePropertiesFile.exists()) {
 }
 
 android {
-    compileSdkVersion flutter.compileSdkVersion
-
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_11
         targetCompatibility JavaVersion.VERSION_11
@@ -47,13 +45,14 @@ android {
         main.java.srcDirs += 'src/main/kotlin'
     }
 
+    compileSdkVersion 31
+
     defaultConfig {
         applicationId "net.sandrokl.playlistmerger4spotify"
-        minSdkVersion 19
-        targetSdkVersion flutter.targetSdkVersion
+        minSdkVersion 21
+        targetSdkVersion 31
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
-        // setProperty("archivesBaseName", "playlistmerger4spotify-$versionCode")
     }
 
     signingConfigs {

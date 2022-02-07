@@ -80,6 +80,11 @@ class MessageLookup extends MessageLookupByLibrary {
         "sourcePlaylists":
             MessageLookupByLibrary.simpleMessage("Source playlists"),
         "spotifyUser": MessageLookupByLibrary.simpleMessage("Spotify user"),
+        "statusOfYourMergingRequestsUpdates":
+            MessageLookupByLibrary.simpleMessage(
+                "Status of your merging requests updates."),
+        "updatePlaylistsResults":
+            MessageLookupByLibrary.simpleMessage("Update playlists results"),
         "updateThisInSpotify":
             MessageLookupByLibrary.simpleMessage("Update this in Spotify"),
         "we_will_open_login": MessageLookupByLibrary.simpleMessage(

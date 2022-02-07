@@ -399,6 +399,26 @@ class S {
       args: [],
     );
   }
+
+  /// `Update playlists results`
+  String get updatePlaylistsResults {
+    return Intl.message(
+      'Update playlists results',
+      name: 'updatePlaylistsResults',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Status of your merging requests updates.`
+  String get statusOfYourMergingRequestsUpdates {
+    return Intl.message(
+      'Status of your merging requests updates.',
+      name: 'statusOfYourMergingRequestsUpdates',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
