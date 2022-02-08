@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:playlistmerger4spotify/store/spotify_user_store.dart';
 import 'package:provider/provider.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:playlistmerger4spotify/generated/l10n.dart';
 
 class UserInfo extends StatelessWidget {
@@ -26,8 +27,8 @@ class UserInfo extends StatelessWidget {
                         Icons.account_box_outlined,
                         size: 50.0,
                       )
-                    : Image.network(
-                        store.user?.photoUrl as String,
+                    : Image(
+                        image: CachedNetworkImageProvider(store.user!.photoUrl!),
                         height: 50.0,
                         width: 50.0,
                         fit: BoxFit.fitHeight,

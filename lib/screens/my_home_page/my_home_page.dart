@@ -39,6 +39,7 @@ class _MyHomePageState extends State<MyHomePage> {
           channelDescription: S.current.statusOfYourMergingRequestsUpdates,
           playSound: false,
           enableVibration: false,
+          importance: NotificationImportance.High,
         )
       ],
       debug: kDebugMode,
