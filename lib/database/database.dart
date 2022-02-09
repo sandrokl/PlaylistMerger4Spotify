@@ -11,7 +11,7 @@ import 'package:playlistmerger4spotify/database/models/playlists.dart';
 import 'package:playlistmerger4spotify/database/models/playlists_to_merge.dart';
 import 'package:playlistmerger4spotify/database/models/tracks_to_add.dart';
 import 'package:playlistmerger4spotify/database/models/tracks_to_remove.dart';
-import 'package:playlistmerger4spotify/database/models/track.dart';
+import 'package:playlistmerger4spotify/database/models/base/track.dart';
 import 'package:sqflite/sqflite.dart' as sqflite;
 
 import 'old_database_helper.dart';
