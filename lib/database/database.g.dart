@@ -533,14 +533,14 @@ class $PlaylistsToMergeTable extends PlaylistsToMerge
   }
 }
 
-class CurrentTracksCompanion extends UpdateCompanion<Track> {
+class TracksCurrentCompanion extends UpdateCompanion<Track> {
   final Value<String> playlistId;
   final Value<String> trackId;
   final Value<String> name;
   final Value<String> trackArtists;
   final Value<String> trackUri;
   final Value<int> durationMs;
-  const CurrentTracksCompanion({
+  const TracksCurrentCompanion({
     this.playlistId = const Value.absent(),
     this.trackId = const Value.absent(),
     this.name = const Value.absent(),
@@ -548,7 +548,7 @@ class CurrentTracksCompanion extends UpdateCompanion<Track> {
     this.trackUri = const Value.absent(),
     this.durationMs = const Value.absent(),
   });
-  CurrentTracksCompanion.insert({
+  TracksCurrentCompanion.insert({
     required String playlistId,
     required String trackId,
     required String name,
@@ -579,14 +579,14 @@ class CurrentTracksCompanion extends UpdateCompanion<Track> {
     });
   }
 
-  CurrentTracksCompanion copyWith(
+  TracksCurrentCompanion copyWith(
       {Value<String>? playlistId,
       Value<String>? trackId,
       Value<String>? name,
       Value<String>? trackArtists,
       Value<String>? trackUri,
       Value<int>? durationMs}) {
-    return CurrentTracksCompanion(
+    return TracksCurrentCompanion(
       playlistId: playlistId ?? this.playlistId,
       trackId: trackId ?? this.trackId,
       name: name ?? this.name,
@@ -622,7 +622,7 @@ class CurrentTracksCompanion extends UpdateCompanion<Track> {
 
   @override
   String toString() {
-    return (StringBuffer('CurrentTracksCompanion(')
+    return (StringBuffer('TracksCurrentCompanion(')
           ..write('playlistId: $playlistId, ')
           ..write('trackId: $trackId, ')
           ..write('name: $name, ')
@@ -634,16 +634,19 @@ class CurrentTracksCompanion extends UpdateCompanion<Track> {
   }
 }
 
-class $CurrentTracksTable extends CurrentTracks
-    with TableInfo<$CurrentTracksTable, Track> {
+class $TracksCurrentTable extends TracksCurrent
+    with TableInfo<$TracksCurrentTable, Track> {
   final GeneratedDatabase _db;
   final String? _alias;
-  $CurrentTracksTable(this._db, [this._alias]);
+  $TracksCurrentTable(this._db, [this._alias]);
   final VerificationMeta _playlistIdMeta = const VerificationMeta('playlistId');
   @override
   late final GeneratedColumn<String?> playlistId = GeneratedColumn<String?>(
       'playlist_id', aliasedName, false,
-      type: const StringType(), requiredDuringInsert: true);
+      type: const StringType(),
+      requiredDuringInsert: true,
+      defaultConstraints:
+          'REFERENCES playlists (playlist_id) ON UPDATE CASCADE ON DELETE CASCADE');
   final VerificationMeta _trackIdMeta = const VerificationMeta('trackId');
   @override
   late final GeneratedColumn<String?> trackId = GeneratedColumn<String?>(
@@ -674,9 +677,9 @@ class $CurrentTracksTable extends CurrentTracks
   List<GeneratedColumn> get $columns =>
       [playlistId, trackId, name, trackArtists, trackUri, durationMs];
   @override
-  String get aliasedName => _alias ?? 'current_tracks';
+  String get aliasedName => _alias ?? 'tracks_current';
   @override
-  String get actualTableName => 'current_tracks';
+  String get actualTableName => 'tracks_current';
   @override
   VerificationContext validateIntegrity(Insertable<Track> instance,
       {bool isInserting = false}) {
@@ -749,19 +752,19 @@ class $CurrentTracksTable extends CurrentTracks
   }
 
   @override
-  $CurrentTracksTable createAlias(String alias) {
-    return $CurrentTracksTable(_db, alias);
+  $TracksCurrentTable createAlias(String alias) {
+    return $TracksCurrentTable(_db, alias);
   }
 }
 
-class NewAllTracksCompanion extends UpdateCompanion<Track> {
+class TracksNewAllCompanion extends UpdateCompanion<Track> {
   final Value<String> playlistId;
   final Value<String> trackId;
   final Value<String> name;
   final Value<String> trackArtists;
   final Value<String> trackUri;
   final Value<int> durationMs;
-  const NewAllTracksCompanion({
+  const TracksNewAllCompanion({
     this.playlistId = const Value.absent(),
     this.trackId = const Value.absent(),
     this.name = const Value.absent(),
@@ -769,7 +772,7 @@ class NewAllTracksCompanion extends UpdateCompanion<Track> {
     this.trackUri = const Value.absent(),
     this.durationMs = const Value.absent(),
   });
-  NewAllTracksCompanion.insert({
+  TracksNewAllCompanion.insert({
     required String playlistId,
     required String trackId,
     required String name,
@@ -800,14 +803,14 @@ class NewAllTracksCompanion extends UpdateCompanion<Track> {
     });
   }
 
-  NewAllTracksCompanion copyWith(
+  TracksNewAllCompanion copyWith(
       {Value<String>? playlistId,
       Value<String>? trackId,
       Value<String>? name,
       Value<String>? trackArtists,
       Value<String>? trackUri,
       Value<int>? durationMs}) {
-    return NewAllTracksCompanion(
+    return TracksNewAllCompanion(
       playlistId: playlistId ?? this.playlistId,
       trackId: trackId ?? this.trackId,
       name: name ?? this.name,
@@ -843,7 +846,7 @@ class NewAllTracksCompanion extends UpdateCompanion<Track> {
 
   @override
   String toString() {
-    return (StringBuffer('NewAllTracksCompanion(')
+    return (StringBuffer('TracksNewAllCompanion(')
           ..write('playlistId: $playlistId, ')
           ..write('trackId: $trackId, ')
           ..write('name: $name, ')
@@ -855,16 +858,19 @@ class NewAllTracksCompanion extends UpdateCompanion<Track> {
   }
 }
 
-class $NewAllTracksTable extends NewAllTracks
-    with TableInfo<$NewAllTracksTable, Track> {
+class $TracksNewAllTable extends TracksNewAll
+    with TableInfo<$TracksNewAllTable, Track> {
   final GeneratedDatabase _db;
   final String? _alias;
-  $NewAllTracksTable(this._db, [this._alias]);
+  $TracksNewAllTable(this._db, [this._alias]);
   final VerificationMeta _playlistIdMeta = const VerificationMeta('playlistId');
   @override
   late final GeneratedColumn<String?> playlistId = GeneratedColumn<String?>(
       'playlist_id', aliasedName, false,
-      type: const StringType(), requiredDuringInsert: true);
+      type: const StringType(),
+      requiredDuringInsert: true,
+      defaultConstraints:
+          'REFERENCES playlists (playlist_id) ON UPDATE CASCADE ON DELETE CASCADE');
   final VerificationMeta _trackIdMeta = const VerificationMeta('trackId');
   @override
   late final GeneratedColumn<String?> trackId = GeneratedColumn<String?>(
@@ -895,9 +901,9 @@ class $NewAllTracksTable extends NewAllTracks
   List<GeneratedColumn> get $columns =>
       [playlistId, trackId, name, trackArtists, trackUri, durationMs];
   @override
-  String get aliasedName => _alias ?? 'new_all_tracks';
+  String get aliasedName => _alias ?? 'tracks_new_all';
   @override
-  String get actualTableName => 'new_all_tracks';
+  String get actualTableName => 'tracks_new_all';
   @override
   VerificationContext validateIntegrity(Insertable<Track> instance,
       {bool isInserting = false}) {
@@ -970,19 +976,19 @@ class $NewAllTracksTable extends NewAllTracks
   }
 
   @override
-  $NewAllTracksTable createAlias(String alias) {
-    return $NewAllTracksTable(_db, alias);
+  $TracksNewAllTable createAlias(String alias) {
+    return $TracksNewAllTable(_db, alias);
   }
 }
 
-class NewDistinctTracksCompanion extends UpdateCompanion<Track> {
+class TracksNewDistinctCompanion extends UpdateCompanion<Track> {
   final Value<String> playlistId;
   final Value<String> trackId;
   final Value<String> name;
   final Value<String> trackArtists;
   final Value<String> trackUri;
   final Value<int> durationMs;
-  const NewDistinctTracksCompanion({
+  const TracksNewDistinctCompanion({
     this.playlistId = const Value.absent(),
     this.trackId = const Value.absent(),
     this.name = const Value.absent(),
@@ -990,7 +996,7 @@ class NewDistinctTracksCompanion extends UpdateCompanion<Track> {
     this.trackUri = const Value.absent(),
     this.durationMs = const Value.absent(),
   });
-  NewDistinctTracksCompanion.insert({
+  TracksNewDistinctCompanion.insert({
     required String playlistId,
     required String trackId,
     required String name,
@@ -1021,14 +1027,14 @@ class NewDistinctTracksCompanion extends UpdateCompanion<Track> {
     });
   }
 
-  NewDistinctTracksCompanion copyWith(
+  TracksNewDistinctCompanion copyWith(
       {Value<String>? playlistId,
       Value<String>? trackId,
       Value<String>? name,
       Value<String>? trackArtists,
       Value<String>? trackUri,
       Value<int>? durationMs}) {
-    return NewDistinctTracksCompanion(
+    return TracksNewDistinctCompanion(
       playlistId: playlistId ?? this.playlistId,
       trackId: trackId ?? this.trackId,
       name: name ?? this.name,
@@ -1064,7 +1070,7 @@ class NewDistinctTracksCompanion extends UpdateCompanion<Track> {
 
   @override
   String toString() {
-    return (StringBuffer('NewDistinctTracksCompanion(')
+    return (StringBuffer('TracksNewDistinctCompanion(')
           ..write('playlistId: $playlistId, ')
           ..write('trackId: $trackId, ')
           ..write('name: $name, ')
@@ -1076,16 +1082,19 @@ class NewDistinctTracksCompanion extends UpdateCompanion<Track> {
   }
 }
 
-class $NewDistinctTracksTable extends NewDistinctTracks
-    with TableInfo<$NewDistinctTracksTable, Track> {
+class $TracksNewDistinctTable extends TracksNewDistinct
+    with TableInfo<$TracksNewDistinctTable, Track> {
   final GeneratedDatabase _db;
   final String? _alias;
-  $NewDistinctTracksTable(this._db, [this._alias]);
+  $TracksNewDistinctTable(this._db, [this._alias]);
   final VerificationMeta _playlistIdMeta = const VerificationMeta('playlistId');
   @override
   late final GeneratedColumn<String?> playlistId = GeneratedColumn<String?>(
       'playlist_id', aliasedName, false,
-      type: const StringType(), requiredDuringInsert: true);
+      type: const StringType(),
+      requiredDuringInsert: true,
+      defaultConstraints:
+          'REFERENCES playlists (playlist_id) ON UPDATE CASCADE ON DELETE CASCADE');
   final VerificationMeta _trackIdMeta = const VerificationMeta('trackId');
   @override
   late final GeneratedColumn<String?> trackId = GeneratedColumn<String?>(
@@ -1116,9 +1125,9 @@ class $NewDistinctTracksTable extends NewDistinctTracks
   List<GeneratedColumn> get $columns =>
       [playlistId, trackId, name, trackArtists, trackUri, durationMs];
   @override
-  String get aliasedName => _alias ?? 'new_distinct_tracks';
+  String get aliasedName => _alias ?? 'tracks_new_distinct';
   @override
-  String get actualTableName => 'new_distinct_tracks';
+  String get actualTableName => 'tracks_new_distinct';
   @override
   VerificationContext validateIntegrity(Insertable<Track> instance,
       {bool isInserting = false}) {
@@ -1191,8 +1200,8 @@ class $NewDistinctTracksTable extends NewDistinctTracks
   }
 
   @override
-  $NewDistinctTracksTable createAlias(String alias) {
-    return $NewDistinctTracksTable(_db, alias);
+  $TracksNewDistinctTable createAlias(String alias) {
+    return $TracksNewDistinctTable(_db, alias);
   }
 }
 
@@ -1306,7 +1315,10 @@ class $TracksToRemoveTable extends TracksToRemove
   @override
   late final GeneratedColumn<String?> playlistId = GeneratedColumn<String?>(
       'playlist_id', aliasedName, false,
-      type: const StringType(), requiredDuringInsert: true);
+      type: const StringType(),
+      requiredDuringInsert: true,
+      defaultConstraints:
+          'REFERENCES playlists (playlist_id) ON UPDATE CASCADE ON DELETE CASCADE');
   final VerificationMeta _trackIdMeta = const VerificationMeta('trackId');
   @override
   late final GeneratedColumn<String?> trackId = GeneratedColumn<String?>(
@@ -1527,7 +1539,10 @@ class $TracksToAddTable extends TracksToAdd
   @override
   late final GeneratedColumn<String?> playlistId = GeneratedColumn<String?>(
       'playlist_id', aliasedName, false,
-      type: const StringType(), requiredDuringInsert: true);
+      type: const StringType(),
+      requiredDuringInsert: true,
+      defaultConstraints:
+          'REFERENCES playlists (playlist_id) ON UPDATE CASCADE ON DELETE CASCADE');
   final VerificationMeta _trackIdMeta = const VerificationMeta('trackId');
   @override
   late final GeneratedColumn<String?> trackId = GeneratedColumn<String?>(
@@ -1643,10 +1658,10 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $PlaylistsTable playlists = $PlaylistsTable(this);
   late final $PlaylistsToMergeTable playlistsToMerge =
       $PlaylistsToMergeTable(this);
-  late final $CurrentTracksTable currentTracks = $CurrentTracksTable(this);
-  late final $NewAllTracksTable newAllTracks = $NewAllTracksTable(this);
-  late final $NewDistinctTracksTable newDistinctTracks =
-      $NewDistinctTracksTable(this);
+  late final $TracksCurrentTable tracksCurrent = $TracksCurrentTable(this);
+  late final $TracksNewAllTable tracksNewAll = $TracksNewAllTable(this);
+  late final $TracksNewDistinctTable tracksNewDistinct =
+      $TracksNewDistinctTable(this);
   late final $TracksToRemoveTable tracksToRemove = $TracksToRemoveTable(this);
   late final $TracksToAddTable tracksToAdd = $TracksToAddTable(this);
   late final PlaylistsDao playlistsDao = PlaylistsDao(this as AppDatabase);
@@ -1658,9 +1673,9 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   List<DatabaseSchemaEntity> get allSchemaEntities => [
         playlists,
         playlistsToMerge,
-        currentTracks,
-        newAllTracks,
-        newDistinctTracks,
+        tracksCurrent,
+        tracksNewAll,
+        tracksNewDistinct,
         tracksToRemove,
         tracksToAdd
       ];

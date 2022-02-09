@@ -3,4 +3,4 @@ import 'package:playlistmerger4spotify/database/models/base/track.dart';
 import 'package:playlistmerger4spotify/database/models/base/tracks_table_base.dart';
 
 @UseRowClass(Track)
-class NewDistinctTracks extends TracksTableBase {}
+class TracksNewDistinct extends TracksTableBase {}
