@@ -14,20 +14,24 @@ class WorkManagerHelper {
   static const TASK_DO_MERGING_SCHEDULED_ALL = "mergeScheduledAll";
 
   static Future<bool> handleTaskRequest(String task, Map<String, dynamic>? inputData) async {
-    if (task == TASK_DO_MERGING_NOW_ALL) {
-    } else if (task == TASK_DO_MERGING_NOW_SPECIFIC) {
-      final String playlistId = inputData?["playlistId"];
+    try {
+      if (task == TASK_DO_MERGING_NOW_ALL) {
+      } else if (task == TASK_DO_MERGING_NOW_SPECIFIC) {
+        final String playlistId = inputData?["playlistId"];
+      }
+
+      // TODO : use the notification below as model
+      await AwesomeNotifications().createNotification(
+        content: NotificationContent(
+          id: Random().nextInt(999999),
+          channelKey: NotificationsHelper.CHANNEL_KEY_MERGING_RESULTS,
+          body: 'Simple body',
+        ),
+      );
+
+      return Future.value(true);
+    } catch (_) {
+      Future.error('Failed.');
     }
-
-    // TODO : use the notification below as model
-    await AwesomeNotifications().createNotification(
-      content: NotificationContent(
-        id: Random().nextInt(999999),
-        channelKey: NotificationsHelper.CHANNEL_KEY_MERGING_RESULTS,
-        body: 'Simple body',
-      ),
-    );
-
-    return true;
   }
 }
