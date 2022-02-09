@@ -533,17 +533,1135 @@ class $PlaylistsToMergeTable extends PlaylistsToMerge
   }
 }
 
+class CurrentTracksCompanion extends UpdateCompanion<Track> {
+  final Value<String> playlistId;
+  final Value<String> trackId;
+  final Value<String> name;
+  final Value<String> trackArtists;
+  final Value<String> trackUri;
+  final Value<int> durationMs;
+  const CurrentTracksCompanion({
+    this.playlistId = const Value.absent(),
+    this.trackId = const Value.absent(),
+    this.name = const Value.absent(),
+    this.trackArtists = const Value.absent(),
+    this.trackUri = const Value.absent(),
+    this.durationMs = const Value.absent(),
+  });
+  CurrentTracksCompanion.insert({
+    required String playlistId,
+    required String trackId,
+    required String name,
+    required String trackArtists,
+    required String trackUri,
+    required int durationMs,
+  })  : playlistId = Value(playlistId),
+        trackId = Value(trackId),
+        name = Value(name),
+        trackArtists = Value(trackArtists),
+        trackUri = Value(trackUri),
+        durationMs = Value(durationMs);
+  static Insertable<Track> custom({
+    Expression<String>? playlistId,
+    Expression<String>? trackId,
+    Expression<String>? name,
+    Expression<String>? trackArtists,
+    Expression<String>? trackUri,
+    Expression<int>? durationMs,
+  }) {
+    return RawValuesInsertable({
+      if (playlistId != null) 'playlist_id': playlistId,
+      if (trackId != null) 'track_id': trackId,
+      if (name != null) 'name': name,
+      if (trackArtists != null) 'track_artists': trackArtists,
+      if (trackUri != null) 'track_uri': trackUri,
+      if (durationMs != null) 'duration_ms': durationMs,
+    });
+  }
+
+  CurrentTracksCompanion copyWith(
+      {Value<String>? playlistId,
+      Value<String>? trackId,
+      Value<String>? name,
+      Value<String>? trackArtists,
+      Value<String>? trackUri,
+      Value<int>? durationMs}) {
+    return CurrentTracksCompanion(
+      playlistId: playlistId ?? this.playlistId,
+      trackId: trackId ?? this.trackId,
+      name: name ?? this.name,
+      trackArtists: trackArtists ?? this.trackArtists,
+      trackUri: trackUri ?? this.trackUri,
+      durationMs: durationMs ?? this.durationMs,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (playlistId.present) {
+      map['playlist_id'] = Variable<String>(playlistId.value);
+    }
+    if (trackId.present) {
+      map['track_id'] = Variable<String>(trackId.value);
+    }
+    if (name.present) {
+      map['name'] = Variable<String>(name.value);
+    }
+    if (trackArtists.present) {
+      map['track_artists'] = Variable<String>(trackArtists.value);
+    }
+    if (trackUri.present) {
+      map['track_uri'] = Variable<String>(trackUri.value);
+    }
+    if (durationMs.present) {
+      map['duration_ms'] = Variable<int>(durationMs.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('CurrentTracksCompanion(')
+          ..write('playlistId: $playlistId, ')
+          ..write('trackId: $trackId, ')
+          ..write('name: $name, ')
+          ..write('trackArtists: $trackArtists, ')
+          ..write('trackUri: $trackUri, ')
+          ..write('durationMs: $durationMs')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $CurrentTracksTable extends CurrentTracks
+    with TableInfo<$CurrentTracksTable, Track> {
+  final GeneratedDatabase _db;
+  final String? _alias;
+  $CurrentTracksTable(this._db, [this._alias]);
+  final VerificationMeta _playlistIdMeta = const VerificationMeta('playlistId');
+  @override
+  late final GeneratedColumn<String?> playlistId = GeneratedColumn<String?>(
+      'playlist_id', aliasedName, false,
+      type: const StringType(), requiredDuringInsert: true);
+  final VerificationMeta _trackIdMeta = const VerificationMeta('trackId');
+  @override
+  late final GeneratedColumn<String?> trackId = GeneratedColumn<String?>(
+      'track_id', aliasedName, false,
+      type: const StringType(), requiredDuringInsert: true);
+  final VerificationMeta _nameMeta = const VerificationMeta('name');
+  @override
+  late final GeneratedColumn<String?> name = GeneratedColumn<String?>(
+      'name', aliasedName, false,
+      type: const StringType(), requiredDuringInsert: true);
+  final VerificationMeta _trackArtistsMeta =
+      const VerificationMeta('trackArtists');
+  @override
+  late final GeneratedColumn<String?> trackArtists = GeneratedColumn<String?>(
+      'track_artists', aliasedName, false,
+      type: const StringType(), requiredDuringInsert: true);
+  final VerificationMeta _trackUriMeta = const VerificationMeta('trackUri');
+  @override
+  late final GeneratedColumn<String?> trackUri = GeneratedColumn<String?>(
+      'track_uri', aliasedName, false,
+      type: const StringType(), requiredDuringInsert: true);
+  final VerificationMeta _durationMsMeta = const VerificationMeta('durationMs');
+  @override
+  late final GeneratedColumn<int?> durationMs = GeneratedColumn<int?>(
+      'duration_ms', aliasedName, false,
+      type: const IntType(), requiredDuringInsert: true);
+  @override
+  List<GeneratedColumn> get $columns =>
+      [playlistId, trackId, name, trackArtists, trackUri, durationMs];
+  @override
+  String get aliasedName => _alias ?? 'current_tracks';
+  @override
+  String get actualTableName => 'current_tracks';
+  @override
+  VerificationContext validateIntegrity(Insertable<Track> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('playlist_id')) {
+      context.handle(
+          _playlistIdMeta,
+          playlistId.isAcceptableOrUnknown(
+              data['playlist_id']!, _playlistIdMeta));
+    } else if (isInserting) {
+      context.missing(_playlistIdMeta);
+    }
+    if (data.containsKey('track_id')) {
+      context.handle(_trackIdMeta,
+          trackId.isAcceptableOrUnknown(data['track_id']!, _trackIdMeta));
+    } else if (isInserting) {
+      context.missing(_trackIdMeta);
+    }
+    if (data.containsKey('name')) {
+      context.handle(
+          _nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
+    } else if (isInserting) {
+      context.missing(_nameMeta);
+    }
+    if (data.containsKey('track_artists')) {
+      context.handle(
+          _trackArtistsMeta,
+          trackArtists.isAcceptableOrUnknown(
+              data['track_artists']!, _trackArtistsMeta));
+    } else if (isInserting) {
+      context.missing(_trackArtistsMeta);
+    }
+    if (data.containsKey('track_uri')) {
+      context.handle(_trackUriMeta,
+          trackUri.isAcceptableOrUnknown(data['track_uri']!, _trackUriMeta));
+    } else if (isInserting) {
+      context.missing(_trackUriMeta);
+    }
+    if (data.containsKey('duration_ms')) {
+      context.handle(
+          _durationMsMeta,
+          durationMs.isAcceptableOrUnknown(
+              data['duration_ms']!, _durationMsMeta));
+    } else if (isInserting) {
+      context.missing(_durationMsMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {playlistId, trackId};
+  @override
+  Track map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return Track(
+      playlistId: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}playlist_id'])!,
+      trackId: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}track_id'])!,
+      name: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}name'])!,
+      trackArtists: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}track_artists'])!,
+      trackUri: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}track_uri'])!,
+      durationMs: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}duration_ms'])!,
+    );
+  }
+
+  @override
+  $CurrentTracksTable createAlias(String alias) {
+    return $CurrentTracksTable(_db, alias);
+  }
+}
+
+class NewAllTracksCompanion extends UpdateCompanion<Track> {
+  final Value<String> playlistId;
+  final Value<String> trackId;
+  final Value<String> name;
+  final Value<String> trackArtists;
+  final Value<String> trackUri;
+  final Value<int> durationMs;
+  const NewAllTracksCompanion({
+    this.playlistId = const Value.absent(),
+    this.trackId = const Value.absent(),
+    this.name = const Value.absent(),
+    this.trackArtists = const Value.absent(),
+    this.trackUri = const Value.absent(),
+    this.durationMs = const Value.absent(),
+  });
+  NewAllTracksCompanion.insert({
+    required String playlistId,
+    required String trackId,
+    required String name,
+    required String trackArtists,
+    required String trackUri,
+    required int durationMs,
+  })  : playlistId = Value(playlistId),
+        trackId = Value(trackId),
+        name = Value(name),
+        trackArtists = Value(trackArtists),
+        trackUri = Value(trackUri),
+        durationMs = Value(durationMs);
+  static Insertable<Track> custom({
+    Expression<String>? playlistId,
+    Expression<String>? trackId,
+    Expression<String>? name,
+    Expression<String>? trackArtists,
+    Expression<String>? trackUri,
+    Expression<int>? durationMs,
+  }) {
+    return RawValuesInsertable({
+      if (playlistId != null) 'playlist_id': playlistId,
+      if (trackId != null) 'track_id': trackId,
+      if (name != null) 'name': name,
+      if (trackArtists != null) 'track_artists': trackArtists,
+      if (trackUri != null) 'track_uri': trackUri,
+      if (durationMs != null) 'duration_ms': durationMs,
+    });
+  }
+
+  NewAllTracksCompanion copyWith(
+      {Value<String>? playlistId,
+      Value<String>? trackId,
+      Value<String>? name,
+      Value<String>? trackArtists,
+      Value<String>? trackUri,
+      Value<int>? durationMs}) {
+    return NewAllTracksCompanion(
+      playlistId: playlistId ?? this.playlistId,
+      trackId: trackId ?? this.trackId,
+      name: name ?? this.name,
+      trackArtists: trackArtists ?? this.trackArtists,
+      trackUri: trackUri ?? this.trackUri,
+      durationMs: durationMs ?? this.durationMs,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (playlistId.present) {
+      map['playlist_id'] = Variable<String>(playlistId.value);
+    }
+    if (trackId.present) {
+      map['track_id'] = Variable<String>(trackId.value);
+    }
+    if (name.present) {
+      map['name'] = Variable<String>(name.value);
+    }
+    if (trackArtists.present) {
+      map['track_artists'] = Variable<String>(trackArtists.value);
+    }
+    if (trackUri.present) {
+      map['track_uri'] = Variable<String>(trackUri.value);
+    }
+    if (durationMs.present) {
+      map['duration_ms'] = Variable<int>(durationMs.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('NewAllTracksCompanion(')
+          ..write('playlistId: $playlistId, ')
+          ..write('trackId: $trackId, ')
+          ..write('name: $name, ')
+          ..write('trackArtists: $trackArtists, ')
+          ..write('trackUri: $trackUri, ')
+          ..write('durationMs: $durationMs')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $NewAllTracksTable extends NewAllTracks
+    with TableInfo<$NewAllTracksTable, Track> {
+  final GeneratedDatabase _db;
+  final String? _alias;
+  $NewAllTracksTable(this._db, [this._alias]);
+  final VerificationMeta _playlistIdMeta = const VerificationMeta('playlistId');
+  @override
+  late final GeneratedColumn<String?> playlistId = GeneratedColumn<String?>(
+      'playlist_id', aliasedName, false,
+      type: const StringType(), requiredDuringInsert: true);
+  final VerificationMeta _trackIdMeta = const VerificationMeta('trackId');
+  @override
+  late final GeneratedColumn<String?> trackId = GeneratedColumn<String?>(
+      'track_id', aliasedName, false,
+      type: const StringType(), requiredDuringInsert: true);
+  final VerificationMeta _nameMeta = const VerificationMeta('name');
+  @override
+  late final GeneratedColumn<String?> name = GeneratedColumn<String?>(
+      'name', aliasedName, false,
+      type: const StringType(), requiredDuringInsert: true);
+  final VerificationMeta _trackArtistsMeta =
+      const VerificationMeta('trackArtists');
+  @override
+  late final GeneratedColumn<String?> trackArtists = GeneratedColumn<String?>(
+      'track_artists', aliasedName, false,
+      type: const StringType(), requiredDuringInsert: true);
+  final VerificationMeta _trackUriMeta = const VerificationMeta('trackUri');
+  @override
+  late final GeneratedColumn<String?> trackUri = GeneratedColumn<String?>(
+      'track_uri', aliasedName, false,
+      type: const StringType(), requiredDuringInsert: true);
+  final VerificationMeta _durationMsMeta = const VerificationMeta('durationMs');
+  @override
+  late final GeneratedColumn<int?> durationMs = GeneratedColumn<int?>(
+      'duration_ms', aliasedName, false,
+      type: const IntType(), requiredDuringInsert: true);
+  @override
+  List<GeneratedColumn> get $columns =>
+      [playlistId, trackId, name, trackArtists, trackUri, durationMs];
+  @override
+  String get aliasedName => _alias ?? 'new_all_tracks';
+  @override
+  String get actualTableName => 'new_all_tracks';
+  @override
+  VerificationContext validateIntegrity(Insertable<Track> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('playlist_id')) {
+      context.handle(
+          _playlistIdMeta,
+          playlistId.isAcceptableOrUnknown(
+              data['playlist_id']!, _playlistIdMeta));
+    } else if (isInserting) {
+      context.missing(_playlistIdMeta);
+    }
+    if (data.containsKey('track_id')) {
+      context.handle(_trackIdMeta,
+          trackId.isAcceptableOrUnknown(data['track_id']!, _trackIdMeta));
+    } else if (isInserting) {
+      context.missing(_trackIdMeta);
+    }
+    if (data.containsKey('name')) {
+      context.handle(
+          _nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
+    } else if (isInserting) {
+      context.missing(_nameMeta);
+    }
+    if (data.containsKey('track_artists')) {
+      context.handle(
+          _trackArtistsMeta,
+          trackArtists.isAcceptableOrUnknown(
+              data['track_artists']!, _trackArtistsMeta));
+    } else if (isInserting) {
+      context.missing(_trackArtistsMeta);
+    }
+    if (data.containsKey('track_uri')) {
+      context.handle(_trackUriMeta,
+          trackUri.isAcceptableOrUnknown(data['track_uri']!, _trackUriMeta));
+    } else if (isInserting) {
+      context.missing(_trackUriMeta);
+    }
+    if (data.containsKey('duration_ms')) {
+      context.handle(
+          _durationMsMeta,
+          durationMs.isAcceptableOrUnknown(
+              data['duration_ms']!, _durationMsMeta));
+    } else if (isInserting) {
+      context.missing(_durationMsMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {playlistId, trackId};
+  @override
+  Track map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return Track(
+      playlistId: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}playlist_id'])!,
+      trackId: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}track_id'])!,
+      name: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}name'])!,
+      trackArtists: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}track_artists'])!,
+      trackUri: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}track_uri'])!,
+      durationMs: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}duration_ms'])!,
+    );
+  }
+
+  @override
+  $NewAllTracksTable createAlias(String alias) {
+    return $NewAllTracksTable(_db, alias);
+  }
+}
+
+class NewDistinctTracksCompanion extends UpdateCompanion<Track> {
+  final Value<String> playlistId;
+  final Value<String> trackId;
+  final Value<String> name;
+  final Value<String> trackArtists;
+  final Value<String> trackUri;
+  final Value<int> durationMs;
+  const NewDistinctTracksCompanion({
+    this.playlistId = const Value.absent(),
+    this.trackId = const Value.absent(),
+    this.name = const Value.absent(),
+    this.trackArtists = const Value.absent(),
+    this.trackUri = const Value.absent(),
+    this.durationMs = const Value.absent(),
+  });
+  NewDistinctTracksCompanion.insert({
+    required String playlistId,
+    required String trackId,
+    required String name,
+    required String trackArtists,
+    required String trackUri,
+    required int durationMs,
+  })  : playlistId = Value(playlistId),
+        trackId = Value(trackId),
+        name = Value(name),
+        trackArtists = Value(trackArtists),
+        trackUri = Value(trackUri),
+        durationMs = Value(durationMs);
+  static Insertable<Track> custom({
+    Expression<String>? playlistId,
+    Expression<String>? trackId,
+    Expression<String>? name,
+    Expression<String>? trackArtists,
+    Expression<String>? trackUri,
+    Expression<int>? durationMs,
+  }) {
+    return RawValuesInsertable({
+      if (playlistId != null) 'playlist_id': playlistId,
+      if (trackId != null) 'track_id': trackId,
+      if (name != null) 'name': name,
+      if (trackArtists != null) 'track_artists': trackArtists,
+      if (trackUri != null) 'track_uri': trackUri,
+      if (durationMs != null) 'duration_ms': durationMs,
+    });
+  }
+
+  NewDistinctTracksCompanion copyWith(
+      {Value<String>? playlistId,
+      Value<String>? trackId,
+      Value<String>? name,
+      Value<String>? trackArtists,
+      Value<String>? trackUri,
+      Value<int>? durationMs}) {
+    return NewDistinctTracksCompanion(
+      playlistId: playlistId ?? this.playlistId,
+      trackId: trackId ?? this.trackId,
+      name: name ?? this.name,
+      trackArtists: trackArtists ?? this.trackArtists,
+      trackUri: trackUri ?? this.trackUri,
+      durationMs: durationMs ?? this.durationMs,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (playlistId.present) {
+      map['playlist_id'] = Variable<String>(playlistId.value);
+    }
+    if (trackId.present) {
+      map['track_id'] = Variable<String>(trackId.value);
+    }
+    if (name.present) {
+      map['name'] = Variable<String>(name.value);
+    }
+    if (trackArtists.present) {
+      map['track_artists'] = Variable<String>(trackArtists.value);
+    }
+    if (trackUri.present) {
+      map['track_uri'] = Variable<String>(trackUri.value);
+    }
+    if (durationMs.present) {
+      map['duration_ms'] = Variable<int>(durationMs.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('NewDistinctTracksCompanion(')
+          ..write('playlistId: $playlistId, ')
+          ..write('trackId: $trackId, ')
+          ..write('name: $name, ')
+          ..write('trackArtists: $trackArtists, ')
+          ..write('trackUri: $trackUri, ')
+          ..write('durationMs: $durationMs')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $NewDistinctTracksTable extends NewDistinctTracks
+    with TableInfo<$NewDistinctTracksTable, Track> {
+  final GeneratedDatabase _db;
+  final String? _alias;
+  $NewDistinctTracksTable(this._db, [this._alias]);
+  final VerificationMeta _playlistIdMeta = const VerificationMeta('playlistId');
+  @override
+  late final GeneratedColumn<String?> playlistId = GeneratedColumn<String?>(
+      'playlist_id', aliasedName, false,
+      type: const StringType(), requiredDuringInsert: true);
+  final VerificationMeta _trackIdMeta = const VerificationMeta('trackId');
+  @override
+  late final GeneratedColumn<String?> trackId = GeneratedColumn<String?>(
+      'track_id', aliasedName, false,
+      type: const StringType(), requiredDuringInsert: true);
+  final VerificationMeta _nameMeta = const VerificationMeta('name');
+  @override
+  late final GeneratedColumn<String?> name = GeneratedColumn<String?>(
+      'name', aliasedName, false,
+      type: const StringType(), requiredDuringInsert: true);
+  final VerificationMeta _trackArtistsMeta =
+      const VerificationMeta('trackArtists');
+  @override
+  late final GeneratedColumn<String?> trackArtists = GeneratedColumn<String?>(
+      'track_artists', aliasedName, false,
+      type: const StringType(), requiredDuringInsert: true);
+  final VerificationMeta _trackUriMeta = const VerificationMeta('trackUri');
+  @override
+  late final GeneratedColumn<String?> trackUri = GeneratedColumn<String?>(
+      'track_uri', aliasedName, false,
+      type: const StringType(), requiredDuringInsert: true);
+  final VerificationMeta _durationMsMeta = const VerificationMeta('durationMs');
+  @override
+  late final GeneratedColumn<int?> durationMs = GeneratedColumn<int?>(
+      'duration_ms', aliasedName, false,
+      type: const IntType(), requiredDuringInsert: true);
+  @override
+  List<GeneratedColumn> get $columns =>
+      [playlistId, trackId, name, trackArtists, trackUri, durationMs];
+  @override
+  String get aliasedName => _alias ?? 'new_distinct_tracks';
+  @override
+  String get actualTableName => 'new_distinct_tracks';
+  @override
+  VerificationContext validateIntegrity(Insertable<Track> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('playlist_id')) {
+      context.handle(
+          _playlistIdMeta,
+          playlistId.isAcceptableOrUnknown(
+              data['playlist_id']!, _playlistIdMeta));
+    } else if (isInserting) {
+      context.missing(_playlistIdMeta);
+    }
+    if (data.containsKey('track_id')) {
+      context.handle(_trackIdMeta,
+          trackId.isAcceptableOrUnknown(data['track_id']!, _trackIdMeta));
+    } else if (isInserting) {
+      context.missing(_trackIdMeta);
+    }
+    if (data.containsKey('name')) {
+      context.handle(
+          _nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
+    } else if (isInserting) {
+      context.missing(_nameMeta);
+    }
+    if (data.containsKey('track_artists')) {
+      context.handle(
+          _trackArtistsMeta,
+          trackArtists.isAcceptableOrUnknown(
+              data['track_artists']!, _trackArtistsMeta));
+    } else if (isInserting) {
+      context.missing(_trackArtistsMeta);
+    }
+    if (data.containsKey('track_uri')) {
+      context.handle(_trackUriMeta,
+          trackUri.isAcceptableOrUnknown(data['track_uri']!, _trackUriMeta));
+    } else if (isInserting) {
+      context.missing(_trackUriMeta);
+    }
+    if (data.containsKey('duration_ms')) {
+      context.handle(
+          _durationMsMeta,
+          durationMs.isAcceptableOrUnknown(
+              data['duration_ms']!, _durationMsMeta));
+    } else if (isInserting) {
+      context.missing(_durationMsMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {playlistId, trackId};
+  @override
+  Track map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return Track(
+      playlistId: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}playlist_id'])!,
+      trackId: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}track_id'])!,
+      name: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}name'])!,
+      trackArtists: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}track_artists'])!,
+      trackUri: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}track_uri'])!,
+      durationMs: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}duration_ms'])!,
+    );
+  }
+
+  @override
+  $NewDistinctTracksTable createAlias(String alias) {
+    return $NewDistinctTracksTable(_db, alias);
+  }
+}
+
+class TracksToRemoveCompanion extends UpdateCompanion<Track> {
+  final Value<String> playlistId;
+  final Value<String> trackId;
+  final Value<String> name;
+  final Value<String> trackArtists;
+  final Value<String> trackUri;
+  final Value<int> durationMs;
+  const TracksToRemoveCompanion({
+    this.playlistId = const Value.absent(),
+    this.trackId = const Value.absent(),
+    this.name = const Value.absent(),
+    this.trackArtists = const Value.absent(),
+    this.trackUri = const Value.absent(),
+    this.durationMs = const Value.absent(),
+  });
+  TracksToRemoveCompanion.insert({
+    required String playlistId,
+    required String trackId,
+    required String name,
+    required String trackArtists,
+    required String trackUri,
+    required int durationMs,
+  })  : playlistId = Value(playlistId),
+        trackId = Value(trackId),
+        name = Value(name),
+        trackArtists = Value(trackArtists),
+        trackUri = Value(trackUri),
+        durationMs = Value(durationMs);
+  static Insertable<Track> custom({
+    Expression<String>? playlistId,
+    Expression<String>? trackId,
+    Expression<String>? name,
+    Expression<String>? trackArtists,
+    Expression<String>? trackUri,
+    Expression<int>? durationMs,
+  }) {
+    return RawValuesInsertable({
+      if (playlistId != null) 'playlist_id': playlistId,
+      if (trackId != null) 'track_id': trackId,
+      if (name != null) 'name': name,
+      if (trackArtists != null) 'track_artists': trackArtists,
+      if (trackUri != null) 'track_uri': trackUri,
+      if (durationMs != null) 'duration_ms': durationMs,
+    });
+  }
+
+  TracksToRemoveCompanion copyWith(
+      {Value<String>? playlistId,
+      Value<String>? trackId,
+      Value<String>? name,
+      Value<String>? trackArtists,
+      Value<String>? trackUri,
+      Value<int>? durationMs}) {
+    return TracksToRemoveCompanion(
+      playlistId: playlistId ?? this.playlistId,
+      trackId: trackId ?? this.trackId,
+      name: name ?? this.name,
+      trackArtists: trackArtists ?? this.trackArtists,
+      trackUri: trackUri ?? this.trackUri,
+      durationMs: durationMs ?? this.durationMs,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (playlistId.present) {
+      map['playlist_id'] = Variable<String>(playlistId.value);
+    }
+    if (trackId.present) {
+      map['track_id'] = Variable<String>(trackId.value);
+    }
+    if (name.present) {
+      map['name'] = Variable<String>(name.value);
+    }
+    if (trackArtists.present) {
+      map['track_artists'] = Variable<String>(trackArtists.value);
+    }
+    if (trackUri.present) {
+      map['track_uri'] = Variable<String>(trackUri.value);
+    }
+    if (durationMs.present) {
+      map['duration_ms'] = Variable<int>(durationMs.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('TracksToRemoveCompanion(')
+          ..write('playlistId: $playlistId, ')
+          ..write('trackId: $trackId, ')
+          ..write('name: $name, ')
+          ..write('trackArtists: $trackArtists, ')
+          ..write('trackUri: $trackUri, ')
+          ..write('durationMs: $durationMs')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $TracksToRemoveTable extends TracksToRemove
+    with TableInfo<$TracksToRemoveTable, Track> {
+  final GeneratedDatabase _db;
+  final String? _alias;
+  $TracksToRemoveTable(this._db, [this._alias]);
+  final VerificationMeta _playlistIdMeta = const VerificationMeta('playlistId');
+  @override
+  late final GeneratedColumn<String?> playlistId = GeneratedColumn<String?>(
+      'playlist_id', aliasedName, false,
+      type: const StringType(), requiredDuringInsert: true);
+  final VerificationMeta _trackIdMeta = const VerificationMeta('trackId');
+  @override
+  late final GeneratedColumn<String?> trackId = GeneratedColumn<String?>(
+      'track_id', aliasedName, false,
+      type: const StringType(), requiredDuringInsert: true);
+  final VerificationMeta _nameMeta = const VerificationMeta('name');
+  @override
+  late final GeneratedColumn<String?> name = GeneratedColumn<String?>(
+      'name', aliasedName, false,
+      type: const StringType(), requiredDuringInsert: true);
+  final VerificationMeta _trackArtistsMeta =
+      const VerificationMeta('trackArtists');
+  @override
+  late final GeneratedColumn<String?> trackArtists = GeneratedColumn<String?>(
+      'track_artists', aliasedName, false,
+      type: const StringType(), requiredDuringInsert: true);
+  final VerificationMeta _trackUriMeta = const VerificationMeta('trackUri');
+  @override
+  late final GeneratedColumn<String?> trackUri = GeneratedColumn<String?>(
+      'track_uri', aliasedName, false,
+      type: const StringType(), requiredDuringInsert: true);
+  final VerificationMeta _durationMsMeta = const VerificationMeta('durationMs');
+  @override
+  late final GeneratedColumn<int?> durationMs = GeneratedColumn<int?>(
+      'duration_ms', aliasedName, false,
+      type: const IntType(), requiredDuringInsert: true);
+  @override
+  List<GeneratedColumn> get $columns =>
+      [playlistId, trackId, name, trackArtists, trackUri, durationMs];
+  @override
+  String get aliasedName => _alias ?? 'tracks_to_remove';
+  @override
+  String get actualTableName => 'tracks_to_remove';
+  @override
+  VerificationContext validateIntegrity(Insertable<Track> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('playlist_id')) {
+      context.handle(
+          _playlistIdMeta,
+          playlistId.isAcceptableOrUnknown(
+              data['playlist_id']!, _playlistIdMeta));
+    } else if (isInserting) {
+      context.missing(_playlistIdMeta);
+    }
+    if (data.containsKey('track_id')) {
+      context.handle(_trackIdMeta,
+          trackId.isAcceptableOrUnknown(data['track_id']!, _trackIdMeta));
+    } else if (isInserting) {
+      context.missing(_trackIdMeta);
+    }
+    if (data.containsKey('name')) {
+      context.handle(
+          _nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
+    } else if (isInserting) {
+      context.missing(_nameMeta);
+    }
+    if (data.containsKey('track_artists')) {
+      context.handle(
+          _trackArtistsMeta,
+          trackArtists.isAcceptableOrUnknown(
+              data['track_artists']!, _trackArtistsMeta));
+    } else if (isInserting) {
+      context.missing(_trackArtistsMeta);
+    }
+    if (data.containsKey('track_uri')) {
+      context.handle(_trackUriMeta,
+          trackUri.isAcceptableOrUnknown(data['track_uri']!, _trackUriMeta));
+    } else if (isInserting) {
+      context.missing(_trackUriMeta);
+    }
+    if (data.containsKey('duration_ms')) {
+      context.handle(
+          _durationMsMeta,
+          durationMs.isAcceptableOrUnknown(
+              data['duration_ms']!, _durationMsMeta));
+    } else if (isInserting) {
+      context.missing(_durationMsMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {playlistId, trackId};
+  @override
+  Track map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return Track(
+      playlistId: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}playlist_id'])!,
+      trackId: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}track_id'])!,
+      name: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}name'])!,
+      trackArtists: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}track_artists'])!,
+      trackUri: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}track_uri'])!,
+      durationMs: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}duration_ms'])!,
+    );
+  }
+
+  @override
+  $TracksToRemoveTable createAlias(String alias) {
+    return $TracksToRemoveTable(_db, alias);
+  }
+}
+
+class TracksToAddCompanion extends UpdateCompanion<Track> {
+  final Value<String> playlistId;
+  final Value<String> trackId;
+  final Value<String> name;
+  final Value<String> trackArtists;
+  final Value<String> trackUri;
+  final Value<int> durationMs;
+  const TracksToAddCompanion({
+    this.playlistId = const Value.absent(),
+    this.trackId = const Value.absent(),
+    this.name = const Value.absent(),
+    this.trackArtists = const Value.absent(),
+    this.trackUri = const Value.absent(),
+    this.durationMs = const Value.absent(),
+  });
+  TracksToAddCompanion.insert({
+    required String playlistId,
+    required String trackId,
+    required String name,
+    required String trackArtists,
+    required String trackUri,
+    required int durationMs,
+  })  : playlistId = Value(playlistId),
+        trackId = Value(trackId),
+        name = Value(name),
+        trackArtists = Value(trackArtists),
+        trackUri = Value(trackUri),
+        durationMs = Value(durationMs);
+  static Insertable<Track> custom({
+    Expression<String>? playlistId,
+    Expression<String>? trackId,
+    Expression<String>? name,
+    Expression<String>? trackArtists,
+    Expression<String>? trackUri,
+    Expression<int>? durationMs,
+  }) {
+    return RawValuesInsertable({
+      if (playlistId != null) 'playlist_id': playlistId,
+      if (trackId != null) 'track_id': trackId,
+      if (name != null) 'name': name,
+      if (trackArtists != null) 'track_artists': trackArtists,
+      if (trackUri != null) 'track_uri': trackUri,
+      if (durationMs != null) 'duration_ms': durationMs,
+    });
+  }
+
+  TracksToAddCompanion copyWith(
+      {Value<String>? playlistId,
+      Value<String>? trackId,
+      Value<String>? name,
+      Value<String>? trackArtists,
+      Value<String>? trackUri,
+      Value<int>? durationMs}) {
+    return TracksToAddCompanion(
+      playlistId: playlistId ?? this.playlistId,
+      trackId: trackId ?? this.trackId,
+      name: name ?? this.name,
+      trackArtists: trackArtists ?? this.trackArtists,
+      trackUri: trackUri ?? this.trackUri,
+      durationMs: durationMs ?? this.durationMs,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (playlistId.present) {
+      map['playlist_id'] = Variable<String>(playlistId.value);
+    }
+    if (trackId.present) {
+      map['track_id'] = Variable<String>(trackId.value);
+    }
+    if (name.present) {
+      map['name'] = Variable<String>(name.value);
+    }
+    if (trackArtists.present) {
+      map['track_artists'] = Variable<String>(trackArtists.value);
+    }
+    if (trackUri.present) {
+      map['track_uri'] = Variable<String>(trackUri.value);
+    }
+    if (durationMs.present) {
+      map['duration_ms'] = Variable<int>(durationMs.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('TracksToAddCompanion(')
+          ..write('playlistId: $playlistId, ')
+          ..write('trackId: $trackId, ')
+          ..write('name: $name, ')
+          ..write('trackArtists: $trackArtists, ')
+          ..write('trackUri: $trackUri, ')
+          ..write('durationMs: $durationMs')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $TracksToAddTable extends TracksToAdd
+    with TableInfo<$TracksToAddTable, Track> {
+  final GeneratedDatabase _db;
+  final String? _alias;
+  $TracksToAddTable(this._db, [this._alias]);
+  final VerificationMeta _playlistIdMeta = const VerificationMeta('playlistId');
+  @override
+  late final GeneratedColumn<String?> playlistId = GeneratedColumn<String?>(
+      'playlist_id', aliasedName, false,
+      type: const StringType(), requiredDuringInsert: true);
+  final VerificationMeta _trackIdMeta = const VerificationMeta('trackId');
+  @override
+  late final GeneratedColumn<String?> trackId = GeneratedColumn<String?>(
+      'track_id', aliasedName, false,
+      type: const StringType(), requiredDuringInsert: true);
+  final VerificationMeta _nameMeta = const VerificationMeta('name');
+  @override
+  late final GeneratedColumn<String?> name = GeneratedColumn<String?>(
+      'name', aliasedName, false,
+      type: const StringType(), requiredDuringInsert: true);
+  final VerificationMeta _trackArtistsMeta =
+      const VerificationMeta('trackArtists');
+  @override
+  late final GeneratedColumn<String?> trackArtists = GeneratedColumn<String?>(
+      'track_artists', aliasedName, false,
+      type: const StringType(), requiredDuringInsert: true);
+  final VerificationMeta _trackUriMeta = const VerificationMeta('trackUri');
+  @override
+  late final GeneratedColumn<String?> trackUri = GeneratedColumn<String?>(
+      'track_uri', aliasedName, false,
+      type: const StringType(), requiredDuringInsert: true);
+  final VerificationMeta _durationMsMeta = const VerificationMeta('durationMs');
+  @override
+  late final GeneratedColumn<int?> durationMs = GeneratedColumn<int?>(
+      'duration_ms', aliasedName, false,
+      type: const IntType(), requiredDuringInsert: true);
+  @override
+  List<GeneratedColumn> get $columns =>
+      [playlistId, trackId, name, trackArtists, trackUri, durationMs];
+  @override
+  String get aliasedName => _alias ?? 'tracks_to_add';
+  @override
+  String get actualTableName => 'tracks_to_add';
+  @override
+  VerificationContext validateIntegrity(Insertable<Track> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('playlist_id')) {
+      context.handle(
+          _playlistIdMeta,
+          playlistId.isAcceptableOrUnknown(
+              data['playlist_id']!, _playlistIdMeta));
+    } else if (isInserting) {
+      context.missing(_playlistIdMeta);
+    }
+    if (data.containsKey('track_id')) {
+      context.handle(_trackIdMeta,
+          trackId.isAcceptableOrUnknown(data['track_id']!, _trackIdMeta));
+    } else if (isInserting) {
+      context.missing(_trackIdMeta);
+    }
+    if (data.containsKey('name')) {
+      context.handle(
+          _nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
+    } else if (isInserting) {
+      context.missing(_nameMeta);
+    }
+    if (data.containsKey('track_artists')) {
+      context.handle(
+          _trackArtistsMeta,
+          trackArtists.isAcceptableOrUnknown(
+              data['track_artists']!, _trackArtistsMeta));
+    } else if (isInserting) {
+      context.missing(_trackArtistsMeta);
+    }
+    if (data.containsKey('track_uri')) {
+      context.handle(_trackUriMeta,
+          trackUri.isAcceptableOrUnknown(data['track_uri']!, _trackUriMeta));
+    } else if (isInserting) {
+      context.missing(_trackUriMeta);
+    }
+    if (data.containsKey('duration_ms')) {
+      context.handle(
+          _durationMsMeta,
+          durationMs.isAcceptableOrUnknown(
+              data['duration_ms']!, _durationMsMeta));
+    } else if (isInserting) {
+      context.missing(_durationMsMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {playlistId, trackId};
+  @override
+  Track map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return Track(
+      playlistId: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}playlist_id'])!,
+      trackId: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}track_id'])!,
+      name: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}name'])!,
+      trackArtists: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}track_artists'])!,
+      trackUri: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}track_uri'])!,
+      durationMs: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}duration_ms'])!,
+    );
+  }
+
+  @override
+  $TracksToAddTable createAlias(String alias) {
+    return $TracksToAddTable(_db, alias);
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(SqlTypeSystem.defaultInstance, e);
   late final $PlaylistsTable playlists = $PlaylistsTable(this);
   late final $PlaylistsToMergeTable playlistsToMerge =
       $PlaylistsToMergeTable(this);
+  late final $CurrentTracksTable currentTracks = $CurrentTracksTable(this);
+  late final $NewAllTracksTable newAllTracks = $NewAllTracksTable(this);
+  late final $NewDistinctTracksTable newDistinctTracks =
+      $NewDistinctTracksTable(this);
+  late final $TracksToRemoveTable tracksToRemove = $TracksToRemoveTable(this);
+  late final $TracksToAddTable tracksToAdd = $TracksToAddTable(this);
   late final PlaylistsDao playlistsDao = PlaylistsDao(this as AppDatabase);
   late final PlaylistsToMergeDao playlistsToMergeDao =
       PlaylistsToMergeDao(this as AppDatabase);
   @override
   Iterable<TableInfo> get allTables => allSchemaEntities.whereType<TableInfo>();
   @override
-  List<DatabaseSchemaEntity> get allSchemaEntities =>
-      [playlists, playlistsToMerge];
+  List<DatabaseSchemaEntity> get allSchemaEntities => [
+        playlists,
+        playlistsToMerge,
+        currentTracks,
+        newAllTracks,
+        newDistinctTracks,
+        tracksToRemove,
+        tracksToAdd
+      ];
 }

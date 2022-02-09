@@ -4,8 +4,14 @@ import 'package:drift/native.dart';
 import 'package:path/path.dart' as p;
 import 'package:playlistmerger4spotify/database/dao/playlists_dao.dart';
 import 'package:playlistmerger4spotify/database/dao/playlists_to_merge_dao.dart';
+import 'package:playlistmerger4spotify/database/models/current_tracks.dart';
+import 'package:playlistmerger4spotify/database/models/new_all_tracks.dart';
+import 'package:playlistmerger4spotify/database/models/new_distinct_tracks.dart';
 import 'package:playlistmerger4spotify/database/models/playlists.dart';
 import 'package:playlistmerger4spotify/database/models/playlists_to_merge.dart';
+import 'package:playlistmerger4spotify/database/models/tracks_to_add.dart';
+import 'package:playlistmerger4spotify/database/models/tracks_to_remove.dart';
+import 'package:playlistmerger4spotify/database/models/track.dart';
 import 'package:sqflite/sqflite.dart' as sqflite;
 
 import 'old_database_helper.dart';
@@ -20,7 +26,18 @@ LazyDatabase _openConnection() {
   });
 }
 
-@DriftDatabase(tables: [Playlists, PlaylistsToMerge], daos: [PlaylistsDao, PlaylistsToMergeDao])
+@DriftDatabase(tables: [
+  Playlists,
+  PlaylistsToMerge,
+  CurrentTracks,
+  NewAllTracks,
+  NewDistinctTracks,
+  TracksToRemove,
+  TracksToAdd
+], daos: [
+  PlaylistsDao,
+  PlaylistsToMergeDao,
+])
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
