@@ -4,10 +4,8 @@ import 'package:drift/native.dart';
 import 'package:path/path.dart' as p;
 import 'package:playlistmerger4spotify/database/dao/playlists_dao.dart';
 import 'package:playlistmerger4spotify/database/dao/playlists_to_merge_dao.dart';
-import 'package:playlistmerger4spotify/database/dao/tracks_dao.dart';
 import 'package:playlistmerger4spotify/database/models/playlists.dart';
 import 'package:playlistmerger4spotify/database/models/playlists_to_merge.dart';
-import 'package:playlistmerger4spotify/database/models/tracks.dart';
 import 'package:sqflite/sqflite.dart' as sqflite;
 
 import 'old_database_helper.dart';
@@ -22,14 +20,12 @@ LazyDatabase _openConnection() {
   });
 }
 
-@DriftDatabase(
-    tables: [Playlists, PlaylistsToMerge, Tracks],
-    daos: [PlaylistsDao, PlaylistsToMergeDao, TracksDao])
+@DriftDatabase(tables: [Playlists, PlaylistsToMerge], daos: [PlaylistsDao, PlaylistsToMergeDao])
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 2;
+  int get schemaVersion => 3;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
