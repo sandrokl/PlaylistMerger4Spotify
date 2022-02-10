@@ -1,10 +1,7 @@
-import 'package:awesome_notifications/awesome_notifications.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:playlistmerger4spotify/database/database.dart';
 import 'package:playlistmerger4spotify/generated/l10n.dart';
 import 'package:playlistmerger4spotify/helpers/import_export_helper.dart';
-import 'package:playlistmerger4spotify/helpers/notifications_helper.dart';
 import 'package:playlistmerger4spotify/helpers/spotify_client.dart';
 import 'package:playlistmerger4spotify/helpers/work_manager_helper.dart';
 import 'package:playlistmerger4spotify/screens/merging_definition/merging_definition.dart';
@@ -29,21 +26,6 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
-
-    AwesomeNotifications().initialize(
-      'resource://drawable/res_ic_notification',
-      [
-        NotificationChannel(
-          channelKey: NotificationsHelper.CHANNEL_KEY_MERGING_RESULTS,
-          channelName: S.current.updatePlaylistsResults,
-          channelDescription: S.current.statusOfYourMergingRequestsUpdates,
-          playSound: false,
-          enableVibration: false,
-          importance: NotificationImportance.High,
-        )
-      ],
-      debug: kDebugMode,
-    );
 
     final spotifyClient = SpotifyClient();
     spotifyClient.getUserFromSession().then((user) async {
@@ -93,8 +75,8 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(S.of(context).appTitle),
         actions: [
           IconButton(
-            onPressed: () {
-              Workmanager().registerOneOffTask(
+            onPressed: () async {
+              await Workmanager().registerOneOffTask(
                 DateTime.now().millisecond.toString(),
                 WorkManagerHelper.TASK_DO_MERGING_NOW_ALL,
                 tag: WorkManagerHelper.TAG_DO_MERGING_NOW,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:playlistmerger4spotify/database/database.dart';
+import 'package:playlistmerger4spotify/helpers/notifications_helper.dart';
 import 'package:playlistmerger4spotify/helpers/work_manager_helper.dart';
 import 'package:playlistmerger4spotify/screens/my_home_page/my_home_page.dart';
 import 'package:playlistmerger4spotify/screens/onboarding/onboarding.dart';
@@ -22,7 +23,9 @@ void main() async {
   final sharedPrefs = await SharedPreferences.getInstance();
   isFirstTime = sharedPrefs.getBool("isFirstTime") ?? true;
 
-  Workmanager().initialize(callbackDispatcher);
+  NotificationsHelper.initialize();
+
+  Workmanager().initialize(callbackDispatcher, isInDebugMode: true);
 
   runApp(
     MultiProvider(
