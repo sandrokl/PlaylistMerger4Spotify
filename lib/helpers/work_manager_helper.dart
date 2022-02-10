@@ -11,8 +11,6 @@ class WorkManagerHelper {
   static const TASK_DO_MERGING_SCHEDULED_ALL = "mergeScheduledAll";
 
   static Future<bool> handleTaskRequest(String task, Map<String, dynamic>? inputData) async {
-    NotificationsHelper.initialize();
-
     if (task == TASK_DO_MERGING_NOW_ALL) {
     } else if (task == TASK_DO_MERGING_NOW_SPECIFIC) {
       final String playlistId = inputData?["playlistId"];
