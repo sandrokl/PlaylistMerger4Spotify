@@ -231,9 +231,10 @@ class PlaylistsCompanion extends UpdateCompanion<Playlist> {
 
 class $PlaylistsTable extends Playlists
     with TableInfo<$PlaylistsTable, Playlist> {
-  final GeneratedDatabase _db;
+  @override
+  final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $PlaylistsTable(this._db, [this._alias]);
+  $PlaylistsTable(this.attachedDatabase, [this._alias]);
   final VerificationMeta _playlistIdMeta = const VerificationMeta('playlistId');
   @override
   late final GeneratedColumn<String?> playlistId = GeneratedColumn<String?>(
@@ -331,7 +332,7 @@ class $PlaylistsTable extends Playlists
 
   @override
   $PlaylistsTable createAlias(String alias) {
-    return $PlaylistsTable(_db, alias);
+    return $PlaylistsTable(attachedDatabase, alias);
   }
 }
 
@@ -466,9 +467,10 @@ class PlaylistsToMergeCompanion extends UpdateCompanion<PlaylistToMerge> {
 
 class $PlaylistsToMergeTable extends PlaylistsToMerge
     with TableInfo<$PlaylistsToMergeTable, PlaylistToMerge> {
-  final GeneratedDatabase _db;
+  @override
+  final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $PlaylistsToMergeTable(this._db, [this._alias]);
+  $PlaylistsToMergeTable(this.attachedDatabase, [this._alias]);
   final VerificationMeta _destinationPlaylistIdMeta =
       const VerificationMeta('destinationPlaylistId');
   @override
@@ -529,7 +531,7 @@ class $PlaylistsToMergeTable extends PlaylistsToMerge
 
   @override
   $PlaylistsToMergeTable createAlias(String alias) {
-    return $PlaylistsToMergeTable(_db, alias);
+    return $PlaylistsToMergeTable(attachedDatabase, alias);
   }
 }
 
@@ -636,9 +638,10 @@ class TracksCurrentCompanion extends UpdateCompanion<Track> {
 
 class $TracksCurrentTable extends TracksCurrent
     with TableInfo<$TracksCurrentTable, Track> {
-  final GeneratedDatabase _db;
+  @override
+  final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $TracksCurrentTable(this._db, [this._alias]);
+  $TracksCurrentTable(this.attachedDatabase, [this._alias]);
   final VerificationMeta _playlistIdMeta = const VerificationMeta('playlistId');
   @override
   late final GeneratedColumn<String?> playlistId = GeneratedColumn<String?>(
@@ -753,7 +756,7 @@ class $TracksCurrentTable extends TracksCurrent
 
   @override
   $TracksCurrentTable createAlias(String alias) {
-    return $TracksCurrentTable(_db, alias);
+    return $TracksCurrentTable(attachedDatabase, alias);
   }
 }
 
@@ -860,9 +863,10 @@ class TracksNewAllCompanion extends UpdateCompanion<Track> {
 
 class $TracksNewAllTable extends TracksNewAll
     with TableInfo<$TracksNewAllTable, Track> {
-  final GeneratedDatabase _db;
+  @override
+  final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $TracksNewAllTable(this._db, [this._alias]);
+  $TracksNewAllTable(this.attachedDatabase, [this._alias]);
   final VerificationMeta _playlistIdMeta = const VerificationMeta('playlistId');
   @override
   late final GeneratedColumn<String?> playlistId = GeneratedColumn<String?>(
@@ -977,7 +981,7 @@ class $TracksNewAllTable extends TracksNewAll
 
   @override
   $TracksNewAllTable createAlias(String alias) {
-    return $TracksNewAllTable(_db, alias);
+    return $TracksNewAllTable(attachedDatabase, alias);
   }
 }
 
@@ -1084,9 +1088,10 @@ class TracksNewDistinctCompanion extends UpdateCompanion<Track> {
 
 class $TracksNewDistinctTable extends TracksNewDistinct
     with TableInfo<$TracksNewDistinctTable, Track> {
-  final GeneratedDatabase _db;
+  @override
+  final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $TracksNewDistinctTable(this._db, [this._alias]);
+  $TracksNewDistinctTable(this.attachedDatabase, [this._alias]);
   final VerificationMeta _playlistIdMeta = const VerificationMeta('playlistId');
   @override
   late final GeneratedColumn<String?> playlistId = GeneratedColumn<String?>(
@@ -1201,7 +1206,7 @@ class $TracksNewDistinctTable extends TracksNewDistinct
 
   @override
   $TracksNewDistinctTable createAlias(String alias) {
-    return $TracksNewDistinctTable(_db, alias);
+    return $TracksNewDistinctTable(attachedDatabase, alias);
   }
 }
 
@@ -1308,9 +1313,10 @@ class TracksToRemoveCompanion extends UpdateCompanion<Track> {
 
 class $TracksToRemoveTable extends TracksToRemove
     with TableInfo<$TracksToRemoveTable, Track> {
-  final GeneratedDatabase _db;
+  @override
+  final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $TracksToRemoveTable(this._db, [this._alias]);
+  $TracksToRemoveTable(this.attachedDatabase, [this._alias]);
   final VerificationMeta _playlistIdMeta = const VerificationMeta('playlistId');
   @override
   late final GeneratedColumn<String?> playlistId = GeneratedColumn<String?>(
@@ -1425,7 +1431,7 @@ class $TracksToRemoveTable extends TracksToRemove
 
   @override
   $TracksToRemoveTable createAlias(String alias) {
-    return $TracksToRemoveTable(_db, alias);
+    return $TracksToRemoveTable(attachedDatabase, alias);
   }
 }
 
@@ -1532,9 +1538,10 @@ class TracksToAddCompanion extends UpdateCompanion<Track> {
 
 class $TracksToAddTable extends TracksToAdd
     with TableInfo<$TracksToAddTable, Track> {
-  final GeneratedDatabase _db;
+  @override
+  final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $TracksToAddTable(this._db, [this._alias]);
+  $TracksToAddTable(this.attachedDatabase, [this._alias]);
   final VerificationMeta _playlistIdMeta = const VerificationMeta('playlistId');
   @override
   late final GeneratedColumn<String?> playlistId = GeneratedColumn<String?>(
@@ -1649,7 +1656,7 @@ class $TracksToAddTable extends TracksToAdd
 
   @override
   $TracksToAddTable createAlias(String alias) {
-    return $TracksToAddTable(_db, alias);
+    return $TracksToAddTable(attachedDatabase, alias);
   }
 }
 
