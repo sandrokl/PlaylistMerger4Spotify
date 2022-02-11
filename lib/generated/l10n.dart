@@ -390,31 +390,75 @@ class S {
     );
   }
 
-  /// `An update to your playlist is being made in Spotify. We'll let you know when it's finished.`
-  String get anUpdateToYourPlaylistIsBeingMadeInSpotify {
-    return Intl.message(
-      'An update to your playlist is being made in Spotify. We\'ll let you know when it\'s finished.',
+  /// `{howMany, plural, one {An update to your playlist is being made in Spotify. We'll let you know when it's finished.} other {An update to your playlists is being made in Spotify. We'll let you know when it's finished.}}`
+  String anUpdateToYourPlaylistIsBeingMadeInSpotify(int howMany) {
+    return Intl.plural(
+      howMany,
+      one:
+          'An update to your playlist is being made in Spotify. We\'ll let you know when it\'s finished.',
+      other:
+          'An update to your playlists is being made in Spotify. We\'ll let you know when it\'s finished.',
       name: 'anUpdateToYourPlaylistIsBeingMadeInSpotify',
       desc: '',
-      args: [],
+      args: [howMany],
     );
   }
 
-  /// `Update playlists results`
-  String get updatePlaylistsResults {
+  /// `<b>Success!</b>`
+  String get notificationSuccessTitle {
     return Intl.message(
-      'Update playlists results',
-      name: 'updatePlaylistsResults',
+      '<b>Success!</b>',
+      name: 'notificationSuccessTitle',
       desc: '',
       args: [],
     );
   }
 
-  /// `Status of your merging requests updates.`
-  String get statusOfYourMergingRequestsUpdates {
+  /// `<b>Failure</b>`
+  String get notificationFailureTitle {
     return Intl.message(
-      'Status of your merging requests updates.',
-      name: 'statusOfYourMergingRequestsUpdates',
+      '<b>Failure</b>',
+      name: 'notificationFailureTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `&#128516 Your merged playlist <em>{name}</em> has been updated successfully.`
+  String notificationPlaylistUpdatedSuccessfully(String name) {
+    return Intl.message(
+      '&#128516 Your merged playlist <em>$name</em> has been updated successfully.',
+      name: 'notificationPlaylistUpdatedSuccessfully',
+      desc: '',
+      args: [name],
+    );
+  }
+
+  /// `&#128516 All your merged playlists have been updated successfully.`
+  String get notificationAllPlaylistsUpdatedSuccessfully {
+    return Intl.message(
+      '&#128516 All your merged playlists have been updated successfully.',
+      name: 'notificationAllPlaylistsUpdatedSuccessfully',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `&#128577 There was an error trying to update your playlists. Please try again later.`
+  String get notificationMergingFailed {
+    return Intl.message(
+      '&#128577 There was an error trying to update your playlists. Please try again later.',
+      name: 'notificationMergingFailed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Results of the playlists updates requests`
+  String get channelNameMergingResults {
+    return Intl.message(
+      'Results of the playlists updates requests',
+      name: 'channelNameMergingResults',
       desc: '',
       args: [],
     );

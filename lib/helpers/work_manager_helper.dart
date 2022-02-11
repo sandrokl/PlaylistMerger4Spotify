@@ -11,11 +11,25 @@ class WorkManagerHelper {
   static const TASK_DO_MERGING_SCHEDULED_ALL = "mergeScheduledAll";
 
   static Future<bool> handleTaskRequest(String task, Map<String, dynamic>? inputData) async {
-    if (task == TASK_DO_MERGING_NOW_ALL) {
-    } else if (task == TASK_DO_MERGING_NOW_SPECIFIC) {
-      final String playlistId = inputData?["playlistId"];
-    }
+    final String notificationChannelName = inputData?["notificationChannelName"];
+    final String successMessage = inputData?["successMessage"];
+    final String successTitle = inputData?["successTitle"];
+    final String errorMessage = inputData?["errorMessage"];
+    final String errorTitle = inputData?["errorTitle"];
 
-    return Future.value(true);
+    try {
+      if (task == TASK_DO_MERGING_NOW_ALL) {
+      } else if (task == TASK_DO_MERGING_NOW_SPECIFIC) {
+        final String playlistId = inputData?["playlistId"];
+      }
+
+      await Future.delayed(const Duration(seconds: 5));
+
+      await NotificationsHelper.showNotification(notificationChannelName, successTitle, successMessage);
+      return Future.value(true);
+    } catch (_) {
+      await NotificationsHelper.showNotification(notificationChannelName, errorTitle, errorMessage);
+      return Future.error("Failed");
+    }
   }
 }

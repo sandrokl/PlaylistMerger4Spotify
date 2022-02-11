@@ -80,6 +80,18 @@ class _MyHomePageState extends State<MyHomePage> {
                 DateTime.now().millisecond.toString(),
                 WorkManagerHelper.TASK_DO_MERGING_NOW_ALL,
                 tag: WorkManagerHelper.TAG_DO_MERGING_NOW,
+                inputData: {
+                  "notificationChannelName": S.of(context).channelNameMergingResults,
+                  "successTitle": S.of(context).notificationSuccessTitle,
+                  "successMessage": S.of(context).notificationAllPlaylistsUpdatedSuccessfully,
+                  "errorTitle": S.of(context).notificationFailureTitle,
+                  "errorMessage": S.of(context).notificationMergingFailed
+                },
+              );
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(S.of(context).anUpdateToYourPlaylistIsBeingMadeInSpotify(2)),
+                ),
               );
             },
             icon: const Icon(Icons.call_merge),
@@ -238,12 +250,20 @@ class _MyHomePageState extends State<MyHomePage> {
                                                             tag: WorkManagerHelper.TAG_DO_MERGING_NOW,
                                                             inputData: {
                                                               "playlistId": p.playlistId,
+                                                              "notificationChannelName":
+                                                                  S.of(context).channelNameMergingResults,
+                                                              "successTitle": S.of(context).notificationSuccessTitle,
+                                                              "successMessage": S
+                                                                  .of(context)
+                                                                  .notificationPlaylistUpdatedSuccessfully(p.name),
+                                                              "errorTitle": S.of(context).notificationFailureTitle,
+                                                              "errorMessage": S.of(context).notificationMergingFailed
                                                             });
                                                         ScaffoldMessenger.of(context).showSnackBar(
                                                           SnackBar(
                                                             content: Text(S
                                                                 .of(context)
-                                                                .anUpdateToYourPlaylistIsBeingMadeInSpotify),
+                                                                .anUpdateToYourPlaylistIsBeingMadeInSpotify(1)),
                                                           ),
                                                         );
                                                         Navigator.pop(context);

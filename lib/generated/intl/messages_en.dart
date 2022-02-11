@@ -20,11 +20,15 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'en';
 
+  static String m0(howMany) =>
+      "${Intl.plural(howMany, one: 'An update to your playlist is being made in Spotify. We\'ll let you know when it\'s finished.', other: 'An update to your playlists is being made in Spotify. We\'ll let you know when it\'s finished.')}";
+
+  static String m1(name) =>
+      "&#128516 Your merged playlist <em>${name}</em> has been updated successfully.";
+
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
-        "anUpdateToYourPlaylistIsBeingMadeInSpotify":
-            MessageLookupByLibrary.simpleMessage(
-                "An update to your playlist is being made in Spotify. We\'ll let you know when it\'s finished."),
+        "anUpdateToYourPlaylistIsBeingMadeInSpotify": m0,
         "appTitle":
             MessageLookupByLibrary.simpleMessage("PlaylistMerger 4 Spotify"),
         "areYouSureYouWishToDelete_end": MessageLookupByLibrary.simpleMessage(
@@ -35,6 +39,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "carefulexclamation": MessageLookupByLibrary.simpleMessage("Careful!"),
         "changesSaved": MessageLookupByLibrary.simpleMessage(
             "Changes saved. You can run the merging again to update it in Spotify."),
+        "channelNameMergingResults": MessageLookupByLibrary.simpleMessage(
+            "Results of the playlists updates requests"),
         "confirm": MessageLookupByLibrary.simpleMessage("Confirm"),
         "createIt": MessageLookupByLibrary.simpleMessage("CREATE IT"),
         "createNewPlaylist":
@@ -63,6 +69,16 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("New playlist\'s name"),
         "nothingHereForNow": MessageLookupByLibrary.simpleMessage(
             "Nothing here for now. Start creating your merged playlists using the button below."),
+        "notificationAllPlaylistsUpdatedSuccessfully":
+            MessageLookupByLibrary.simpleMessage(
+                "&#128516 All your merged playlists have been updated successfully."),
+        "notificationFailureTitle":
+            MessageLookupByLibrary.simpleMessage("<b>Failure</b>"),
+        "notificationMergingFailed": MessageLookupByLibrary.simpleMessage(
+            "&#128577 There was an error trying to update your playlists. Please try again later."),
+        "notificationPlaylistUpdatedSuccessfully": m1,
+        "notificationSuccessTitle":
+            MessageLookupByLibrary.simpleMessage("<b>Success!</b>"),
         "ok": MessageLookupByLibrary.simpleMessage("OK"),
         "openInSpotify":
             MessageLookupByLibrary.simpleMessage("Open in Spotify"),
@@ -80,11 +96,6 @@ class MessageLookup extends MessageLookupByLibrary {
         "sourcePlaylists":
             MessageLookupByLibrary.simpleMessage("Source playlists"),
         "spotifyUser": MessageLookupByLibrary.simpleMessage("Spotify user"),
-        "statusOfYourMergingRequestsUpdates":
-            MessageLookupByLibrary.simpleMessage(
-                "Status of your merging requests updates."),
-        "updatePlaylistsResults":
-            MessageLookupByLibrary.simpleMessage("Update playlists results"),
         "updateThisInSpotify":
             MessageLookupByLibrary.simpleMessage("Update this in Spotify"),
         "we_will_open_login": MessageLookupByLibrary.simpleMessage(
