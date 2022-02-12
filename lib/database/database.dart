@@ -42,7 +42,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 3;
+  int get schemaVersion => 4;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -57,12 +57,15 @@ class AppDatabase extends _$AppDatabase {
         onUpgrade: (m, from, to) async {
           await m.createAll();
 
-          // EXAMPLE :
-          // if (from <= 1) {
-          // try {
-          //   await m.addColumn(tracks, tracks.trackArtists);
-          // } catch (e) {/* column already exists */}
-          // }
+          if (from <= 3) {
+            try {
+              await m.addColumn(tracksCurrent, tracksCurrent.addedAt);
+              await m.addColumn(tracksNewAll, tracksNewAll.addedAt);
+              await m.addColumn(tracksNewDistinct, tracksNewDistinct.addedAt);
+              await m.addColumn(tracksToAdd, tracksToAdd.addedAt);
+              await m.addColumn(tracksToRemove, tracksToRemove.addedAt);
+            } catch (e) {/* column already exists */}
+          }
         },
       );
 }

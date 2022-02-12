@@ -542,6 +542,7 @@ class TracksCurrentCompanion extends UpdateCompanion<Track> {
   final Value<String> trackArtists;
   final Value<String> trackUri;
   final Value<int> durationMs;
+  final Value<DateTime> addedAt;
   const TracksCurrentCompanion({
     this.playlistId = const Value.absent(),
     this.trackId = const Value.absent(),
@@ -549,6 +550,7 @@ class TracksCurrentCompanion extends UpdateCompanion<Track> {
     this.trackArtists = const Value.absent(),
     this.trackUri = const Value.absent(),
     this.durationMs = const Value.absent(),
+    this.addedAt = const Value.absent(),
   });
   TracksCurrentCompanion.insert({
     required String playlistId,
@@ -557,12 +559,14 @@ class TracksCurrentCompanion extends UpdateCompanion<Track> {
     required String trackArtists,
     required String trackUri,
     required int durationMs,
+    required DateTime addedAt,
   })  : playlistId = Value(playlistId),
         trackId = Value(trackId),
         name = Value(name),
         trackArtists = Value(trackArtists),
         trackUri = Value(trackUri),
-        durationMs = Value(durationMs);
+        durationMs = Value(durationMs),
+        addedAt = Value(addedAt);
   static Insertable<Track> custom({
     Expression<String>? playlistId,
     Expression<String>? trackId,
@@ -570,6 +574,7 @@ class TracksCurrentCompanion extends UpdateCompanion<Track> {
     Expression<String>? trackArtists,
     Expression<String>? trackUri,
     Expression<int>? durationMs,
+    Expression<DateTime>? addedAt,
   }) {
     return RawValuesInsertable({
       if (playlistId != null) 'playlist_id': playlistId,
@@ -578,6 +583,7 @@ class TracksCurrentCompanion extends UpdateCompanion<Track> {
       if (trackArtists != null) 'track_artists': trackArtists,
       if (trackUri != null) 'track_uri': trackUri,
       if (durationMs != null) 'duration_ms': durationMs,
+      if (addedAt != null) 'added_at': addedAt,
     });
   }
 
@@ -587,7 +593,8 @@ class TracksCurrentCompanion extends UpdateCompanion<Track> {
       Value<String>? name,
       Value<String>? trackArtists,
       Value<String>? trackUri,
-      Value<int>? durationMs}) {
+      Value<int>? durationMs,
+      Value<DateTime>? addedAt}) {
     return TracksCurrentCompanion(
       playlistId: playlistId ?? this.playlistId,
       trackId: trackId ?? this.trackId,
@@ -595,6 +602,7 @@ class TracksCurrentCompanion extends UpdateCompanion<Track> {
       trackArtists: trackArtists ?? this.trackArtists,
       trackUri: trackUri ?? this.trackUri,
       durationMs: durationMs ?? this.durationMs,
+      addedAt: addedAt ?? this.addedAt,
     );
   }
 
@@ -619,6 +627,9 @@ class TracksCurrentCompanion extends UpdateCompanion<Track> {
     if (durationMs.present) {
       map['duration_ms'] = Variable<int>(durationMs.value);
     }
+    if (addedAt.present) {
+      map['added_at'] = Variable<DateTime>(addedAt.value);
+    }
     return map;
   }
 
@@ -630,7 +641,8 @@ class TracksCurrentCompanion extends UpdateCompanion<Track> {
           ..write('name: $name, ')
           ..write('trackArtists: $trackArtists, ')
           ..write('trackUri: $trackUri, ')
-          ..write('durationMs: $durationMs')
+          ..write('durationMs: $durationMs, ')
+          ..write('addedAt: $addedAt')
           ..write(')'))
         .toString();
   }
@@ -676,9 +688,14 @@ class $TracksCurrentTable extends TracksCurrent
   late final GeneratedColumn<int?> durationMs = GeneratedColumn<int?>(
       'duration_ms', aliasedName, false,
       type: const IntType(), requiredDuringInsert: true);
+  final VerificationMeta _addedAtMeta = const VerificationMeta('addedAt');
+  @override
+  late final GeneratedColumn<DateTime?> addedAt = GeneratedColumn<DateTime?>(
+      'added_at', aliasedName, false,
+      type: const IntType(), requiredDuringInsert: true);
   @override
   List<GeneratedColumn> get $columns =>
-      [playlistId, trackId, name, trackArtists, trackUri, durationMs];
+      [playlistId, trackId, name, trackArtists, trackUri, durationMs, addedAt];
   @override
   String get aliasedName => _alias ?? 'tracks_current';
   @override
@@ -730,6 +747,12 @@ class $TracksCurrentTable extends TracksCurrent
     } else if (isInserting) {
       context.missing(_durationMsMeta);
     }
+    if (data.containsKey('added_at')) {
+      context.handle(_addedAtMeta,
+          addedAt.isAcceptableOrUnknown(data['added_at']!, _addedAtMeta));
+    } else if (isInserting) {
+      context.missing(_addedAtMeta);
+    }
     return context;
   }
 
@@ -751,6 +774,8 @@ class $TracksCurrentTable extends TracksCurrent
           .mapFromDatabaseResponse(data['${effectivePrefix}track_uri'])!,
       durationMs: const IntType()
           .mapFromDatabaseResponse(data['${effectivePrefix}duration_ms'])!,
+      addedAt: const DateTimeType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}added_at'])!,
     );
   }
 
@@ -767,6 +792,7 @@ class TracksNewAllCompanion extends UpdateCompanion<Track> {
   final Value<String> trackArtists;
   final Value<String> trackUri;
   final Value<int> durationMs;
+  final Value<DateTime> addedAt;
   const TracksNewAllCompanion({
     this.playlistId = const Value.absent(),
     this.trackId = const Value.absent(),
@@ -774,6 +800,7 @@ class TracksNewAllCompanion extends UpdateCompanion<Track> {
     this.trackArtists = const Value.absent(),
     this.trackUri = const Value.absent(),
     this.durationMs = const Value.absent(),
+    this.addedAt = const Value.absent(),
   });
   TracksNewAllCompanion.insert({
     required String playlistId,
@@ -782,12 +809,14 @@ class TracksNewAllCompanion extends UpdateCompanion<Track> {
     required String trackArtists,
     required String trackUri,
     required int durationMs,
+    required DateTime addedAt,
   })  : playlistId = Value(playlistId),
         trackId = Value(trackId),
         name = Value(name),
         trackArtists = Value(trackArtists),
         trackUri = Value(trackUri),
-        durationMs = Value(durationMs);
+        durationMs = Value(durationMs),
+        addedAt = Value(addedAt);
   static Insertable<Track> custom({
     Expression<String>? playlistId,
     Expression<String>? trackId,
@@ -795,6 +824,7 @@ class TracksNewAllCompanion extends UpdateCompanion<Track> {
     Expression<String>? trackArtists,
     Expression<String>? trackUri,
     Expression<int>? durationMs,
+    Expression<DateTime>? addedAt,
   }) {
     return RawValuesInsertable({
       if (playlistId != null) 'playlist_id': playlistId,
@@ -803,6 +833,7 @@ class TracksNewAllCompanion extends UpdateCompanion<Track> {
       if (trackArtists != null) 'track_artists': trackArtists,
       if (trackUri != null) 'track_uri': trackUri,
       if (durationMs != null) 'duration_ms': durationMs,
+      if (addedAt != null) 'added_at': addedAt,
     });
   }
 
@@ -812,7 +843,8 @@ class TracksNewAllCompanion extends UpdateCompanion<Track> {
       Value<String>? name,
       Value<String>? trackArtists,
       Value<String>? trackUri,
-      Value<int>? durationMs}) {
+      Value<int>? durationMs,
+      Value<DateTime>? addedAt}) {
     return TracksNewAllCompanion(
       playlistId: playlistId ?? this.playlistId,
       trackId: trackId ?? this.trackId,
@@ -820,6 +852,7 @@ class TracksNewAllCompanion extends UpdateCompanion<Track> {
       trackArtists: trackArtists ?? this.trackArtists,
       trackUri: trackUri ?? this.trackUri,
       durationMs: durationMs ?? this.durationMs,
+      addedAt: addedAt ?? this.addedAt,
     );
   }
 
@@ -844,6 +877,9 @@ class TracksNewAllCompanion extends UpdateCompanion<Track> {
     if (durationMs.present) {
       map['duration_ms'] = Variable<int>(durationMs.value);
     }
+    if (addedAt.present) {
+      map['added_at'] = Variable<DateTime>(addedAt.value);
+    }
     return map;
   }
 
@@ -855,7 +891,8 @@ class TracksNewAllCompanion extends UpdateCompanion<Track> {
           ..write('name: $name, ')
           ..write('trackArtists: $trackArtists, ')
           ..write('trackUri: $trackUri, ')
-          ..write('durationMs: $durationMs')
+          ..write('durationMs: $durationMs, ')
+          ..write('addedAt: $addedAt')
           ..write(')'))
         .toString();
   }
@@ -901,9 +938,14 @@ class $TracksNewAllTable extends TracksNewAll
   late final GeneratedColumn<int?> durationMs = GeneratedColumn<int?>(
       'duration_ms', aliasedName, false,
       type: const IntType(), requiredDuringInsert: true);
+  final VerificationMeta _addedAtMeta = const VerificationMeta('addedAt');
+  @override
+  late final GeneratedColumn<DateTime?> addedAt = GeneratedColumn<DateTime?>(
+      'added_at', aliasedName, false,
+      type: const IntType(), requiredDuringInsert: true);
   @override
   List<GeneratedColumn> get $columns =>
-      [playlistId, trackId, name, trackArtists, trackUri, durationMs];
+      [playlistId, trackId, name, trackArtists, trackUri, durationMs, addedAt];
   @override
   String get aliasedName => _alias ?? 'tracks_new_all';
   @override
@@ -955,6 +997,12 @@ class $TracksNewAllTable extends TracksNewAll
     } else if (isInserting) {
       context.missing(_durationMsMeta);
     }
+    if (data.containsKey('added_at')) {
+      context.handle(_addedAtMeta,
+          addedAt.isAcceptableOrUnknown(data['added_at']!, _addedAtMeta));
+    } else if (isInserting) {
+      context.missing(_addedAtMeta);
+    }
     return context;
   }
 
@@ -976,6 +1024,8 @@ class $TracksNewAllTable extends TracksNewAll
           .mapFromDatabaseResponse(data['${effectivePrefix}track_uri'])!,
       durationMs: const IntType()
           .mapFromDatabaseResponse(data['${effectivePrefix}duration_ms'])!,
+      addedAt: const DateTimeType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}added_at'])!,
     );
   }
 
@@ -992,6 +1042,7 @@ class TracksNewDistinctCompanion extends UpdateCompanion<Track> {
   final Value<String> trackArtists;
   final Value<String> trackUri;
   final Value<int> durationMs;
+  final Value<DateTime> addedAt;
   const TracksNewDistinctCompanion({
     this.playlistId = const Value.absent(),
     this.trackId = const Value.absent(),
@@ -999,6 +1050,7 @@ class TracksNewDistinctCompanion extends UpdateCompanion<Track> {
     this.trackArtists = const Value.absent(),
     this.trackUri = const Value.absent(),
     this.durationMs = const Value.absent(),
+    this.addedAt = const Value.absent(),
   });
   TracksNewDistinctCompanion.insert({
     required String playlistId,
@@ -1007,12 +1059,14 @@ class TracksNewDistinctCompanion extends UpdateCompanion<Track> {
     required String trackArtists,
     required String trackUri,
     required int durationMs,
+    required DateTime addedAt,
   })  : playlistId = Value(playlistId),
         trackId = Value(trackId),
         name = Value(name),
         trackArtists = Value(trackArtists),
         trackUri = Value(trackUri),
-        durationMs = Value(durationMs);
+        durationMs = Value(durationMs),
+        addedAt = Value(addedAt);
   static Insertable<Track> custom({
     Expression<String>? playlistId,
     Expression<String>? trackId,
@@ -1020,6 +1074,7 @@ class TracksNewDistinctCompanion extends UpdateCompanion<Track> {
     Expression<String>? trackArtists,
     Expression<String>? trackUri,
     Expression<int>? durationMs,
+    Expression<DateTime>? addedAt,
   }) {
     return RawValuesInsertable({
       if (playlistId != null) 'playlist_id': playlistId,
@@ -1028,6 +1083,7 @@ class TracksNewDistinctCompanion extends UpdateCompanion<Track> {
       if (trackArtists != null) 'track_artists': trackArtists,
       if (trackUri != null) 'track_uri': trackUri,
       if (durationMs != null) 'duration_ms': durationMs,
+      if (addedAt != null) 'added_at': addedAt,
     });
   }
 
@@ -1037,7 +1093,8 @@ class TracksNewDistinctCompanion extends UpdateCompanion<Track> {
       Value<String>? name,
       Value<String>? trackArtists,
       Value<String>? trackUri,
-      Value<int>? durationMs}) {
+      Value<int>? durationMs,
+      Value<DateTime>? addedAt}) {
     return TracksNewDistinctCompanion(
       playlistId: playlistId ?? this.playlistId,
       trackId: trackId ?? this.trackId,
@@ -1045,6 +1102,7 @@ class TracksNewDistinctCompanion extends UpdateCompanion<Track> {
       trackArtists: trackArtists ?? this.trackArtists,
       trackUri: trackUri ?? this.trackUri,
       durationMs: durationMs ?? this.durationMs,
+      addedAt: addedAt ?? this.addedAt,
     );
   }
 
@@ -1069,6 +1127,9 @@ class TracksNewDistinctCompanion extends UpdateCompanion<Track> {
     if (durationMs.present) {
       map['duration_ms'] = Variable<int>(durationMs.value);
     }
+    if (addedAt.present) {
+      map['added_at'] = Variable<DateTime>(addedAt.value);
+    }
     return map;
   }
 
@@ -1080,7 +1141,8 @@ class TracksNewDistinctCompanion extends UpdateCompanion<Track> {
           ..write('name: $name, ')
           ..write('trackArtists: $trackArtists, ')
           ..write('trackUri: $trackUri, ')
-          ..write('durationMs: $durationMs')
+          ..write('durationMs: $durationMs, ')
+          ..write('addedAt: $addedAt')
           ..write(')'))
         .toString();
   }
@@ -1126,9 +1188,14 @@ class $TracksNewDistinctTable extends TracksNewDistinct
   late final GeneratedColumn<int?> durationMs = GeneratedColumn<int?>(
       'duration_ms', aliasedName, false,
       type: const IntType(), requiredDuringInsert: true);
+  final VerificationMeta _addedAtMeta = const VerificationMeta('addedAt');
+  @override
+  late final GeneratedColumn<DateTime?> addedAt = GeneratedColumn<DateTime?>(
+      'added_at', aliasedName, false,
+      type: const IntType(), requiredDuringInsert: true);
   @override
   List<GeneratedColumn> get $columns =>
-      [playlistId, trackId, name, trackArtists, trackUri, durationMs];
+      [playlistId, trackId, name, trackArtists, trackUri, durationMs, addedAt];
   @override
   String get aliasedName => _alias ?? 'tracks_new_distinct';
   @override
@@ -1180,6 +1247,12 @@ class $TracksNewDistinctTable extends TracksNewDistinct
     } else if (isInserting) {
       context.missing(_durationMsMeta);
     }
+    if (data.containsKey('added_at')) {
+      context.handle(_addedAtMeta,
+          addedAt.isAcceptableOrUnknown(data['added_at']!, _addedAtMeta));
+    } else if (isInserting) {
+      context.missing(_addedAtMeta);
+    }
     return context;
   }
 
@@ -1201,6 +1274,8 @@ class $TracksNewDistinctTable extends TracksNewDistinct
           .mapFromDatabaseResponse(data['${effectivePrefix}track_uri'])!,
       durationMs: const IntType()
           .mapFromDatabaseResponse(data['${effectivePrefix}duration_ms'])!,
+      addedAt: const DateTimeType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}added_at'])!,
     );
   }
 
@@ -1217,6 +1292,7 @@ class TracksToRemoveCompanion extends UpdateCompanion<Track> {
   final Value<String> trackArtists;
   final Value<String> trackUri;
   final Value<int> durationMs;
+  final Value<DateTime> addedAt;
   const TracksToRemoveCompanion({
     this.playlistId = const Value.absent(),
     this.trackId = const Value.absent(),
@@ -1224,6 +1300,7 @@ class TracksToRemoveCompanion extends UpdateCompanion<Track> {
     this.trackArtists = const Value.absent(),
     this.trackUri = const Value.absent(),
     this.durationMs = const Value.absent(),
+    this.addedAt = const Value.absent(),
   });
   TracksToRemoveCompanion.insert({
     required String playlistId,
@@ -1232,12 +1309,14 @@ class TracksToRemoveCompanion extends UpdateCompanion<Track> {
     required String trackArtists,
     required String trackUri,
     required int durationMs,
+    required DateTime addedAt,
   })  : playlistId = Value(playlistId),
         trackId = Value(trackId),
         name = Value(name),
         trackArtists = Value(trackArtists),
         trackUri = Value(trackUri),
-        durationMs = Value(durationMs);
+        durationMs = Value(durationMs),
+        addedAt = Value(addedAt);
   static Insertable<Track> custom({
     Expression<String>? playlistId,
     Expression<String>? trackId,
@@ -1245,6 +1324,7 @@ class TracksToRemoveCompanion extends UpdateCompanion<Track> {
     Expression<String>? trackArtists,
     Expression<String>? trackUri,
     Expression<int>? durationMs,
+    Expression<DateTime>? addedAt,
   }) {
     return RawValuesInsertable({
       if (playlistId != null) 'playlist_id': playlistId,
@@ -1253,6 +1333,7 @@ class TracksToRemoveCompanion extends UpdateCompanion<Track> {
       if (trackArtists != null) 'track_artists': trackArtists,
       if (trackUri != null) 'track_uri': trackUri,
       if (durationMs != null) 'duration_ms': durationMs,
+      if (addedAt != null) 'added_at': addedAt,
     });
   }
 
@@ -1262,7 +1343,8 @@ class TracksToRemoveCompanion extends UpdateCompanion<Track> {
       Value<String>? name,
       Value<String>? trackArtists,
       Value<String>? trackUri,
-      Value<int>? durationMs}) {
+      Value<int>? durationMs,
+      Value<DateTime>? addedAt}) {
     return TracksToRemoveCompanion(
       playlistId: playlistId ?? this.playlistId,
       trackId: trackId ?? this.trackId,
@@ -1270,6 +1352,7 @@ class TracksToRemoveCompanion extends UpdateCompanion<Track> {
       trackArtists: trackArtists ?? this.trackArtists,
       trackUri: trackUri ?? this.trackUri,
       durationMs: durationMs ?? this.durationMs,
+      addedAt: addedAt ?? this.addedAt,
     );
   }
 
@@ -1294,6 +1377,9 @@ class TracksToRemoveCompanion extends UpdateCompanion<Track> {
     if (durationMs.present) {
       map['duration_ms'] = Variable<int>(durationMs.value);
     }
+    if (addedAt.present) {
+      map['added_at'] = Variable<DateTime>(addedAt.value);
+    }
     return map;
   }
 
@@ -1305,7 +1391,8 @@ class TracksToRemoveCompanion extends UpdateCompanion<Track> {
           ..write('name: $name, ')
           ..write('trackArtists: $trackArtists, ')
           ..write('trackUri: $trackUri, ')
-          ..write('durationMs: $durationMs')
+          ..write('durationMs: $durationMs, ')
+          ..write('addedAt: $addedAt')
           ..write(')'))
         .toString();
   }
@@ -1351,9 +1438,14 @@ class $TracksToRemoveTable extends TracksToRemove
   late final GeneratedColumn<int?> durationMs = GeneratedColumn<int?>(
       'duration_ms', aliasedName, false,
       type: const IntType(), requiredDuringInsert: true);
+  final VerificationMeta _addedAtMeta = const VerificationMeta('addedAt');
+  @override
+  late final GeneratedColumn<DateTime?> addedAt = GeneratedColumn<DateTime?>(
+      'added_at', aliasedName, false,
+      type: const IntType(), requiredDuringInsert: true);
   @override
   List<GeneratedColumn> get $columns =>
-      [playlistId, trackId, name, trackArtists, trackUri, durationMs];
+      [playlistId, trackId, name, trackArtists, trackUri, durationMs, addedAt];
   @override
   String get aliasedName => _alias ?? 'tracks_to_remove';
   @override
@@ -1405,6 +1497,12 @@ class $TracksToRemoveTable extends TracksToRemove
     } else if (isInserting) {
       context.missing(_durationMsMeta);
     }
+    if (data.containsKey('added_at')) {
+      context.handle(_addedAtMeta,
+          addedAt.isAcceptableOrUnknown(data['added_at']!, _addedAtMeta));
+    } else if (isInserting) {
+      context.missing(_addedAtMeta);
+    }
     return context;
   }
 
@@ -1426,6 +1524,8 @@ class $TracksToRemoveTable extends TracksToRemove
           .mapFromDatabaseResponse(data['${effectivePrefix}track_uri'])!,
       durationMs: const IntType()
           .mapFromDatabaseResponse(data['${effectivePrefix}duration_ms'])!,
+      addedAt: const DateTimeType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}added_at'])!,
     );
   }
 
@@ -1442,6 +1542,7 @@ class TracksToAddCompanion extends UpdateCompanion<Track> {
   final Value<String> trackArtists;
   final Value<String> trackUri;
   final Value<int> durationMs;
+  final Value<DateTime> addedAt;
   const TracksToAddCompanion({
     this.playlistId = const Value.absent(),
     this.trackId = const Value.absent(),
@@ -1449,6 +1550,7 @@ class TracksToAddCompanion extends UpdateCompanion<Track> {
     this.trackArtists = const Value.absent(),
     this.trackUri = const Value.absent(),
     this.durationMs = const Value.absent(),
+    this.addedAt = const Value.absent(),
   });
   TracksToAddCompanion.insert({
     required String playlistId,
@@ -1457,12 +1559,14 @@ class TracksToAddCompanion extends UpdateCompanion<Track> {
     required String trackArtists,
     required String trackUri,
     required int durationMs,
+    required DateTime addedAt,
   })  : playlistId = Value(playlistId),
         trackId = Value(trackId),
         name = Value(name),
         trackArtists = Value(trackArtists),
         trackUri = Value(trackUri),
-        durationMs = Value(durationMs);
+        durationMs = Value(durationMs),
+        addedAt = Value(addedAt);
   static Insertable<Track> custom({
     Expression<String>? playlistId,
     Expression<String>? trackId,
@@ -1470,6 +1574,7 @@ class TracksToAddCompanion extends UpdateCompanion<Track> {
     Expression<String>? trackArtists,
     Expression<String>? trackUri,
     Expression<int>? durationMs,
+    Expression<DateTime>? addedAt,
   }) {
     return RawValuesInsertable({
       if (playlistId != null) 'playlist_id': playlistId,
@@ -1478,6 +1583,7 @@ class TracksToAddCompanion extends UpdateCompanion<Track> {
       if (trackArtists != null) 'track_artists': trackArtists,
       if (trackUri != null) 'track_uri': trackUri,
       if (durationMs != null) 'duration_ms': durationMs,
+      if (addedAt != null) 'added_at': addedAt,
     });
   }
 
@@ -1487,7 +1593,8 @@ class TracksToAddCompanion extends UpdateCompanion<Track> {
       Value<String>? name,
       Value<String>? trackArtists,
       Value<String>? trackUri,
-      Value<int>? durationMs}) {
+      Value<int>? durationMs,
+      Value<DateTime>? addedAt}) {
     return TracksToAddCompanion(
       playlistId: playlistId ?? this.playlistId,
       trackId: trackId ?? this.trackId,
@@ -1495,6 +1602,7 @@ class TracksToAddCompanion extends UpdateCompanion<Track> {
       trackArtists: trackArtists ?? this.trackArtists,
       trackUri: trackUri ?? this.trackUri,
       durationMs: durationMs ?? this.durationMs,
+      addedAt: addedAt ?? this.addedAt,
     );
   }
 
@@ -1519,6 +1627,9 @@ class TracksToAddCompanion extends UpdateCompanion<Track> {
     if (durationMs.present) {
       map['duration_ms'] = Variable<int>(durationMs.value);
     }
+    if (addedAt.present) {
+      map['added_at'] = Variable<DateTime>(addedAt.value);
+    }
     return map;
   }
 
@@ -1530,7 +1641,8 @@ class TracksToAddCompanion extends UpdateCompanion<Track> {
           ..write('name: $name, ')
           ..write('trackArtists: $trackArtists, ')
           ..write('trackUri: $trackUri, ')
-          ..write('durationMs: $durationMs')
+          ..write('durationMs: $durationMs, ')
+          ..write('addedAt: $addedAt')
           ..write(')'))
         .toString();
   }
@@ -1576,9 +1688,14 @@ class $TracksToAddTable extends TracksToAdd
   late final GeneratedColumn<int?> durationMs = GeneratedColumn<int?>(
       'duration_ms', aliasedName, false,
       type: const IntType(), requiredDuringInsert: true);
+  final VerificationMeta _addedAtMeta = const VerificationMeta('addedAt');
+  @override
+  late final GeneratedColumn<DateTime?> addedAt = GeneratedColumn<DateTime?>(
+      'added_at', aliasedName, false,
+      type: const IntType(), requiredDuringInsert: true);
   @override
   List<GeneratedColumn> get $columns =>
-      [playlistId, trackId, name, trackArtists, trackUri, durationMs];
+      [playlistId, trackId, name, trackArtists, trackUri, durationMs, addedAt];
   @override
   String get aliasedName => _alias ?? 'tracks_to_add';
   @override
@@ -1630,6 +1747,12 @@ class $TracksToAddTable extends TracksToAdd
     } else if (isInserting) {
       context.missing(_durationMsMeta);
     }
+    if (data.containsKey('added_at')) {
+      context.handle(_addedAtMeta,
+          addedAt.isAcceptableOrUnknown(data['added_at']!, _addedAtMeta));
+    } else if (isInserting) {
+      context.missing(_addedAtMeta);
+    }
     return context;
   }
 
@@ -1651,6 +1774,8 @@ class $TracksToAddTable extends TracksToAdd
           .mapFromDatabaseResponse(data['${effectivePrefix}track_uri'])!,
       durationMs: const IntType()
           .mapFromDatabaseResponse(data['${effectivePrefix}duration_ms'])!,
+      addedAt: const DateTimeType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}added_at'])!,
     );
   }
 

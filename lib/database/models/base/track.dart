@@ -7,14 +7,17 @@ class Track extends DataClass implements Insertable<Track> {
   final String trackArtists;
   final String trackUri;
   final int durationMs;
+  final DateTime addedAt;
 
-  Track(
-      {required this.playlistId,
-      required this.trackId,
-      required this.name,
-      required this.trackArtists,
-      required this.trackUri,
-      required this.durationMs});
+  Track({
+    required this.playlistId,
+    required this.trackId,
+    required this.name,
+    required this.trackArtists,
+    required this.trackUri,
+    required this.durationMs,
+    required this.addedAt,
+  });
 
   factory Track.fromData(Map<String, dynamic> data, {String? prefix}) {
     final effectivePrefix = prefix ?? '';
@@ -25,6 +28,7 @@ class Track extends DataClass implements Insertable<Track> {
       trackArtists: const StringType().mapFromDatabaseResponse(data['${effectivePrefix}track_artists'])!,
       trackUri: const StringType().mapFromDatabaseResponse(data['${effectivePrefix}track_uri'])!,
       durationMs: const IntType().mapFromDatabaseResponse(data['${effectivePrefix}duration_ms'])!,
+      addedAt: const DateTimeType().mapFromDatabaseResponse(data['${effectivePrefix}added_at'])!,
     );
   }
 
@@ -37,6 +41,7 @@ class Track extends DataClass implements Insertable<Track> {
     map['track_artists'] = Variable<String>(trackArtists);
     map['track_uri'] = Variable<String>(trackUri);
     map['duration_ms'] = Variable<int>(durationMs);
+    map['added_at'] = Variable<DateTime>(addedAt);
     return map;
   }
 
@@ -49,6 +54,7 @@ class Track extends DataClass implements Insertable<Track> {
       trackArtists: serializer.fromJson<String>(json['trackArtists']),
       trackUri: serializer.fromJson<String>(json['trackUri']),
       durationMs: serializer.fromJson<int>(json['durationMs']),
+      addedAt: serializer.fromJson<DateTime>(json['addedAt']),
     );
   }
 
@@ -62,6 +68,7 @@ class Track extends DataClass implements Insertable<Track> {
       'trackArtists': serializer.toJson<String>(trackArtists),
       'trackUri': serializer.toJson<String>(trackUri),
       'durationMs': serializer.toJson<int>(durationMs),
+      'addedAt': serializer.toJson<DateTime>(addedAt),
     };
   }
 
@@ -74,12 +81,13 @@ class Track extends DataClass implements Insertable<Track> {
           ..write('trackArtists: $trackArtists, ')
           ..write('trackUri: $trackUri, ')
           ..write('durationMs: $durationMs')
+          ..write('addedAt: $addedAt')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(playlistId, trackId, name, trackArtists, trackUri, durationMs);
+  int get hashCode => Object.hash(playlistId, trackId, name, trackArtists, trackUri, durationMs, addedAt);
 
   @override
   bool operator ==(Object other) =>
@@ -90,7 +98,8 @@ class Track extends DataClass implements Insertable<Track> {
           other.name == name &&
           other.trackArtists == trackArtists &&
           other.trackUri == trackUri &&
-          other.durationMs == durationMs);
+          other.durationMs == durationMs &&
+          other.addedAt == addedAt);
 }
 
 /*

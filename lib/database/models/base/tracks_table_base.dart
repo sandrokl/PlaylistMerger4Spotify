@@ -9,6 +9,7 @@ abstract class TracksTableBase extends Table {
   TextColumn get trackArtists => text()();
   TextColumn get trackUri => text()();
   IntColumn get durationMs => integer()();
+  DateTimeColumn get addedAt => dateTime()();
 
   @override
   Set<Column> get primaryKey => {playlistId, trackId};
