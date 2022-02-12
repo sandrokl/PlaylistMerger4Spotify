@@ -23,24 +23,23 @@ class NotificationsHelper {
     return DateTime.now().millisecondsSinceEpoch ~/ 1000;
   }
 
-  static NotificationDetails _createPlatformNotificationsDetails(String channelName) {
+  static NotificationDetails _createPlatformNotificationsDetails(String channelId, String channelName) {
     final androidPlatformChannelSpecifics = AndroidNotificationDetails(
-      CHANNEL_KEY_MERGING_RESULTS,
+      channelId,
       channelName,
       importance: Importance.max,
       color: Colors.green,
       channelShowBadge: true,
       playSound: false,
-      enableVibration: false,
       styleInformation: const BigTextStyleInformation('', htmlFormatTitle: true, htmlFormatContent: true),
     );
     final platformNotificationsDetails = NotificationDetails(android: androidPlatformChannelSpecifics);
     return platformNotificationsDetails;
   }
 
-  static Future<void> showNotification(String channelName, String title, String message) async {
+  static Future<void> showNotification(String channelId, String channelName, String title, String message) async {
     await initialize();
-    final platformNotificationsDetails = _createPlatformNotificationsDetails(channelName);
+    final platformNotificationsDetails = _createPlatformNotificationsDetails(channelId, channelName);
     await _flutterLocalNotificationsPlugin.show(_generateId(), title, message, platformNotificationsDetails,
         payload: null);
   }
