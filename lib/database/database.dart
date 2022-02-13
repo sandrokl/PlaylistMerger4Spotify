@@ -6,6 +6,7 @@ import 'package:playlistmerger4spotify/database/dao/playlists_dao.dart';
 import 'package:playlistmerger4spotify/database/dao/playlists_to_merge_dao.dart';
 import 'package:playlistmerger4spotify/database/dao/tracks_current_dao.dart';
 import 'package:playlistmerger4spotify/database/dao/tracks_new_all_dao.dart';
+import 'package:playlistmerger4spotify/database/dao/tracks_new_distinct_dao.dart';
 import 'package:playlistmerger4spotify/database/models/tracks_current.dart';
 import 'package:playlistmerger4spotify/database/models/tracks_new_all.dart';
 import 'package:playlistmerger4spotify/database/models/tracks_new_distinct.dart';
@@ -43,6 +44,7 @@ LazyDatabase _openConnection() {
     PlaylistsToMergeDao,
     TracksCurrentDao,
     TracksNewAllDao,
+    TracksNewDistinctDao,
   ],
 )
 class AppDatabase extends _$AppDatabase {

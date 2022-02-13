@@ -1803,6 +1803,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
       TracksCurrentDao(this as AppDatabase);
   late final TracksNewAllDao tracksNewAllDao =
       TracksNewAllDao(this as AppDatabase);
+  late final TracksNewDistinctDao tracksNewDistinctDao =
+      TracksNewDistinctDao(this as AppDatabase);
   @override
   Iterable<TableInfo> get allTables => allSchemaEntities.whereType<TableInfo>();
   @override

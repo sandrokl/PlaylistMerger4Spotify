@@ -19,6 +19,7 @@ class MergingHelper {
       // STEP 0 : clean all records of tracks
       await _db.tracksCurrentDao.deleteAll();
       await _db.tracksNewAllDao.deleteAll();
+      await _db.tracksNewDistinctDao.deleteAll();
 
       var tracks = <Track>[];
 
@@ -50,6 +51,10 @@ class MergingHelper {
           tracks.clear();
         }
       }
+
+      // STEP 3 : remove duplicates from new tracks
+      await _db.tracksNewDistinctDao.generateNewTracksWithoutDuplicates();
+
       return true;
     } catch (_) {
       return false;
