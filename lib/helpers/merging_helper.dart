@@ -29,9 +29,11 @@ class MergingHelper {
     try {
       // STEP 0 : clean all records of tracks
       _db.tracksCurrentDao.deleteAll();
+      _db.tracksNewAllDao.deleteAll();
+
+      var tracks = <Track>[];
 
       // STEP 1 : get current tracks in merged playlist
-      var tracks = <Track>[];
       await for (var track in SpotifyClient().getTracksFromPlaylist(playlistId)) {
         tracks.add(track);
         if (tracks.length == _databaseBatchSize) {
@@ -39,8 +41,26 @@ class MergingHelper {
           tracks.clear();
         }
       }
-      await _db.tracksCurrentDao.insertAll(tracks);
-      tracks.clear();
+      if (tracks.isNotEmpty) {
+        await _db.tracksCurrentDao.insertAll(tracks);
+        tracks.clear();
+      }
+
+      // STEP 2 : get all tracks from source playlists
+      var sources = await _db.playlistsToMergeDao.getPlaylistsToMergeByDestinationId(playlistId);
+      for (var source in sources) {
+        await for (var track in SpotifyClient().getTracksFromPlaylist(source.sourcePlaylistId)) {
+          tracks.add(track);
+          if (tracks.length == _databaseBatchSize) {
+            await _db.tracksNewAllDao.insertAll(tracks);
+            tracks.clear();
+          }
+        }
+        if (tracks.isNotEmpty) {
+          await _db.tracksNewAllDao.insertAll(tracks);
+          tracks.clear();
+        }
+      }
 
       if (showNotification && notificationInfo != null) {
         NotificationsHelper.showNotification(

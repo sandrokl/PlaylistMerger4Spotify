@@ -1801,6 +1801,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
       PlaylistsToMergeDao(this as AppDatabase);
   late final TracksCurrentDao tracksCurrentDao =
       TracksCurrentDao(this as AppDatabase);
+  late final TracksNewAllDao tracksNewAllDao =
+      TracksNewAllDao(this as AppDatabase);
   @override
   Iterable<TableInfo> get allTables => allSchemaEntities.whereType<TableInfo>();
   @override
