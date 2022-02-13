@@ -2,16 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:playlistmerger4spotify/database/database.dart';
 import 'package:playlistmerger4spotify/generated/l10n.dart';
 import 'package:playlistmerger4spotify/helpers/import_export_helper.dart';
-import 'package:playlistmerger4spotify/helpers/merging_helper.dart';
 import 'package:playlistmerger4spotify/helpers/notifications_helper.dart';
 import 'package:playlistmerger4spotify/helpers/spotify_client.dart';
-import 'package:playlistmerger4spotify/models/notification_info.dart';
+import 'package:playlistmerger4spotify/helpers/work_manager_helper.dart';
 import 'package:playlistmerger4spotify/screens/merging_definition/merging_definition.dart';
 import 'package:playlistmerger4spotify/screens/my_home_page/appbar_popup_menu_items.dart';
 import 'package:playlistmerger4spotify/screens/my_home_page/user_info.dart';
 import 'package:playlistmerger4spotify/store/spotify_user_store.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:workmanager/workmanager.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key}) : super(key: key);
@@ -77,15 +77,17 @@ class _MyHomePageState extends State<MyHomePage> {
         actions: [
           IconButton(
             onPressed: () async {
-              MergingHelper().updateAllMergedPlaylists(
-                showNotification: true,
-                notificationInfo: NotificationInfo(
-                    notificationChannelId: NotificationsHelper.CHANNEL_KEY_MERGING_RESULTS,
-                    notificationChannelName: S.of(context).channelNameMergingResults,
-                    successTitle: S.of(context).notificationSuccessTitle,
-                    successMessage: S.of(context).notificationAllPlaylistsUpdatedSuccessfully,
-                    failureTitle: S.of(context).notificationFailureTitle,
-                    failureMessage: S.of(context).notificationMergingFailed),
+              await Workmanager().registerOneOffTask(
+                DateTime.now().millisecond.toString(),
+                WorkManagerHelper.TASK_DO_MERGING_NOW_ALL,
+                inputData: {
+                  "notificationChannelId": NotificationsHelper.CHANNEL_KEY_MERGING_RESULTS,
+                  "notificationChannelName": S.of(context).channelNameMergingResults,
+                  "successTitle": S.of(context).notificationSuccessTitle,
+                  "successMessage": S.of(context).notificationAllPlaylistsUpdatedSuccessfully,
+                  "failureTitle": S.of(context).notificationFailureTitle,
+                  "failureMessage": S.of(context).notificationMergingFailed
+                },
               );
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
@@ -243,20 +245,22 @@ class _MyHomePageState extends State<MyHomePage> {
                                                       contentPadding: const EdgeInsets.all(4.0),
                                                       dense: true,
                                                       onTap: () async {
-                                                        MergingHelper().updateSpecificMergedPlaylist(
-                                                          p.playlistId,
-                                                          showNotification: true,
-                                                          notificationInfo: NotificationInfo(
-                                                              notificationChannelId:
-                                                                  NotificationsHelper.CHANNEL_KEY_MERGING_RESULTS,
-                                                              notificationChannelName:
-                                                                  S.of(context).channelNameMergingResults,
-                                                              successTitle: S.of(context).notificationSuccessTitle,
-                                                              successMessage: S
-                                                                  .of(context)
-                                                                  .notificationPlaylistUpdatedSuccessfully(p.name),
-                                                              failureTitle: S.of(context).notificationFailureTitle,
-                                                              failureMessage: S.of(context).notificationMergingFailed),
+                                                        await Workmanager().registerOneOffTask(
+                                                          DateTime.now().millisecond.toString(),
+                                                          WorkManagerHelper.TASK_DO_MERGING_NOW_SPECIFIC,
+                                                          inputData: {
+                                                            "playlistId": p.playlistId,
+                                                            "notificationChannelId":
+                                                                NotificationsHelper.CHANNEL_KEY_MERGING_RESULTS,
+                                                            "notificationChannelName":
+                                                                S.of(context).channelNameMergingResults,
+                                                            "successTitle": S.of(context).notificationSuccessTitle,
+                                                            "successMessage": S
+                                                                .of(context)
+                                                                .notificationPlaylistUpdatedSuccessfully(p.name),
+                                                            "failureTitle": S.of(context).notificationFailureTitle,
+                                                            "failureMessage": S.of(context).notificationMergingFailed
+                                                          },
                                                         );
                                                         ScaffoldMessenger.of(context).showSnackBar(
                                                           SnackBar(

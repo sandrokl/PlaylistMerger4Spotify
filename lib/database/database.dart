@@ -46,7 +46,9 @@ LazyDatabase _openConnection() {
   ],
 )
 class AppDatabase extends _$AppDatabase {
-  AppDatabase() : super(_openConnection());
+  static final AppDatabase _singleton = AppDatabase._internal();
+  AppDatabase._internal() : super(_openConnection());
+  factory AppDatabase() => _singleton;
 
   @override
   int get schemaVersion => 4;

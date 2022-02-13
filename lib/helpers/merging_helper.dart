@@ -28,8 +28,8 @@ class MergingHelper {
       {bool showNotification = true, NotificationInfo? notificationInfo}) async {
     try {
       // STEP 0 : clean all records of tracks
-      _db.tracksCurrentDao.deleteAll();
-      _db.tracksNewAllDao.deleteAll();
+      await _db.tracksCurrentDao.deleteAll();
+      await _db.tracksNewAllDao.deleteAll();
 
       var tracks = <Track>[];
 
@@ -63,7 +63,7 @@ class MergingHelper {
       }
 
       if (showNotification && notificationInfo != null) {
-        NotificationsHelper.showNotification(
+        await NotificationsHelper.showNotification(
           notificationInfo.notificationChannelId,
           notificationInfo.notificationChannelName,
           notificationInfo.successTitle,
@@ -73,7 +73,7 @@ class MergingHelper {
       return true;
     } catch (_) {
       if (showNotification && notificationInfo != null) {
-        NotificationsHelper.showNotification(
+        await NotificationsHelper.showNotification(
           notificationInfo.notificationChannelId,
           notificationInfo.notificationChannelName,
           notificationInfo.failureTitle,

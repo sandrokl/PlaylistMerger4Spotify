@@ -18,9 +18,7 @@ class SpotifyClient {
   late OAuth2Helper _httpHelper;
 
   static final SpotifyClient _singleton = SpotifyClient._internal();
-
   factory SpotifyClient() => _singleton;
-
   SpotifyClient._internal() {
     _httpHelper = OAuth2Helper(
         SpotifyOAuth2Client(
