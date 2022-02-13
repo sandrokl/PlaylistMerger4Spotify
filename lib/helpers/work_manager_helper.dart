@@ -1,7 +1,5 @@
 // ignore_for_file: constant_identifier_names
 
-import 'notifications_helper.dart';
-
 class WorkManagerHelper {
   static const TAG_DO_MERGING_NOW = "doMergingNow";
   static const TAG_DO_MERGING_SCHEDULED = "doMergingScheculed";

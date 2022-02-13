@@ -4,6 +4,7 @@ import 'package:drift/native.dart';
 import 'package:path/path.dart' as p;
 import 'package:playlistmerger4spotify/database/dao/playlists_dao.dart';
 import 'package:playlistmerger4spotify/database/dao/playlists_to_merge_dao.dart';
+import 'package:playlistmerger4spotify/database/dao/tracks_current_dao.dart';
 import 'package:playlistmerger4spotify/database/models/tracks_current.dart';
 import 'package:playlistmerger4spotify/database/models/tracks_new_all.dart';
 import 'package:playlistmerger4spotify/database/models/tracks_new_distinct.dart';
@@ -26,18 +27,22 @@ LazyDatabase _openConnection() {
   });
 }
 
-@DriftDatabase(tables: [
-  Playlists,
-  PlaylistsToMerge,
-  TracksCurrent,
-  TracksNewAll,
-  TracksNewDistinct,
-  TracksToRemove,
-  TracksToAdd
-], daos: [
-  PlaylistsDao,
-  PlaylistsToMergeDao,
-])
+@DriftDatabase(
+  tables: [
+    Playlists,
+    PlaylistsToMerge,
+    TracksCurrent,
+    TracksNewAll,
+    TracksNewDistinct,
+    TracksToRemove,
+    TracksToAdd,
+  ],
+  daos: [
+    PlaylistsDao,
+    PlaylistsToMergeDao,
+    TracksCurrentDao,
+  ],
+)
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
