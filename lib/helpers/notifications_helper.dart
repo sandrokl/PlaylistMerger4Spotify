@@ -1,14 +1,18 @@
-// ignore_for_file: constant_identifier_names
+// ignore_for_file: constant_identifier_names, non_constant_identifier_names
 
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class NotificationsHelper {
+  NotificationsHelper._internal();
+  static final NotificationsHelper _instance = NotificationsHelper._internal();
+  factory NotificationsHelper() => _instance;
+
   static const CHANNEL_KEY_MERGING_RESULTS = "merging_results";
 
-  static late FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin;
+  late FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin;
 
-  static Future<void> initialize() async {
+  Future<void> initialize() async {
     _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
     const AndroidInitializationSettings initializationSettingsAndroid = AndroidInitializationSettings(
       'res_ic_notif',
@@ -19,11 +23,11 @@ class NotificationsHelper {
     await _flutterLocalNotificationsPlugin.initialize(initializationSettings);
   }
 
-  static int _generateId() {
+  int _generateId() {
     return DateTime.now().millisecondsSinceEpoch ~/ 1000;
   }
 
-  static NotificationDetails _createPlatformNotificationsDetails(String channelId, String channelName) {
+  NotificationDetails _createPlatformNotificationsDetails(String channelId, String channelName) {
     final androidPlatformChannelSpecifics = AndroidNotificationDetails(
       channelId,
       channelName,
@@ -37,7 +41,7 @@ class NotificationsHelper {
     return platformNotificationsDetails;
   }
 
-  static Future<void> showNotification(String channelId, String channelName, String title, String message) async {
+  Future<void> showNotification(String channelId, String channelName, String title, String message) async {
     await initialize();
     final platformNotificationsDetails = _createPlatformNotificationsDetails(channelId, channelName);
     await _flutterLocalNotificationsPlugin.show(_generateId(), title, message, platformNotificationsDetails,

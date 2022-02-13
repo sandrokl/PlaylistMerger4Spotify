@@ -390,14 +390,14 @@ class S {
     );
   }
 
-  /// `{howMany, plural, one {An update to your playlist is being made in Spotify. We'll let you know when it's finished.} other {An update to your playlists is being made in Spotify. We'll let you know when it's finished.}}`
+  /// `{howMany, plural, one {An update to your playlist is being made in Spotify. We'll let you know when it's finished. DO NOT LAUNCH A NEW UPDATE UNTIL THEN.} other {An update to your playlists is being made in Spotify. We'll let you know when it's finished. DO NOT LAUNCH A NEW UPDATE UNTIL THEN.}}`
   String anUpdateToYourPlaylistIsBeingMadeInSpotify(int howMany) {
     return Intl.plural(
       howMany,
       one:
-          'An update to your playlist is being made in Spotify. We\'ll let you know when it\'s finished.',
+          'An update to your playlist is being made in Spotify. We\'ll let you know when it\'s finished. DO NOT LAUNCH A NEW UPDATE UNTIL THEN.',
       other:
-          'An update to your playlists is being made in Spotify. We\'ll let you know when it\'s finished.',
+          'An update to your playlists is being made in Spotify. We\'ll let you know when it\'s finished. DO NOT LAUNCH A NEW UPDATE UNTIL THEN.',
       name: 'anUpdateToYourPlaylistIsBeingMadeInSpotify',
       desc: '',
       args: [howMany],
@@ -459,6 +459,26 @@ class S {
     return Intl.message(
       'Results of the playlists updates requests',
       name: 'channelNameMergingResults',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `<b>Busy</b>`
+  String get busyTitle {
+    return Intl.message(
+      '<b>Busy</b>',
+      name: 'busyTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please wait the current update to finish before starting a new one.`
+  String get busyMessage {
+    return Intl.message(
+      'Please wait the current update to finish before starting a new one.',
+      name: 'busyMessage',
       desc: '',
       args: [],
     );

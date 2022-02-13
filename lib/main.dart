@@ -14,7 +14,7 @@ import 'generated/l10n.dart';
 late bool isFirstTime;
 
 void callbackDispatcher() {
-  Workmanager().executeTask(WorkManagerHelper.handleTaskRequest);
+  Workmanager().executeTask(WorkManagerHelper().handleTaskRequest);
 }
 
 void main() async {
@@ -23,7 +23,7 @@ void main() async {
   final sharedPrefs = await SharedPreferences.getInstance();
   isFirstTime = sharedPrefs.getBool("isFirstTime") ?? true;
 
-  await NotificationsHelper.initialize();
+  await NotificationsHelper().initialize();
 
   Workmanager().initialize(callbackDispatcher);
 

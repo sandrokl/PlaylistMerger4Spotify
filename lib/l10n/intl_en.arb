@@ -33,7 +33,7 @@
   "settings": "Settings...",
   "updateThisInSpotify": "Update this in Spotify",
   "mergingDefinitionsImportedSuccessfully": "Merging definitions imported successfully, as much as possible, respecting your current playlists.",
-  "anUpdateToYourPlaylistIsBeingMadeInSpotify": "{howMany, plural, one {An update to your playlist is being made in Spotify. We'll let you know when it's finished.} other {An update to your playlists is being made in Spotify. We'll let you know when it's finished.}}",
+  "anUpdateToYourPlaylistIsBeingMadeInSpotify": "{howMany, plural, one {An update to your playlist is being made in Spotify. We'll let you know when it's finished. DO NOT LAUNCH A NEW UPDATE UNTIL THEN.} other {An update to your playlists is being made in Spotify. We'll let you know when it's finished. DO NOT LAUNCH A NEW UPDATE UNTIL THEN.}}",
   "@anUpdateToYourPlaylistIsBeingMadeInSpotify": {
     "placeholders": {
       "howMany": {
@@ -53,5 +53,7 @@
   },
   "notificationAllPlaylistsUpdatedSuccessfully": "&#128516 All your merged playlists have been updated successfully.",
   "notificationMergingFailed": "&#128577 There was an error trying to update your playlists. Please try again later.",
-  "channelNameMergingResults": "Results of the playlists updates requests"
+  "channelNameMergingResults": "Results of the playlists updates requests",
+  "busyTitle": "<b>Busy</b>",
+  "busyMessage": "Please wait the current update to finish before starting a new one."
 }

@@ -21,7 +21,7 @@ class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'en';
 
   static String m0(howMany) =>
-      "${Intl.plural(howMany, one: 'An update to your playlist is being made in Spotify. We\'ll let you know when it\'s finished.', other: 'An update to your playlists is being made in Spotify. We\'ll let you know when it\'s finished.')}";
+      "${Intl.plural(howMany, one: 'An update to your playlist is being made in Spotify. We\'ll let you know when it\'s finished. DO NOT LAUNCH A NEW UPDATE UNTIL THEN.', other: 'An update to your playlists is being made in Spotify. We\'ll let you know when it\'s finished. DO NOT LAUNCH A NEW UPDATE UNTIL THEN.')}";
 
   static String m1(name) =>
       "&#128516 Your merged playlist <em>${name}</em> has been updated successfully.";
@@ -35,6 +35,9 @@ class MessageLookup extends MessageLookupByLibrary {
             "\'s merging definition? This will not delete the playlist in Spotify."),
         "areYouSureYouWishToDelete_start": MessageLookupByLibrary.simpleMessage(
             "Are you sure you want to delete "),
+        "busyMessage": MessageLookupByLibrary.simpleMessage(
+            "Please wait the current update to finish before starting a new one."),
+        "busyTitle": MessageLookupByLibrary.simpleMessage("<b>Busy</b>"),
         "cancel": MessageLookupByLibrary.simpleMessage("cancel"),
         "carefulexclamation": MessageLookupByLibrary.simpleMessage("Careful!"),
         "changesSaved": MessageLookupByLibrary.simpleMessage(
