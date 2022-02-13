@@ -20,7 +20,7 @@ class PlaylistsDao extends DatabaseAccessor<AppDatabase> with _$PlaylistsDaoMixi
   }
 
   Future<List<Playlist>> getPossibleNewMergingPlaylists(String userId) async {
-    var alreadyUsedPlaylists = await getCurrentDestinationPlaylistsIds();
+    var alreadyUsedPlaylists = await db.playlistsToMergeDao.getCurrentDestinationPlaylistsIds();
     return (select(playlists)
           ..where((p) => p.ownerId.equals(userId) & p.playlistId.isNotIn(alreadyUsedPlaylists))
           ..orderBy([(p) => OrderingTerm(expression: p.name.upper())]))
@@ -43,19 +43,12 @@ class PlaylistsDao extends DatabaseAccessor<AppDatabase> with _$PlaylistsDaoMixi
   }
 
   Future<List<Playlist>> getMergedPlaylists() async {
-    var values = await getCurrentDestinationPlaylistsIds();
+    var values = await db.playlistsToMergeDao.getCurrentDestinationPlaylistsIds();
 
     if (values.isEmpty) return [];
     return (select(playlists)
           ..where((tbl) => tbl.playlistId.isIn(values))
           ..orderBy([(p) => OrderingTerm(expression: p.name.upper())]))
         .get();
-  }
-
-  Future<List<String?>> getCurrentDestinationPlaylistsIds() async {
-    var queryDestinationPlaylists = selectOnly(db.playlistsToMerge, distinct: true)
-      ..addColumns([db.playlistsToMerge.destinationPlaylistId]);
-    var values = await queryDestinationPlaylists.map((p) => p.read(db.playlistsToMerge.destinationPlaylistId)).get();
-    return values;
   }
 }

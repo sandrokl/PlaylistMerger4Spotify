@@ -33,7 +33,7 @@
   "settings": "Settings...",
   "updateThisInSpotify": "Update this in Spotify",
   "mergingDefinitionsImportedSuccessfully": "Merging definitions imported successfully, as much as possible, respecting your current playlists.",
-  "anUpdateToYourPlaylistIsBeingMadeInSpotify": "{howMany, plural, one {An update to your playlist is being made in Spotify. We'll let you know when it's finished. DO NOT LAUNCH A NEW UPDATE UNTIL THEN.} other {An update to your playlists is being made in Spotify. We'll let you know when it's finished. DO NOT LAUNCH A NEW UPDATE UNTIL THEN.}}",
+  "anUpdateToYourPlaylistIsBeingMadeInSpotify": "{howMany, plural, one {An update to your playlist is being made in Spotify. We'll let you know when it's finished. Do not launch a new update then.} other {An update to your playlists is being made in Spotify. We'll let you know when it's finished. Do not launch a new update then.}}",
   "@anUpdateToYourPlaylistIsBeingMadeInSpotify": {
     "placeholders": {
       "howMany": {

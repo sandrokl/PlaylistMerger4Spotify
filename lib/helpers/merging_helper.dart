@@ -19,7 +19,14 @@ class MergingHelper {
   }
 
   Future<void> updateAllMergedPlaylists() async {
-    //await updateSpecificMergedPlaylist("abc", showNotification: false);
+    var mergingPlaylists = await _db.playlistsToMergeDao.getCurrentDestinationPlaylistsIds();
+    if (mergingPlaylists.isNotEmpty) {
+      for (var id in mergingPlaylists) {
+        if (id != null) {
+          await updateSpecificMergedPlaylist(id);
+        }
+      }
+    }
 
     // shrink empty space from database
     await _db.customStatement("VACUUM;");
