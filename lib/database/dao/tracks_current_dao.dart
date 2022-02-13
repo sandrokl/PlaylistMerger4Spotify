@@ -15,7 +15,18 @@ class TracksCurrentDao extends DatabaseAccessor<AppDatabase> with _$TracksCurren
     });
   }
 
+  Future<List<String?>> getAllTracksIds() async {
+    var queryTracksIds = selectOnly(tracksCurrent, distinct: true)..addColumns([tracksCurrent.trackId]);
+    var values = await queryTracksIds.map((t) => t.read(tracksCurrent.trackId)).get();
+    return values;
+  }
+
   Future<void> deleteAll() async {
     await delete(tracksCurrent).go();
+  }
+
+  Future<List<Track>> getTracksNotNewDistinct() async {
+    var newDistinctTracksIds = await db.tracksNewDistinctDao.getAllTracksIds();
+    return (select(tracksCurrent)..where((t) => t.trackId.isNotIn(newDistinctTracksIds))).get();
   }
 }

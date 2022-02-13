@@ -13,22 +13,23 @@ class TracksNewDistinctDao extends DatabaseAccessor<AppDatabase> with _$TracksNe
     await delete(tracksNewDistinct).go();
   }
 
-  Future<void> generateNewTracksWithoutDuplicates() async {
-    var query = customSelect(
-      """select playlist_id, track_id, track_artists, name, track_uri, duration_ms, added_at
-        from tracks_new_all 
-        group by name, track_artists
-        HAVING ROWID = MIN(ROWID)
-        order by added_at desc;""",
-      readsFrom: {db.tracksNewAll},
-    ).get();
-    var tracksToInsert = (await query).map((row) => Track.fromData(row.data)).toList();
-
+  Future<void> insertAll(List<Track> tracks) async {
     await batch((batch) async {
       batch.insertAllOnConflictUpdate(
         tracksNewDistinct,
-        tracksToInsert,
+        tracks,
       );
     });
+  }
+
+  Future<List<Track>> getTracksNotInCurrent() async {
+    var currentTracksIds = await db.tracksCurrentDao.getAllTracksIds();
+    return (select(tracksNewDistinct)..where((t) => t.trackId.isNotIn(currentTracksIds))).get();
+  }
+
+  Future<List<String?>> getAllTracksIds() async {
+    var queryTracksIds = selectOnly(tracksNewDistinct, distinct: true)..addColumns([tracksNewDistinct.trackId]);
+    var values = await queryTracksIds.map((t) => t.read(tracksNewDistinct.trackId)).get();
+    return values;
   }
 }

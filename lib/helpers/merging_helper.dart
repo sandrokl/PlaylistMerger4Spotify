@@ -10,16 +10,25 @@ class MergingHelper {
   final _db = AppDatabase();
   final _databaseBatchSize = 100;
 
+  Future<void> clearTracksInDB() async {
+    await _db.tracksCurrentDao.deleteAll();
+    await _db.tracksNewAllDao.deleteAll();
+    await _db.tracksNewDistinctDao.deleteAll();
+    await _db.tracksToAddDao.deleteAll();
+    await _db.tracksToRemoveDao.deleteAll();
+  }
+
   Future<void> updateAllMergedPlaylists() async {
     //await updateSpecificMergedPlaylist("abc", showNotification: false);
+
+    // shrink empty space from database
+    await _db.customStatement("VACUUM;");
   }
 
   Future<bool> updateSpecificMergedPlaylist(String playlistId) async {
     try {
-      // STEP 0 : clean all records of tracks
-      await _db.tracksCurrentDao.deleteAll();
-      await _db.tracksNewAllDao.deleteAll();
-      await _db.tracksNewDistinctDao.deleteAll();
+      // STEP 0 : clear all records of tracks, just to be sure
+      await clearTracksInDB();
 
       var tracks = <Track>[];
 
@@ -53,7 +62,23 @@ class MergingHelper {
       }
 
       // STEP 3 : remove duplicates from new tracks
-      await _db.tracksNewDistinctDao.generateNewTracksWithoutDuplicates();
+      var tracksWithoutDuplicates = await _db.tracksNewAllDao.getTracksWithoutDuplicates();
+      await _db.tracksNewDistinctDao.insertAll(tracksWithoutDuplicates);
+
+      // STEP 4: generate list of tracks to add
+      var tracksToAdd = await _db.tracksNewDistinctDao.getTracksNotInCurrent();
+      await _db.tracksToAddDao.insertAll(tracksToAdd);
+
+      // STEP 5: generate list of tracks to remove
+      var tracksToRemove = await _db.tracksCurrentDao.getTracksNotNewDistinct();
+      await _db.tracksToRemoveDao.insertAll(tracksToRemove);
+
+      // STEP 6: add tracks to Spotify
+
+      // STEP 7: remove tracks from Spotify
+
+      // STEP N : clear tracks from DB
+      await clearTracksInDB();
 
       return true;
     } catch (_) {

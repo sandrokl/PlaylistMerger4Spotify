@@ -1805,6 +1805,10 @@ abstract class _$AppDatabase extends GeneratedDatabase {
       TracksNewAllDao(this as AppDatabase);
   late final TracksNewDistinctDao tracksNewDistinctDao =
       TracksNewDistinctDao(this as AppDatabase);
+  late final TracksToAddDao tracksToAddDao =
+      TracksToAddDao(this as AppDatabase);
+  late final TracksToRemoveDao tracksToRemoveDao =
+      TracksToRemoveDao(this as AppDatabase);
   @override
   Iterable<TableInfo> get allTables => allSchemaEntities.whereType<TableInfo>();
   @override
