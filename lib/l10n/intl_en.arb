@@ -1,4 +1,59 @@
 {
   "appTitle": "PlaylistMerger 4 Spotify",
-  "spotifyUser": "Spotify user"
+  "spotifyUser": "Spotify user",
+  "ok": "OK",
+  "pleaseLoginToSpotify": "Please login to Spotify",
+  "welcome": "Welcome",
+  "we_will_open_login": "To begin, we will open the Spotify login page next",
+  "makeSureToChooseAPlaylistYouDontDirectlyAdd": "When asked to choose your DESTINATION PLAYLIST, make sure to choose a playlist that doesn't already contain your music.\nIt will be completely erased and replaced with the new merging results.",
+  "carefulexclamation": "Careful!",
+  "nothingHereForNow": "Nothing here for now. Start creating your merged playlists using the button below.",
+  "confirm": "Confirm",
+  "delete": "DELETE",
+  "cancel": "cancel",
+  "areYouSureYouWishToDelete_start": "Are you sure you want to delete ",
+  "areYouSureYouWishToDelete_end": "'s merging definition? This will not delete the playlist in Spotify.",
+  "saving_threedots": "Saving...",
+  "openInSpotify": "Open in Spotify",
+  "modifyThisMergingRule": "Modify this merging definition",
+  "selectAPlaylist": "-- Select a playlist -- ",
+  "destinationPlaylist": "Destination playlist",
+  "sourcePlaylists": "Source playlists",
+  "dismiss": "DISMISS",
+  "doNotShowAgain": "Do not show again",
+  "changesSaved": "Changes saved. You can run the merging again to update it in Spotify.",
+  "deleteThisMergingRule": "Delete this merging definition",
+  "createIt": "CREATE IT",
+  "nameOfThePlaylist": "New playlist's name",
+  "createNewPlaylist": "Create new playlist",
+  "pleaseEnterThePlaylistName": "Please enter the playlist name",
+  "playlistCreatedWithPlaylistmerger4Spotify": "Playlist created with PlaylistMerger 4 Spotify",
+  "importMergingDefinitions": "Import merging definitions",
+  "exportMergingDefinitions": "Export merging definitions",
+  "settings": "Settings...",
+  "updateThisInSpotify": "Update this in Spotify",
+  "mergingDefinitionsImportedSuccessfully": "Merging definitions imported successfully, as much as possible, respecting your current playlists.",
+  "anUpdateToYourPlaylistIsBeingMadeInSpotify": "{howMany, plural, one {An update to your playlist is being made in Spotify. We'll let you know when it's finished. Do not launch any new update until then.} other {An update to your playlists is being made in Spotify. We'll let you know when it's finished. Do not launch any new update until then.}}",
+  "@anUpdateToYourPlaylistIsBeingMadeInSpotify": {
+    "placeholders": {
+      "howMany": {
+        "type": "int"
+      }
+    }
+  },
+  "notificationSuccessTitle": "<b>Success!</b>",
+  "notificationFailureTitle": "<b>Failure</b>",
+  "notificationPlaylistUpdatedSuccessfully": "&#128516 Your merged playlist <em>{name}</em> has been updated successfully.",
+  "@notificationPlaylistUpdatedSuccessfully": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationAllPlaylistsUpdatedSuccessfully": "&#128516 All your merged playlists have been updated successfully.",
+  "notificationMergingFailed": "&#128577 There was an error trying to update your playlists. Please try again later.",
+  "channelNameMergingResults": "Results of the playlists updates requests",
+  "busyTitle": "<b>Busy</b>",
+  "busyMessage": "Please wait the current update to finish before starting a new one."
 }

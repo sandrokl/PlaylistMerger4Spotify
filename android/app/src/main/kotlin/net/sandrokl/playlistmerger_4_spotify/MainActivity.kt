@@ -1,4 +1,4 @@
-package net.sandrokl.playlistmerger_4_spotify
+package net.sandrokl.playlistmerger4spotify
 
 import io.flutter.embedding.android.FlutterActivity
 

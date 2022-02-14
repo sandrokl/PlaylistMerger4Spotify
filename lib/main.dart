@@ -1,21 +1,41 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:playlistmerger_4_spotify/database/database.dart';
-import 'package:playlistmerger_4_spotify/screens/my_home_page/my_home_page.dart';
-import 'package:playlistmerger_4_spotify/store/spotify_user_store.dart';
+import 'package:playlistmerger4spotify/database/database.dart';
+import 'package:playlistmerger4spotify/helpers/notifications_helper.dart';
+import 'package:playlistmerger4spotify/helpers/work_manager_helper.dart';
+import 'package:playlistmerger4spotify/screens/my_home_page/my_home_page.dart';
+import 'package:playlistmerger4spotify/screens/onboarding/onboarding.dart';
+import 'package:playlistmerger4spotify/store/spotify_user_store.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:workmanager/workmanager.dart';
 import 'generated/l10n.dart';
 
-void main() {
+late bool isFirstTime;
+
+void callbackDispatcher() {
+  Workmanager().executeTask(WorkManagerHelper().handleTaskRequest);
+}
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  final sharedPrefs = await SharedPreferences.getInstance();
+  isFirstTime = sharedPrefs.getBool("isFirstTime") ?? true;
+
+  await NotificationsHelper().initialize();
+
+  Workmanager().initialize(callbackDispatcher);
+
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(
-          create: (context) => SpotifyUserStore(),
+        Provider<SpotifyUserStore>(
+          create: (_) => SpotifyUserStore(),
         ),
         Provider<AppDatabase>(
-          create: (context) => AppDatabase(),
-          dispose: (context, db) => db.close(),
+          create: (_) => AppDatabase(),
+          dispose: (_, db) => db.close(),
         ),
       ],
       child: const MyApp(),
@@ -37,9 +57,15 @@ class MyApp extends StatelessWidget {
       ],
       supportedLocales: S.delegate.supportedLocales,
       theme: ThemeData(
+        brightness: Brightness.light,
         primarySwatch: Colors.green,
       ),
-      home: const MyHomePage(),
+      darkTheme: ThemeData(
+        brightness: Brightness.dark,
+        primarySwatch: Colors.green,
+      ),
+      themeMode: ThemeMode.system,
+      home: isFirstTime ? const Onboarding() : const MyHomePage(),
     );
   }
 }

@@ -1,11 +1,11 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'tracks_dao.dart';
+part of 'tracks_new_all_dao.dart';
 
 // **************************************************************************
 // DaoGenerator
 // **************************************************************************
 
-mixin _$TracksDaoMixin on DatabaseAccessor<AppDatabase> {
-  $TracksTable get tracks => attachedDatabase.tracks;
+mixin _$TracksNewAllDaoMixin on DatabaseAccessor<AppDatabase> {
+  $TracksNewAllTable get tracksNewAll => attachedDatabase.tracksNewAll;
 }
