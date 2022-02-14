@@ -18,4 +18,8 @@ class TracksToAddDao extends DatabaseAccessor<AppDatabase> with _$TracksToAddDao
   Future<void> deleteAll() async {
     await delete(tracksToAdd).go();
   }
+
+  Future<List<Track>> getAll() {
+    return select(tracksToAdd).get();
+  }
 }

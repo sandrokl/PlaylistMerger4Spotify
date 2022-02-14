@@ -21,7 +21,7 @@ class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'en';
 
   static String m0(howMany) =>
-      "${Intl.plural(howMany, one: 'An update to your playlist is being made in Spotify. We\'ll let you know when it\'s finished. Do not launch a new update then.', other: 'An update to your playlists is being made in Spotify. We\'ll let you know when it\'s finished. Do not launch a new update then.')}";
+      "${Intl.plural(howMany, one: 'An update to your playlist is being made in Spotify. We\'ll let you know when it\'s finished. Do not launch a new update until then.', other: 'An update to your playlists is being made in Spotify. We\'ll let you know when it\'s finished. Do not launch a new update until then.')}";
 
   static String m1(name) =>
       "&#128516 Your merged playlist <em>${name}</em> has been updated successfully.";

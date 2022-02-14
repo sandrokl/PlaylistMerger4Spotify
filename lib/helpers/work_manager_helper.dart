@@ -25,7 +25,10 @@ class WorkManagerHelper {
 
     if (task == TASK_DO_MERGING_NOW_ALL) {
       try {
-        await MergingHelper().updateAllMergedPlaylists();
+        var result = await MergingHelper().updateAllMergedPlaylists();
+        if (!result) {
+          throw Exception("FAILED");
+        }
         await NotificationsHelper().showNotification(
           notificationChannelId,
           notificationChannelName,
@@ -39,12 +42,15 @@ class WorkManagerHelper {
           failureTitle,
           failureMessage,
         );
-        return Future.error("Failed");
+        return Future.error("FAILED");
       }
     } else if (task == TASK_DO_MERGING_NOW_SPECIFIC) {
       final String playlistId = inputData?["playlistId"];
       try {
-        await MergingHelper().updateSpecificMergedPlaylist(playlistId);
+        var result = await MergingHelper().updateSpecificMergedPlaylist(playlistId);
+        if (!result) {
+          throw Exception("FAILED");
+        }
         await NotificationsHelper().showNotification(
           notificationChannelId,
           notificationChannelName,
@@ -58,7 +64,7 @@ class WorkManagerHelper {
           failureTitle,
           failureMessage,
         );
-        return Future.error("Failed");
+        return Future.error("FAILED");
       }
     }
     return Future.value(true);

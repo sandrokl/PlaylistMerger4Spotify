@@ -12,7 +12,7 @@ List<PopupMenuItem<String>> getPopUpMenuItems(BuildContext context) {
   var items = [
     ItemDefinition(Icons.file_upload, "export", S.of(context).exportMergingDefinitions),
     ItemDefinition(Icons.file_download, "import", S.of(context).importMergingDefinitions),
-    ItemDefinition(Icons.settings, "settings", S.of(context).settings),
+    // ItemDefinition(Icons.settings, "settings", S.of(context).settings),
   ];
   return items
       .map((item) => PopupMenuItem<String>(

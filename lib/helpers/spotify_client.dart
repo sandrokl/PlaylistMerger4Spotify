@@ -5,15 +5,17 @@ import 'package:oauth2_client/spotify_oauth2_client.dart';
 import 'package:playlistmerger4spotify/database/database.dart';
 import 'package:playlistmerger4spotify/database/models/base/track.dart';
 import 'package:playlistmerger4spotify/generated/l10n.dart';
+import 'package:playlistmerger4spotify/models/spotify_uri.dart';
 import 'package:playlistmerger4spotify/models/spotify_user.dart';
 import 'package:playlistmerger4spotify/spotify_secrets.dart' as secrets;
 import 'package:playlistmerger4spotify/helpers/spotify_json_parser.dart';
+import 'package:http/http.dart' as http;
 
 class SpotifyClient {
   final _apiUrlBase = "https://api.spotify.com/v1";
   final _pageSize = 20;
-  final _responseTooManyRequest = 429;
-  final _retryDelay = 15;
+  final _statusCodeTooManyRequests = 429;
+  final _retryDelay = const Duration(seconds: 15);
 
   late OAuth2Helper _httpHelper;
 
@@ -47,8 +49,8 @@ class SpotifyClient {
       var httpResponse = await _httpHelper.get("$_apiUrlBase/me/playlists?offset=$offset&limit=$_pageSize");
 
       // if Spotify returns "too many requests", wait 15s to retry
-      if (httpResponse.statusCode == _responseTooManyRequest) {
-        await Future.delayed(Duration(seconds: _retryDelay));
+      if (httpResponse.statusCode == _statusCodeTooManyRequests) {
+        await Future.delayed(_retryDelay);
         continue;
       }
 
@@ -87,8 +89,8 @@ class SpotifyClient {
       );
 
       // if Spotify returns "too many requests", wait 15s to retry
-      if (httpResponse.statusCode == _responseTooManyRequest) {
-        await Future.delayed(Duration(seconds: _retryDelay));
+      if (httpResponse.statusCode == _statusCodeTooManyRequests) {
+        await Future.delayed(_retryDelay);
         continue;
       }
 
@@ -100,5 +102,59 @@ class SpotifyClient {
       next = jsonListTracks["next"];
       page++;
     } while (next != null);
+  }
+
+  Future<void> insertTracksInPlaylist(String playlistId, List<Track> tracksToAdd) async {
+    var slices = (tracksToAdd.length / _pageSize).ceil();
+    var i = 0;
+    do {
+      var tracks = i == (slices - 1)
+          ? tracksToAdd.sublist(i * _pageSize)
+          : tracksToAdd.sublist(i * _pageSize, (i * _pageSize) + _pageSize);
+
+      var toInsert = <String, dynamic>{};
+      toInsert["uris"] = tracks.map((t) => t.trackUri).toList();
+
+      var httpResponse = await _httpHelper.post(
+        "$_apiUrlBase/playlists/$playlistId/tracks",
+        body: jsonEncode(toInsert),
+      );
+
+      if (httpResponse.statusCode == _statusCodeTooManyRequests) {
+        await Future.delayed(_retryDelay);
+        continue;
+      }
+
+      i++;
+    } while (i < slices);
+  }
+
+  Future<void> removeTracksInPlaylist(String playlistId, List<Track> tracksToRemove) async {
+    var slices = (tracksToRemove.length / _pageSize).ceil();
+    var i = 0;
+    do {
+      var tracks = i == (slices - 1)
+          ? tracksToRemove.sublist(i * _pageSize)
+          : tracksToRemove.sublist(i * _pageSize, (i * _pageSize) + _pageSize);
+
+      var toDelete = <String, dynamic>{};
+      var listUris = (tracks.map((t) => SpotifyUri(t.trackUri).toMap())).toList();
+      toDelete["tracks"] = listUris;
+      var accessToken = (await _httpHelper.getToken())!.accessToken!;
+
+      var req = http.Request("DELETE", Uri.parse("$_apiUrlBase/playlists/$playlistId/tracks"));
+      req.headers["Accept"] = "application/json";
+      req.headers["Content-Type"] = "application/json";
+      req.headers["Authorization"] = "Bearer $accessToken";
+      req.body = jsonEncode(toDelete);
+      var httpResponse = await req.send();
+
+      if (httpResponse.statusCode == _statusCodeTooManyRequests) {
+        await Future.delayed(_retryDelay);
+        continue;
+      }
+
+      i++;
+    } while (i < slices);
   }
 }

@@ -9,6 +9,7 @@ class MergingHelper {
 
   final _db = AppDatabase();
   final _databaseBatchSize = 100;
+  final _spotifyClient = SpotifyClient();
 
   Future<void> clearTracksInDB() async {
     await _db.tracksCurrentDao.deleteAll();
@@ -18,18 +19,26 @@ class MergingHelper {
     await _db.tracksToRemoveDao.deleteAll();
   }
 
-  Future<void> updateAllMergedPlaylists() async {
-    var mergingPlaylists = await _db.playlistsToMergeDao.getCurrentDestinationPlaylistsIds();
-    if (mergingPlaylists.isNotEmpty) {
-      for (var id in mergingPlaylists) {
-        if (id != null) {
-          await updateSpecificMergedPlaylist(id);
+  Future<bool> updateAllMergedPlaylists() async {
+    try {
+      var mergingPlaylists = await _db.playlistsToMergeDao.getCurrentDestinationPlaylistsIds();
+      if (mergingPlaylists.isNotEmpty) {
+        for (var id in mergingPlaylists) {
+          if (id != null) {
+            var result = await updateSpecificMergedPlaylist(id);
+            if (!result) {
+              throw Exception("FAILED");
+            }
+          }
         }
       }
-    }
 
-    // shrink empty space from database
-    await _db.customStatement("VACUUM;");
+      // shrink empty space from database
+      await _db.customStatement("VACUUM;");
+      return true;
+    } catch (_) {
+      return false;
+    }
   }
 
   Future<bool> updateSpecificMergedPlaylist(String playlistId) async {
@@ -40,7 +49,7 @@ class MergingHelper {
       var tracks = <Track>[];
 
       // STEP 1 : get current tracks in merged playlist
-      await for (var track in SpotifyClient().getTracksFromPlaylist(playlistId)) {
+      await for (var track in _spotifyClient.getTracksFromPlaylist(playlistId)) {
         tracks.add(track);
         if (tracks.length == _databaseBatchSize) {
           await _db.tracksCurrentDao.insertAll(tracks);
@@ -55,7 +64,7 @@ class MergingHelper {
       // STEP 2 : get all tracks from source playlists
       var sources = await _db.playlistsToMergeDao.getPlaylistsToMergeByDestinationId(playlistId);
       for (var source in sources) {
-        await for (var track in SpotifyClient().getTracksFromPlaylist(source.sourcePlaylistId)) {
+        await for (var track in _spotifyClient.getTracksFromPlaylist(source.sourcePlaylistId)) {
           tracks.add(track);
           if (tracks.length == _databaseBatchSize) {
             await _db.tracksNewAllDao.insertAll(tracks);
@@ -81,8 +90,16 @@ class MergingHelper {
       await _db.tracksToRemoveDao.insertAll(tracksToRemove);
 
       // STEP 6: add tracks to Spotify
+      tracksToAdd = await _db.tracksToAddDao.getAll();
+      if (tracksToAdd.isNotEmpty) {
+        await _spotifyClient.insertTracksInPlaylist(playlistId, tracksToAdd);
+      }
 
       // STEP 7: remove tracks from Spotify
+      tracksToRemove = await _db.tracksToRemoveDao.getAll();
+      if (tracksToRemove.isNotEmpty) {
+        await _spotifyClient.removeTracksInPlaylist(playlistId, tracksToRemove);
+      }
 
       // STEP N : clear tracks from DB
       await clearTracksInDB();
