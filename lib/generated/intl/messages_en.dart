@@ -77,6 +77,10 @@ class MessageLookup extends MessageLookupByLibrary {
                 "&#128516 All your merged playlists have been updated successfully."),
         "notificationFailureTitle":
             MessageLookupByLibrary.simpleMessage("<b>Failure</b>"),
+        "notificationInProgressChannelName":
+            MessageLookupByLibrary.simpleMessage("Update in progress"),
+        "notificationInProgressMessage":
+            MessageLookupByLibrary.simpleMessage("Updating playlist..."),
         "notificationMergingFailed": MessageLookupByLibrary.simpleMessage(
             "&#128577 There was an error trying to update your playlists. Please try again later."),
         "notificationPlaylistUpdatedSuccessfully": m1,

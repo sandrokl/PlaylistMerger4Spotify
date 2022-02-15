@@ -1,5 +1,8 @@
+import 'dart:math';
+
 import 'package:playlistmerger4spotify/database/database.dart';
 import 'package:playlistmerger4spotify/database/models/base/track.dart';
+import 'package:playlistmerger4spotify/helpers/notifications_helper.dart';
 import 'package:playlistmerger4spotify/helpers/spotify_client.dart';
 
 class MergingHelper {
@@ -19,13 +22,22 @@ class MergingHelper {
     await _db.tracksToRemoveDao.deleteAll();
   }
 
-  Future<bool> updateAllMergedPlaylists() async {
+  Future<bool> updateAllMergedPlaylists(
+    String notificationInProgressChannelId,
+    String notificationInProgressChannelName,
+    String notificationInProgressMessage,
+  ) async {
     try {
       var mergingPlaylists = await _db.playlistsToMergeDao.getCurrentDestinationPlaylistsIds();
       if (mergingPlaylists.isNotEmpty) {
         for (var id in mergingPlaylists) {
           if (id != null) {
-            var result = await updateSpecificMergedPlaylist(id);
+            var result = await updateSpecificMergedPlaylist(
+              id,
+              notificationInProgressChannelId,
+              notificationInProgressChannelName,
+              notificationInProgressMessage,
+            );
             if (!result) {
               throw Exception("FAILED");
             }
@@ -41,8 +53,23 @@ class MergingHelper {
     }
   }
 
-  Future<bool> updateSpecificMergedPlaylist(String playlistId) async {
+  Future<bool> updateSpecificMergedPlaylist(
+    String playlistId,
+    String notificationInProgressChannelId,
+    String notificationInProgressChannelName,
+    String notificationInProgressMessage,
+  ) async {
+    final jobId = Random().nextInt(9999999);
+    final notif = NotificationsHelper();
+
     try {
+      await notif.showPersistentNotification(
+        jobId,
+        notificationInProgressChannelId,
+        notificationInProgressChannelName,
+        notificationInProgressMessage,
+      );
+
       // STEP 0 : clear all records of tracks, just to be sure
       await clearTracksInDB();
 
@@ -103,9 +130,11 @@ class MergingHelper {
 
       // STEP N : clear tracks from DB
       await clearTracksInDB();
+      await notif.dismissPersistentNotification(jobId);
 
       return true;
     } catch (_) {
+      await notif.dismissPersistentNotification(jobId);
       return false;
     }
   }

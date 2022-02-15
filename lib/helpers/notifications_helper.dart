@@ -9,6 +9,7 @@ class NotificationsHelper {
   factory NotificationsHelper() => _instance;
 
   static const CHANNEL_KEY_MERGING_RESULTS = "merging_results";
+  static const CHANNEL_KEY_IN_PROGRESS = "in_progress";
 
   late FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin;
 
@@ -42,9 +43,39 @@ class NotificationsHelper {
   }
 
   Future<void> showNotification(String channelId, String channelName, String title, String message) async {
-    await initialize();
     final platformNotificationsDetails = _createPlatformNotificationsDetails(channelId, channelName);
     await _flutterLocalNotificationsPlugin.show(_generateId(), title, message, platformNotificationsDetails,
         payload: null);
+  }
+
+  NotificationDetails _createPlatformPersistentNotificationsDetails(String channelId, String channelName) {
+    final androidPlatformChannelSpecifics = AndroidNotificationDetails(
+      channelId,
+      channelName,
+      importance: Importance.low,
+      color: Colors.green,
+      channelShowBadge: false,
+      playSound: false,
+      enableVibration: false,
+      autoCancel: false,
+      ongoing: true,
+    );
+    final platformNotificationsDetails = NotificationDetails(android: androidPlatformChannelSpecifics);
+    return platformNotificationsDetails;
+  }
+
+  Future<void> showPersistentNotification(
+      int notificationid, String channelId, String channelName, String message) async {
+    final platformNotificationsDetails = _createPlatformPersistentNotificationsDetails(channelId, channelName);
+    await _flutterLocalNotificationsPlugin.show(
+      notificationid,
+      null,
+      message,
+      platformNotificationsDetails,
+    );
+  }
+
+  Future<void> dismissPersistentNotification(int notificationId) async {
+    await _flutterLocalNotificationsPlugin.cancel(notificationId);
   }
 }

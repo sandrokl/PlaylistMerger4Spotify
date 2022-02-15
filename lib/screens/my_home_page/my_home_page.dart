@@ -87,6 +87,9 @@ class _MyHomePageState extends State<MyHomePage> {
                   "successMessage": S.of(context).notificationAllPlaylistsUpdatedSuccessfully,
                   "failureTitle": S.of(context).notificationFailureTitle,
                   "failureMessage": S.of(context).notificationMergingFailed,
+                  "notificationInProgressChannelId": NotificationsHelper.CHANNEL_KEY_IN_PROGRESS,
+                  "notificationInProgressChannelName": S.of(context).notificationInProgressChannelName,
+                  "notificationInProgressMessage": S.of(context).notificationInProgressMessage,
                 },
               );
               ScaffoldMessenger.of(context).showSnackBar(
@@ -260,6 +263,12 @@ class _MyHomePageState extends State<MyHomePage> {
                                                                 .notificationPlaylistUpdatedSuccessfully(p.name),
                                                             "failureTitle": S.of(context).notificationFailureTitle,
                                                             "failureMessage": S.of(context).notificationMergingFailed,
+                                                            "notificationInProgressChannelId":
+                                                                NotificationsHelper.CHANNEL_KEY_IN_PROGRESS,
+                                                            "notificationInProgressChannelName":
+                                                                S.of(context).notificationInProgressChannelName,
+                                                            "notificationInProgressMessage":
+                                                                S.of(context).notificationInProgressMessage,
                                                           },
                                                         );
                                                         ScaffoldMessenger.of(context).showSnackBar(

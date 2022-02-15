@@ -16,16 +16,25 @@ class WorkManagerHelper {
   static const TASK_DO_MERGING_SCHEDULED_ALL = "mergeScheduledAll";
 
   Future<bool> handleTaskRequest(String task, Map<String, dynamic>? inputData) async {
+    NotificationsHelper().initialize();
+
     final String notificationChannelId = inputData?["notificationChannelId"];
     final String notificationChannelName = inputData?["notificationChannelName"];
     final String successTitle = inputData?["successTitle"];
     final String successMessage = inputData?["successMessage"];
     final String failureTitle = inputData?["failureTitle"];
     final String failureMessage = inputData?["failureMessage"];
+    final String notificationInProgressChannelId = inputData?["notificationInProgressChannelId"];
+    final String notificationInProgressChannelName = inputData?["notificationInProgressChannelName"];
+    final String notificationInProgressMessage = inputData?["notificationInProgressMessage"];
 
     if (task == TASK_DO_MERGING_NOW_ALL) {
       try {
-        var result = await MergingHelper().updateAllMergedPlaylists();
+        var result = await MergingHelper().updateAllMergedPlaylists(
+          notificationInProgressChannelId,
+          notificationInProgressChannelName,
+          notificationInProgressMessage,
+        );
         if (!result) {
           throw Exception("FAILED");
         }
@@ -47,7 +56,12 @@ class WorkManagerHelper {
     } else if (task == TASK_DO_MERGING_NOW_SPECIFIC) {
       final String playlistId = inputData?["playlistId"];
       try {
-        var result = await MergingHelper().updateSpecificMergedPlaylist(playlistId);
+        var result = await MergingHelper().updateSpecificMergedPlaylist(
+          playlistId,
+          notificationInProgressChannelId,
+          notificationInProgressChannelName,
+          notificationInProgressMessage,
+        );
         if (!result) {
           throw Exception("FAILED");
         }
