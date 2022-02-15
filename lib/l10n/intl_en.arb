@@ -55,5 +55,7 @@
   "notificationMergingFailed": "&#128577 There was an error trying to update your playlists. Please try again later.",
   "channelNameMergingResults": "Results of the playlists updates requests",
   "busyTitle": "<b>Busy</b>",
-  "busyMessage": "Please wait the current update to finish before starting a new one."
+  "busyMessage": "Please wait the current update to finish before starting a new one.",
+  "notificationInProgressChannelName": "Update in progress",
+  "notificationInProgressMessage": "Updating playlist..."
 }

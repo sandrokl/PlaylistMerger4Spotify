@@ -483,6 +483,26 @@ class S {
       args: [],
     );
   }
+
+  /// `Update in progress`
+  String get notificationInProgressChannelName {
+    return Intl.message(
+      'Update in progress',
+      name: 'notificationInProgressChannelName',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Updating playlist...`
+  String get notificationInProgressMessage {
+    return Intl.message(
+      'Updating playlist...',
+      name: 'notificationInProgressMessage',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
