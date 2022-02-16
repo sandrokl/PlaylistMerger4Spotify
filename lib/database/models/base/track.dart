@@ -1,6 +1,7 @@
 import 'package:drift/drift.dart';
 
 class Track extends DataClass implements Insertable<Track> {
+  int jobId;
   final String playlistId;
   final String trackId;
   final String name;
@@ -10,6 +11,7 @@ class Track extends DataClass implements Insertable<Track> {
   final DateTime addedAt;
 
   Track({
+    required this.jobId,
     required this.playlistId,
     required this.trackId,
     required this.name,
@@ -22,6 +24,7 @@ class Track extends DataClass implements Insertable<Track> {
   factory Track.fromData(Map<String, dynamic> data, {String? prefix}) {
     final effectivePrefix = prefix ?? '';
     return Track(
+      jobId: const IntType().mapFromDatabaseResponse(data['${effectivePrefix}job_id'])!,
       playlistId: const StringType().mapFromDatabaseResponse(data['${effectivePrefix}playlist_id'])!,
       trackId: const StringType().mapFromDatabaseResponse(data['${effectivePrefix}track_id'])!,
       name: const StringType().mapFromDatabaseResponse(data['${effectivePrefix}name'])!,
@@ -35,6 +38,7 @@ class Track extends DataClass implements Insertable<Track> {
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
+    map['job_id'] = Variable<int>(jobId);
     map['playlist_id'] = Variable<String>(playlistId);
     map['track_id'] = Variable<String>(trackId);
     map['name'] = Variable<String>(name);
@@ -48,6 +52,7 @@ class Track extends DataClass implements Insertable<Track> {
   factory Track.fromJson(Map<String, dynamic> json, {ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return Track(
+      jobId: serializer.fromJson<int>(json['jobId']),
       playlistId: serializer.fromJson<String>(json['playlistId']),
       trackId: serializer.fromJson<String>(json['trackId']),
       name: serializer.fromJson<String>(json['name']),
@@ -62,6 +67,7 @@ class Track extends DataClass implements Insertable<Track> {
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
+      'jobId': serializer.toJson<int>(jobId),
       'playlistId': serializer.toJson<String>(playlistId),
       'trackId': serializer.toJson<String>(trackId),
       'name': serializer.toJson<String>(name),
@@ -75,6 +81,7 @@ class Track extends DataClass implements Insertable<Track> {
   @override
   String toString() {
     return (StringBuffer('Track(')
+          ..write('jobId: $jobId, ')
           ..write('playlistId: $playlistId, ')
           ..write('trackId: $trackId, ')
           ..write('name: $name, ')
@@ -87,12 +94,13 @@ class Track extends DataClass implements Insertable<Track> {
   }
 
   @override
-  int get hashCode => Object.hash(playlistId, trackId, name, trackArtists, trackUri, durationMs, addedAt);
+  int get hashCode => Object.hash(jobId, playlistId, trackId, name, trackArtists, trackUri, durationMs, addedAt);
 
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is Track &&
+          other.jobId == jobId &&
           other.playlistId == playlistId &&
           other.trackId == trackId &&
           other.name == name &&

@@ -9,8 +9,8 @@ part 'tracks_new_distinct_dao.g.dart';
 class TracksNewDistinctDao extends DatabaseAccessor<AppDatabase> with _$TracksNewDistinctDaoMixin {
   TracksNewDistinctDao(AppDatabase db) : super(db);
 
-  Future<void> deleteAll() async {
-    await delete(tracksNewDistinct).go();
+  Future<void> deleteAll(int jobId) async {
+    await (delete(tracksNewDistinct)..where((t) => t.jobId.equals(jobId))).go();
   }
 
   Future<void> insertAll(List<Track> tracks) async {
@@ -22,13 +22,15 @@ class TracksNewDistinctDao extends DatabaseAccessor<AppDatabase> with _$TracksNe
     });
   }
 
-  Future<List<Track>> getTracksNotInCurrent() async {
-    var currentTracksIds = await db.tracksCurrentDao.getAllTracksIds();
-    return (select(tracksNewDistinct)..where((t) => t.trackId.isNotIn(currentTracksIds))).get();
+  Future<List<Track>> getTracksNotInCurrent(int jobId) async {
+    var currentTracksIds = await db.tracksCurrentDao.getAllTracksIds(jobId);
+    return (select(tracksNewDistinct)..where((t) => t.jobId.equals(jobId) & t.trackId.isNotIn(currentTracksIds))).get();
   }
 
-  Future<List<String?>> getAllTracksIds() async {
-    var queryTracksIds = selectOnly(tracksNewDistinct, distinct: true)..addColumns([tracksNewDistinct.trackId]);
+  Future<List<String?>> getAllTracksIds(int jobId) async {
+    var queryTracksIds = selectOnly(tracksNewDistinct, distinct: true)
+      ..addColumns([tracksNewDistinct.trackId])
+      ..where(tracksNewDistinct.jobId.equals(jobId));
     var values = await queryTracksIds.map((t) => t.read(tracksNewDistinct.trackId)).get();
     return values;
   }

@@ -15,11 +15,11 @@ class TracksToRemoveDao extends DatabaseAccessor<AppDatabase> with _$TracksToRem
     });
   }
 
-  Future<void> deleteAll() async {
-    await delete(tracksToRemove).go();
+  Future<void> deleteAll(int jobId) async {
+    await (delete(tracksToRemove)..where((t) => t.jobId.equals(jobId))).go();
   }
 
-  Future<List<Track>> getAll() async {
-    return select(tracksToRemove).get();
+  Future<List<Track>> getAll(int jobId) async {
+    return (select(tracksToRemove)..where((t) => t.jobId.equals(jobId))).get();
   }
 }

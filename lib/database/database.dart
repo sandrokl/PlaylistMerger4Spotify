@@ -57,12 +57,14 @@ class AppDatabase extends _$AppDatabase {
   factory AppDatabase() => _singleton;
 
   @override
-  int get schemaVersion => 4;
+  int get schemaVersion => 5;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
         beforeOpen: (_) async {
           await customStatement('PRAGMA foreign_keys = ON');
+          await customStatement('PRAGMA journal_mode=WAL');
+          await customStatement('PRAGMA busy_timeout=60000');
         },
         onCreate: (m) async {
           await m.createAll();
@@ -79,7 +81,17 @@ class AppDatabase extends _$AppDatabase {
               await m.addColumn(tracksNewDistinct, tracksNewDistinct.addedAt);
               await m.addColumn(tracksToAdd, tracksToAdd.addedAt);
               await m.addColumn(tracksToRemove, tracksToRemove.addedAt);
-            } catch (e) {/* column already exists */}
+            } catch (_) {/* column already exists */}
+          }
+
+          if (from <= 4) {
+            try {
+              await m.addColumn(tracksCurrent, tracksCurrent.jobId);
+              await m.addColumn(tracksNewAll, tracksNewAll.jobId);
+              await m.addColumn(tracksNewDistinct, tracksNewDistinct.jobId);
+              await m.addColumn(tracksToAdd, tracksToAdd.jobId);
+              await m.addColumn(tracksToRemove, tracksToRemove.jobId);
+            } catch (_) {/* column already exists */}
           }
         },
       );

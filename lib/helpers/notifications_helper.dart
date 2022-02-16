@@ -59,6 +59,7 @@ class NotificationsHelper {
       enableVibration: false,
       autoCancel: false,
       ongoing: true,
+      styleInformation: const DefaultStyleInformation(true, true),
     );
     final platformNotificationsDetails = NotificationDetails(android: androidPlatformChannelSpecifics);
     return platformNotificationsDetails;

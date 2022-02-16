@@ -390,14 +390,14 @@ class S {
     );
   }
 
-  /// `{howMany, plural, one {An update to your playlist is being made in Spotify. We'll let you know when it's finished. Do not launch any new update until then.} other {An update to your playlists is being made in Spotify. We'll let you know when it's finished. Do not launch any new update until then.}}`
+  /// `{howMany, plural, one {An update to your playlist is being made in Spotify. We'll let you know when it's finished.} other {An update to your playlists is being made in Spotify. We'll let you know when it's finished.}}`
   String anUpdateToYourPlaylistIsBeingMadeInSpotify(int howMany) {
     return Intl.plural(
       howMany,
       one:
-          'An update to your playlist is being made in Spotify. We\'ll let you know when it\'s finished. Do not launch any new update until then.',
+          'An update to your playlist is being made in Spotify. We\'ll let you know when it\'s finished.',
       other:
-          'An update to your playlists is being made in Spotify. We\'ll let you know when it\'s finished. Do not launch any new update until then.',
+          'An update to your playlists is being made in Spotify. We\'ll let you know when it\'s finished.',
       name: 'anUpdateToYourPlaylistIsBeingMadeInSpotify',
       desc: '',
       args: [howMany],

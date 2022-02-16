@@ -203,7 +203,7 @@ packages:
       name: dots_indicator
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.0"
+    version: "2.1.0"
   drift:
     dependency: "direct main"
     description:
@@ -245,7 +245,7 @@ packages:
       name: file_picker
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "4.3.3"
+    version: "4.4.0"
   fixnum:
     dependency: transitive
     description:
@@ -264,7 +264,7 @@ packages:
       name: flutter_blurhash
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.6.0"
+    version: "0.6.4"
   flutter_cache_manager:
     dependency: transitive
     description:
@@ -285,7 +285,7 @@ packages:
       name: flutter_local_notifications
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "9.2.0"
+    version: "9.3.2"
   flutter_local_notifications_linux:
     dependency: transitive
     description:
@@ -433,7 +433,7 @@ packages:
       name: introduction_screen
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.1.0"
+    version: "3.0.0"
   io:
     dependency: transitive
     description:
@@ -1047,7 +1047,7 @@ packages:
       name: win32
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.3.11"
+    version: "2.4.0"
   workmanager:
     dependency: "direct main"
     description:

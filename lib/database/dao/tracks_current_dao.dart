@@ -15,18 +15,20 @@ class TracksCurrentDao extends DatabaseAccessor<AppDatabase> with _$TracksCurren
     });
   }
 
-  Future<List<String?>> getAllTracksIds() async {
-    var queryTracksIds = selectOnly(tracksCurrent, distinct: true)..addColumns([tracksCurrent.trackId]);
+  Future<List<String?>> getAllTracksIds(int jobId) async {
+    var queryTracksIds = selectOnly(tracksCurrent, distinct: true)
+      ..addColumns([tracksCurrent.trackId])
+      ..where(tracksCurrent.jobId.equals(jobId));
     var values = await queryTracksIds.map((t) => t.read(tracksCurrent.trackId)).get();
     return values;
   }
 
-  Future<void> deleteAll() async {
-    await delete(tracksCurrent).go();
+  Future<void> deleteAll(int jobId) async {
+    await (delete(tracksCurrent)..where((t) => t.jobId.equals(jobId))).go();
   }
 
-  Future<List<Track>> getTracksNotNewDistinct() async {
-    var newDistinctTracksIds = await db.tracksNewDistinctDao.getAllTracksIds();
-    return (select(tracksCurrent)..where((t) => t.trackId.isNotIn(newDistinctTracksIds))).get();
+  Future<List<Track>> getTracksNotNewDistinct(int jobId) async {
+    var newDistinctTracksIds = await db.tracksNewDistinctDao.getAllTracksIds(jobId);
+    return (select(tracksCurrent)..where((t) => t.jobId.equals(jobId) & t.trackId.isNotIn(newDistinctTracksIds))).get();
   }
 }
