@@ -96,7 +96,7 @@ class SpotifyClient {
 
       var jsonListTracks = jsonDecode(httpResponse.body);
       for (var jsonTrack in jsonListTracks["items"]) {
-        yield trackFromSpotifyJson(playlistId, jsonTrack);
+        yield trackFromSpotifyJson(-1, playlistId, jsonTrack);
       }
 
       next = jsonListTracks["next"];

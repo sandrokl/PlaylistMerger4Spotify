@@ -11,12 +11,13 @@ Playlist playlistFromSpotifyJson(Map<String, dynamic> json) {
       isValidated: true);
 }
 
-Track trackFromSpotifyJson(String playlistId, Map<String, dynamic> json) {
+Track trackFromSpotifyJson(int jobId, String playlistId, Map<String, dynamic> json) {
   var allArtists = (json["track"]["artists"] as List<dynamic>).cast<Map<String, dynamic>>();
   var artistsList = allArtists.map((artist) => artist["name"].toString()).toList()..sort();
-  var artistsNames = artistsList.join("||");
+  var artistsNames = artistsList.join("~");
 
   return Track(
+    jobId: jobId,
     playlistId: playlistId,
     trackId: json["track"]["id"],
     name: json["track"]["name"],

@@ -15,19 +15,21 @@ class TracksNewAllDao extends DatabaseAccessor<AppDatabase> with _$TracksNewAllD
     });
   }
 
-  Future<List<Track>> getTracksWithoutDuplicates() async {
+  Future<List<Track>> getTracksWithoutDuplicates(int jobId) async {
     var rows = await customSelect(
-      """select playlist_id, track_id, track_artists, name, track_uri, duration_ms, added_at
+      """select job_id, playlist_id, track_id, track_artists, name, track_uri, duration_ms, added_at
         from tracks_new_all 
+        where job_id = ?
         group by name, track_artists
         HAVING ROWID = MIN(ROWID)
         order by added_at desc;""",
+      variables: [Variable.withInt(jobId)],
       readsFrom: {db.tracksNewAll},
     ).get();
     return rows.map((row) => Track.fromData(row.data)).toList();
   }
 
-  Future<void> deleteAll() async {
-    await delete(tracksNewAll).go();
+  Future<void> deleteAll(int jobId) async {
+    await (delete(tracksNewAll)..where((t) => t.jobId.equals(jobId))).go();
   }
 }
