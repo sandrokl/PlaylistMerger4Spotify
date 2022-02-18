@@ -61,7 +61,7 @@ class AppDatabase extends _$AppDatabase {
   factory AppDatabase() => _singleton;
 
   @override
-  int get schemaVersion => 6;
+  int get schemaVersion => 7;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -95,6 +95,12 @@ class AppDatabase extends _$AppDatabase {
               await m.addColumn(tracksNewDistinct, tracksNewDistinct.jobId);
               await m.addColumn(tracksToAdd, tracksToAdd.jobId);
               await m.addColumn(tracksToRemove, tracksToRemove.jobId);
+            } catch (_) {/* column already exists */}
+          }
+
+          if (from <= 6) {
+            try {
+              await m.addColumn(mergingResults, mergingResults.triggeredBy);
             } catch (_) {/* column already exists */}
           }
         },

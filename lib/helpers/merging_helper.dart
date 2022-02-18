@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:playlistmerger4spotify/database/database.dart';
 import 'package:playlistmerger4spotify/database/models/base/track.dart';
+import 'package:playlistmerger4spotify/database/models/merging_results.dart';
 import 'package:playlistmerger4spotify/helpers/notifications_helper.dart';
 import 'package:playlistmerger4spotify/helpers/spotify_client.dart';
 
@@ -55,6 +56,7 @@ class MergingHelper {
                 notificationInProgressChannelId,
                 notificationInProgressChannelName,
                 notificationInProgressMessage,
+                isAutomaticUpdate: isAutomaticUpdate,
               );
               if (!result) {
                 throw Exception("FAILED");
@@ -77,8 +79,9 @@ class MergingHelper {
     String playlistId,
     String notificationInProgressChannelId,
     String notificationInProgressChannelName,
-    String notificationInProgressMessage,
-  ) async {
+    String notificationInProgressMessage, {
+    bool isAutomaticUpdate = false,
+  }) async {
     final jobId = Random().nextInt(9999999);
     final notif = NotificationsHelper();
     final startDate = DateTime.now();
@@ -160,6 +163,7 @@ class MergingHelper {
         runDate: DateTime.now(),
         successed: true,
         durationMs: DateTime.now().difference(startDate).inMilliseconds,
+        triggeredBy: isAutomaticUpdate ? TriggeredBy.schedule : TriggeredBy.user,
       ));
 
       return true;
@@ -170,6 +174,7 @@ class MergingHelper {
         runDate: DateTime.now(),
         successed: false,
         durationMs: DateTime.now().difference(startDate).inMilliseconds,
+        triggeredBy: isAutomaticUpdate ? TriggeredBy.schedule : TriggeredBy.user,
       ));
       return false;
     }

@@ -1955,11 +1955,13 @@ class MergingResult extends DataClass implements Insertable<MergingResult> {
   final DateTime runDate;
   final bool successed;
   final int durationMs;
+  final TriggeredBy triggeredBy;
   MergingResult(
       {required this.playlistId,
       required this.runDate,
       required this.successed,
-      required this.durationMs});
+      required this.durationMs,
+      required this.triggeredBy});
   factory MergingResult.fromData(Map<String, dynamic> data, {String? prefix}) {
     final effectivePrefix = prefix ?? '';
     return MergingResult(
@@ -1971,6 +1973,8 @@ class MergingResult extends DataClass implements Insertable<MergingResult> {
           .mapFromDatabaseResponse(data['${effectivePrefix}successed'])!,
       durationMs: const IntType()
           .mapFromDatabaseResponse(data['${effectivePrefix}duration_ms'])!,
+      triggeredBy: $MergingResultsTable.$converter0.mapToDart(const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}triggered_by']))!,
     );
   }
   @override
@@ -1980,6 +1984,10 @@ class MergingResult extends DataClass implements Insertable<MergingResult> {
     map['run_date'] = Variable<DateTime>(runDate);
     map['successed'] = Variable<bool>(successed);
     map['duration_ms'] = Variable<int>(durationMs);
+    {
+      final converter = $MergingResultsTable.$converter0;
+      map['triggered_by'] = Variable<int>(converter.mapToSql(triggeredBy)!);
+    }
     return map;
   }
 
@@ -1989,6 +1997,7 @@ class MergingResult extends DataClass implements Insertable<MergingResult> {
       runDate: Value(runDate),
       successed: Value(successed),
       durationMs: Value(durationMs),
+      triggeredBy: Value(triggeredBy),
     );
   }
 
@@ -2000,6 +2009,7 @@ class MergingResult extends DataClass implements Insertable<MergingResult> {
       runDate: serializer.fromJson<DateTime>(json['runDate']),
       successed: serializer.fromJson<bool>(json['successed']),
       durationMs: serializer.fromJson<int>(json['durationMs']),
+      triggeredBy: serializer.fromJson<TriggeredBy>(json['triggeredBy']),
     );
   }
   @override
@@ -2010,6 +2020,7 @@ class MergingResult extends DataClass implements Insertable<MergingResult> {
       'runDate': serializer.toJson<DateTime>(runDate),
       'successed': serializer.toJson<bool>(successed),
       'durationMs': serializer.toJson<int>(durationMs),
+      'triggeredBy': serializer.toJson<TriggeredBy>(triggeredBy),
     };
   }
 
@@ -2017,12 +2028,14 @@ class MergingResult extends DataClass implements Insertable<MergingResult> {
           {String? playlistId,
           DateTime? runDate,
           bool? successed,
-          int? durationMs}) =>
+          int? durationMs,
+          TriggeredBy? triggeredBy}) =>
       MergingResult(
         playlistId: playlistId ?? this.playlistId,
         runDate: runDate ?? this.runDate,
         successed: successed ?? this.successed,
         durationMs: durationMs ?? this.durationMs,
+        triggeredBy: triggeredBy ?? this.triggeredBy,
       );
   @override
   String toString() {
@@ -2030,13 +2043,15 @@ class MergingResult extends DataClass implements Insertable<MergingResult> {
           ..write('playlistId: $playlistId, ')
           ..write('runDate: $runDate, ')
           ..write('successed: $successed, ')
-          ..write('durationMs: $durationMs')
+          ..write('durationMs: $durationMs, ')
+          ..write('triggeredBy: $triggeredBy')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(playlistId, runDate, successed, durationMs);
+  int get hashCode =>
+      Object.hash(playlistId, runDate, successed, durationMs, triggeredBy);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -2044,7 +2059,8 @@ class MergingResult extends DataClass implements Insertable<MergingResult> {
           other.playlistId == this.playlistId &&
           other.runDate == this.runDate &&
           other.successed == this.successed &&
-          other.durationMs == this.durationMs);
+          other.durationMs == this.durationMs &&
+          other.triggeredBy == this.triggeredBy);
 }
 
 class MergingResultsCompanion extends UpdateCompanion<MergingResult> {
@@ -2052,32 +2068,38 @@ class MergingResultsCompanion extends UpdateCompanion<MergingResult> {
   final Value<DateTime> runDate;
   final Value<bool> successed;
   final Value<int> durationMs;
+  final Value<TriggeredBy> triggeredBy;
   const MergingResultsCompanion({
     this.playlistId = const Value.absent(),
     this.runDate = const Value.absent(),
     this.successed = const Value.absent(),
     this.durationMs = const Value.absent(),
+    this.triggeredBy = const Value.absent(),
   });
   MergingResultsCompanion.insert({
     required String playlistId,
     required DateTime runDate,
     required bool successed,
     required int durationMs,
+    required TriggeredBy triggeredBy,
   })  : playlistId = Value(playlistId),
         runDate = Value(runDate),
         successed = Value(successed),
-        durationMs = Value(durationMs);
+        durationMs = Value(durationMs),
+        triggeredBy = Value(triggeredBy);
   static Insertable<MergingResult> custom({
     Expression<String>? playlistId,
     Expression<DateTime>? runDate,
     Expression<bool>? successed,
     Expression<int>? durationMs,
+    Expression<TriggeredBy>? triggeredBy,
   }) {
     return RawValuesInsertable({
       if (playlistId != null) 'playlist_id': playlistId,
       if (runDate != null) 'run_date': runDate,
       if (successed != null) 'successed': successed,
       if (durationMs != null) 'duration_ms': durationMs,
+      if (triggeredBy != null) 'triggered_by': triggeredBy,
     });
   }
 
@@ -2085,12 +2107,14 @@ class MergingResultsCompanion extends UpdateCompanion<MergingResult> {
       {Value<String>? playlistId,
       Value<DateTime>? runDate,
       Value<bool>? successed,
-      Value<int>? durationMs}) {
+      Value<int>? durationMs,
+      Value<TriggeredBy>? triggeredBy}) {
     return MergingResultsCompanion(
       playlistId: playlistId ?? this.playlistId,
       runDate: runDate ?? this.runDate,
       successed: successed ?? this.successed,
       durationMs: durationMs ?? this.durationMs,
+      triggeredBy: triggeredBy ?? this.triggeredBy,
     );
   }
 
@@ -2109,6 +2133,11 @@ class MergingResultsCompanion extends UpdateCompanion<MergingResult> {
     if (durationMs.present) {
       map['duration_ms'] = Variable<int>(durationMs.value);
     }
+    if (triggeredBy.present) {
+      final converter = $MergingResultsTable.$converter0;
+      map['triggered_by'] =
+          Variable<int>(converter.mapToSql(triggeredBy.value)!);
+    }
     return map;
   }
 
@@ -2118,7 +2147,8 @@ class MergingResultsCompanion extends UpdateCompanion<MergingResult> {
           ..write('playlistId: $playlistId, ')
           ..write('runDate: $runDate, ')
           ..write('successed: $successed, ')
-          ..write('durationMs: $durationMs')
+          ..write('durationMs: $durationMs, ')
+          ..write('triggeredBy: $triggeredBy')
           ..write(')'))
         .toString();
   }
@@ -2155,9 +2185,16 @@ class $MergingResultsTable extends MergingResults
   late final GeneratedColumn<int?> durationMs = GeneratedColumn<int?>(
       'duration_ms', aliasedName, false,
       type: const IntType(), requiredDuringInsert: true);
+  final VerificationMeta _triggeredByMeta =
+      const VerificationMeta('triggeredBy');
+  @override
+  late final GeneratedColumnWithTypeConverter<TriggeredBy, int?> triggeredBy =
+      GeneratedColumn<int?>('triggered_by', aliasedName, false,
+              type: const IntType(), requiredDuringInsert: true)
+          .withConverter<TriggeredBy>($MergingResultsTable.$converter0);
   @override
   List<GeneratedColumn> get $columns =>
-      [playlistId, runDate, successed, durationMs];
+      [playlistId, runDate, successed, durationMs, triggeredBy];
   @override
   String get aliasedName => _alias ?? 'merging_results';
   @override
@@ -2195,6 +2232,7 @@ class $MergingResultsTable extends MergingResults
     } else if (isInserting) {
       context.missing(_durationMsMeta);
     }
+    context.handle(_triggeredByMeta, const VerificationResult.success());
     return context;
   }
 
@@ -2210,6 +2248,9 @@ class $MergingResultsTable extends MergingResults
   $MergingResultsTable createAlias(String alias) {
     return $MergingResultsTable(attachedDatabase, alias);
   }
+
+  static TypeConverter<TriggeredBy, int> $converter0 =
+      const EnumIndexConverter<TriggeredBy>(TriggeredBy.values);
 }
 
 abstract class _$AppDatabase extends GeneratedDatabase {
