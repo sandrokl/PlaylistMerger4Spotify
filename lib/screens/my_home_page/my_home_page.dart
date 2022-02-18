@@ -51,6 +51,7 @@ class _MyHomePageState extends State<MyHomePage> {
           S.of(context).notificationInProgressChannelName,
           S.of(context).notificationInProgressMessage,
         );
+        await sharedPrefs.setBool("isUpdateSchedule", true);
       }
     });
   }

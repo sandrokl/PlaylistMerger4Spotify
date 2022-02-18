@@ -26,4 +26,12 @@ class MergingResultsDao extends DatabaseAccessor<AppDatabase> with _$MergingResu
     final cutDate = DateTime.now().add(Duration(days: olderThanInDays * -1));
     await (delete(mergingResults)..where((tbl) => tbl.runDate.isSmallerThanValue(cutDate))).go();
   }
+
+  Future<MergingResult?> getLastSuccessfulUpdate(String id) async {
+    return (select(mergingResults)
+          ..where((tbl) => tbl.playlistId.equals(id) & tbl.successed.equals(true))
+          ..orderBy([(p) => OrderingTerm(expression: p.runDate, mode: OrderingMode.desc)])
+          ..limit(1))
+        .getSingleOrNull();
+  }
 }

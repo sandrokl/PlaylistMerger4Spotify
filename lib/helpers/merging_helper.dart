@@ -6,8 +6,8 @@ import 'package:playlistmerger4spotify/helpers/notifications_helper.dart';
 import 'package:playlistmerger4spotify/helpers/spotify_client.dart';
 
 class MergingHelper {
-  static final MergingHelper _mergingHelper = MergingHelper._internal();
-  factory MergingHelper() => _mergingHelper;
+  static final MergingHelper _instance = MergingHelper._internal();
+  factory MergingHelper() => _instance;
   MergingHelper._internal();
 
   final _db = AppDatabase();
@@ -25,21 +25,40 @@ class MergingHelper {
   Future<bool> updateAllMergedPlaylists(
     String notificationInProgressChannelId,
     String notificationInProgressChannelName,
-    String notificationInProgressMessage,
-  ) async {
+    String notificationInProgressMessage, {
+    bool isAutomaticUpdate = false,
+  }) async {
     try {
       var mergingPlaylists = await _db.playlistsToMergeDao.getCurrentDestinationPlaylistsIds();
       if (mergingPlaylists.isNotEmpty) {
         for (var id in mergingPlaylists) {
           if (id != null) {
-            var result = await updateSpecificMergedPlaylist(
-              id,
-              notificationInProgressChannelId,
-              notificationInProgressChannelName,
-              notificationInProgressMessage,
-            );
-            if (!result) {
-              throw Exception("FAILED");
+            bool shouldUpdate = true;
+
+            if (isAutomaticUpdate) {
+              final MergingResult? lastSuccessfulUpdate = await _db.mergingResultsDao.getLastSuccessfulUpdate(id);
+              final now = DateTime.now();
+              if (lastSuccessfulUpdate != null) {
+                if (lastSuccessfulUpdate.runDate.year == now.year &&
+                    lastSuccessfulUpdate.runDate.month == now.month &&
+                    lastSuccessfulUpdate.runDate.day == now.day &&
+                    // don't do it before 2 AM
+                    now.hour >= 2) {
+                  shouldUpdate = false;
+                }
+              }
+            }
+
+            if (shouldUpdate) {
+              var result = await updateSpecificMergedPlaylist(
+                id,
+                notificationInProgressChannelId,
+                notificationInProgressChannelName,
+                notificationInProgressMessage,
+              );
+              if (!result) {
+                throw Exception("FAILED");
+              }
             }
           }
         }

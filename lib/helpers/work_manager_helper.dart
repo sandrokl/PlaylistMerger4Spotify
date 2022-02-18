@@ -1,7 +1,5 @@
 // ignore_for_file: constant_identifier_names
 
-import 'dart:math';
-
 import 'package:playlistmerger4spotify/helpers/merging_helper.dart';
 import 'package:playlistmerger4spotify/helpers/notifications_helper.dart';
 import 'package:workmanager/workmanager.dart';
@@ -24,24 +22,15 @@ class WorkManagerHelper {
   ) async {
     try {
       await Workmanager().cancelByTag(TASK_DO_MERGING_SCHEDULED_ALL);
+      await Future.delayed(const Duration(seconds: 5));
     } catch (_) {/* nothing to cancel */}
-
-    final tomorrow = DateTime.now().add(const Duration(days: 1));
-    final nextDate = DateTime(
-      tomorrow.year,
-      tomorrow.month,
-      tomorrow.day,
-      2,
-      Random().nextInt(60),
-    );
-    final delay = nextDate.difference(DateTime.now());
 
     await Workmanager().registerPeriodicTask(
       TASK_DO_MERGING_SCHEDULED_ALL,
       TASK_DO_MERGING_SCHEDULED_ALL,
       tag: TASK_DO_MERGING_SCHEDULED_ALL,
-      initialDelay: delay,
-      frequency: const Duration(hours: 24),
+      initialDelay: const Duration(seconds: 30),
+      frequency: const Duration(hours: 2, minutes: 30),
       constraints: Constraints(
         networkType: NetworkType.connected,
         requiresBatteryNotLow: true,
@@ -67,6 +56,7 @@ class WorkManagerHelper {
           notificationInProgressChannelId,
           notificationInProgressChannelName,
           notificationInProgressMessage,
+          isAutomaticUpdate: true,
         );
         if (!result) {
           throw Exception("FAILED");
