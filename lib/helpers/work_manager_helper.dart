@@ -1,5 +1,7 @@
 // ignore_for_file: constant_identifier_names
 
+import 'dart:math';
+
 import 'package:playlistmerger4spotify/helpers/merging_helper.dart';
 import 'package:playlistmerger4spotify/helpers/notifications_helper.dart';
 import 'package:workmanager/workmanager.dart';
@@ -15,26 +17,63 @@ class WorkManagerHelper {
   static const TASK_DO_MERGING_NOW_SPECIFIC = "mergeNowSpecific";
   static const TASK_DO_MERGING_SCHEDULED_ALL = "mergeScheduledAll";
 
-  Future<void> createUpdateSchedule() async {
+  Future<void> createUpdateSchedule(
+    String notificationInProgressChannelId,
+    String notificationInProgressChannelName,
+    String notificationInProgressMessage,
+  ) async {
+    try {
+      await Workmanager().cancelByTag(TASK_DO_MERGING_SCHEDULED_ALL);
+    } catch (_) {/* nothing to cancel */}
+
+    final tomorrow = DateTime.now().add(const Duration(days: 1));
+    final nextDate = DateTime(
+      tomorrow.year,
+      tomorrow.month,
+      tomorrow.day,
+      2,
+      Random().nextInt(60),
+    );
+    final delay = nextDate.difference(DateTime.now());
+
     await Workmanager().registerPeriodicTask(
       TASK_DO_MERGING_SCHEDULED_ALL,
       TASK_DO_MERGING_SCHEDULED_ALL,
       tag: TASK_DO_MERGING_SCHEDULED_ALL,
-      initialDelay: const Duration(minutes: 5),
-      frequency: const Duration(hours: 3),
+      initialDelay: delay,
+      frequency: const Duration(hours: 24),
       constraints: Constraints(
         networkType: NetworkType.connected,
         requiresCharging: true,
       ),
+      inputData: {
+        "notificationInProgressChannelId": notificationInProgressChannelId,
+        "notificationInProgressChannelName": notificationInProgressChannelName,
+        "notificationInProgressMessage": notificationInProgressMessage,
+      },
     );
   }
 
   Future<bool> handleTaskRequest(String task, Map<String, dynamic>? inputData) async {
     NotificationsHelper().initialize();
 
+    final String notificationInProgressChannelId = inputData?["notificationInProgressChannelId"];
+    final String notificationInProgressChannelName = inputData?["notificationInProgressChannelName"];
+    final String notificationInProgressMessage = inputData?["notificationInProgressMessage"];
+
     if (task == TASK_DO_MERGING_SCHEDULED_ALL) {
-      await Future.delayed(const Duration(seconds: 15));
-      return Future.value(true);
+      try {
+        var result = await MergingHelper().updateAllMergedPlaylists(
+          notificationInProgressChannelId,
+          notificationInProgressChannelName,
+          notificationInProgressMessage,
+        );
+        if (!result) {
+          throw Exception("FAILED");
+        }
+      } catch (_) {
+        return Future.error("FAILED");
+      }
     } else {
       final String notificationChannelId = inputData?["notificationChannelId"];
       final String notificationChannelName = inputData?["notificationChannelName"];
@@ -42,9 +81,6 @@ class WorkManagerHelper {
       final String successMessage = inputData?["successMessage"];
       final String failureTitle = inputData?["failureTitle"];
       final String failureMessage = inputData?["failureMessage"];
-      final String notificationInProgressChannelId = inputData?["notificationInProgressChannelId"];
-      final String notificationInProgressChannelName = inputData?["notificationInProgressChannelName"];
-      final String notificationInProgressMessage = inputData?["notificationInProgressMessage"];
 
       if (task == TASK_DO_MERGING_NOW_ALL) {
         try {
@@ -99,7 +135,7 @@ class WorkManagerHelper {
           return Future.error("FAILED");
         }
       }
-      return Future.value(true);
     }
+    return Future.value(true);
   }
 }

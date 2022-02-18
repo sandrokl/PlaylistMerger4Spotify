@@ -46,7 +46,11 @@ class _MyHomePageState extends State<MyHomePage> {
     SharedPreferences.getInstance().then((sharedPrefs) async {
       bool? isUpdateSchedule = sharedPrefs.getBool("isUpdateSchedule");
       if (isUpdateSchedule == null) {
-        await WorkManagerHelper().createUpdateSchedule();
+        await WorkManagerHelper().createUpdateSchedule(
+          NotificationsHelper.CHANNEL_KEY_IN_PROGRESS,
+          S.of(context).notificationInProgressChannelName,
+          S.of(context).notificationInProgressMessage,
+        );
       }
     });
   }

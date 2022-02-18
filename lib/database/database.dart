@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
 import 'package:path/path.dart' as p;
+import 'package:playlistmerger4spotify/database/dao/merging_results_dao.dart';
 import 'package:playlistmerger4spotify/database/dao/playlists_dao.dart';
 import 'package:playlistmerger4spotify/database/dao/playlists_to_merge_dao.dart';
 import 'package:playlistmerger4spotify/database/dao/tracks_current_dao.dart';
@@ -9,6 +10,7 @@ import 'package:playlistmerger4spotify/database/dao/tracks_new_all_dao.dart';
 import 'package:playlistmerger4spotify/database/dao/tracks_new_distinct_dao.dart';
 import 'package:playlistmerger4spotify/database/dao/tracks_to_add_dao.dart';
 import 'package:playlistmerger4spotify/database/dao/tracks_to_remove_dao.dart';
+import 'package:playlistmerger4spotify/database/models/merging_results.dart';
 import 'package:playlistmerger4spotify/database/models/tracks_current.dart';
 import 'package:playlistmerger4spotify/database/models/tracks_new_all.dart';
 import 'package:playlistmerger4spotify/database/models/tracks_new_distinct.dart';
@@ -40,6 +42,7 @@ LazyDatabase _openConnection() {
     TracksNewDistinct,
     TracksToRemove,
     TracksToAdd,
+    MergingResults,
   ],
   daos: [
     PlaylistsDao,
@@ -49,6 +52,7 @@ LazyDatabase _openConnection() {
     TracksNewDistinctDao,
     TracksToAddDao,
     TracksToRemoveDao,
+    MergingResultsDao,
   ],
 )
 class AppDatabase extends _$AppDatabase {
@@ -57,14 +61,14 @@ class AppDatabase extends _$AppDatabase {
   factory AppDatabase() => _singleton;
 
   @override
-  int get schemaVersion => 5;
+  int get schemaVersion => 6;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
         beforeOpen: (_) async {
           await customStatement('PRAGMA foreign_keys = ON');
           await customStatement('PRAGMA journal_mode=WAL');
-          await customStatement('PRAGMA busy_timeout=60000');
+          await customStatement('PRAGMA busy_timeout=90000');
         },
         onCreate: (m) async {
           await m.createAll();

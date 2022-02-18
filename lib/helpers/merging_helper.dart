@@ -45,6 +45,7 @@ class MergingHelper {
         }
       }
 
+      await _db.mergingResultsDao.cleanOldRecords(30);
       // shrink empty space from database
       await _db.customStatement("VACUUM;");
       return true;
@@ -61,6 +62,7 @@ class MergingHelper {
   ) async {
     final jobId = Random().nextInt(9999999);
     final notif = NotificationsHelper();
+    final startDate = DateTime.now();
 
     try {
       await notif.showPersistentNotification(
@@ -134,9 +136,22 @@ class MergingHelper {
       await clearTracksInDB(jobId);
       await notif.dismissPersistentNotification(jobId);
 
+      await _db.mergingResultsDao.insert(MergingResult(
+        playlistId: playlistId,
+        runDate: DateTime.now(),
+        successed: true,
+        durationMs: DateTime.now().difference(startDate).inMilliseconds,
+      ));
+
       return true;
     } catch (_) {
       await notif.dismissPersistentNotification(jobId);
+      await _db.mergingResultsDao.insert(MergingResult(
+        playlistId: playlistId,
+        runDate: DateTime.now(),
+        successed: false,
+        durationMs: DateTime.now().difference(startDate).inMilliseconds,
+      ));
       return false;
     }
   }
