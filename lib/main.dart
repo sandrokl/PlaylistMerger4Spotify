@@ -23,7 +23,7 @@ void main() async {
 
   await NotificationsHelper().initialize();
 
-  await Workmanager().initialize(callbackDispatcher, isInDebugMode: kDebugMode);
+  await Workmanager().initialize(callbackDispatcher);
 
   final sharedPrefs = await SharedPreferences.getInstance();
   isFirstTime = sharedPrefs.getBool("isFirstTime") ?? true;
