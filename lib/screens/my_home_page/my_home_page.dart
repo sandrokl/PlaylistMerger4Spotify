@@ -10,6 +10,7 @@ import 'package:playlistmerger4spotify/screens/my_home_page/appbar_popup_menu_it
 import 'package:playlistmerger4spotify/screens/my_home_page/user_info.dart';
 import 'package:playlistmerger4spotify/store/spotify_user_store.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:workmanager/workmanager.dart';
 
@@ -40,6 +41,18 @@ class _MyHomePageState extends State<MyHomePage> {
       await dao.deleteAllInvalidatedPlaylists();
 
       _updateListMergedPlaylists();
+    });
+
+    SharedPreferences.getInstance().then((sharedPrefs) async {
+      bool? isUpdateSchedule = sharedPrefs.getBool("isUpdateSchedule");
+      if (isUpdateSchedule == null) {
+        await WorkManagerHelper().createUpdateSchedule(
+          NotificationsHelper.CHANNEL_KEY_IN_PROGRESS,
+          S.of(context).notificationInProgressChannelName,
+          S.of(context).notificationInProgressMessage,
+        );
+        await sharedPrefs.setBool("isUpdateSchedule", true);
+      }
     });
   }
 

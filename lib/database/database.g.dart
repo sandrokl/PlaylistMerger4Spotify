@@ -1950,6 +1950,309 @@ class $TracksToAddTable extends TracksToAdd
   }
 }
 
+class MergingResult extends DataClass implements Insertable<MergingResult> {
+  final String playlistId;
+  final DateTime runDate;
+  final bool successed;
+  final int durationMs;
+  final TriggeredBy triggeredBy;
+  MergingResult(
+      {required this.playlistId,
+      required this.runDate,
+      required this.successed,
+      required this.durationMs,
+      required this.triggeredBy});
+  factory MergingResult.fromData(Map<String, dynamic> data, {String? prefix}) {
+    final effectivePrefix = prefix ?? '';
+    return MergingResult(
+      playlistId: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}playlist_id'])!,
+      runDate: const DateTimeType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}run_date'])!,
+      successed: const BoolType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}successed'])!,
+      durationMs: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}duration_ms'])!,
+      triggeredBy: $MergingResultsTable.$converter0.mapToDart(const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}triggered_by']))!,
+    );
+  }
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['playlist_id'] = Variable<String>(playlistId);
+    map['run_date'] = Variable<DateTime>(runDate);
+    map['successed'] = Variable<bool>(successed);
+    map['duration_ms'] = Variable<int>(durationMs);
+    {
+      final converter = $MergingResultsTable.$converter0;
+      map['triggered_by'] = Variable<int>(converter.mapToSql(triggeredBy)!);
+    }
+    return map;
+  }
+
+  MergingResultsCompanion toCompanion(bool nullToAbsent) {
+    return MergingResultsCompanion(
+      playlistId: Value(playlistId),
+      runDate: Value(runDate),
+      successed: Value(successed),
+      durationMs: Value(durationMs),
+      triggeredBy: Value(triggeredBy),
+    );
+  }
+
+  factory MergingResult.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return MergingResult(
+      playlistId: serializer.fromJson<String>(json['playlistId']),
+      runDate: serializer.fromJson<DateTime>(json['runDate']),
+      successed: serializer.fromJson<bool>(json['successed']),
+      durationMs: serializer.fromJson<int>(json['durationMs']),
+      triggeredBy: serializer.fromJson<TriggeredBy>(json['triggeredBy']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'playlistId': serializer.toJson<String>(playlistId),
+      'runDate': serializer.toJson<DateTime>(runDate),
+      'successed': serializer.toJson<bool>(successed),
+      'durationMs': serializer.toJson<int>(durationMs),
+      'triggeredBy': serializer.toJson<TriggeredBy>(triggeredBy),
+    };
+  }
+
+  MergingResult copyWith(
+          {String? playlistId,
+          DateTime? runDate,
+          bool? successed,
+          int? durationMs,
+          TriggeredBy? triggeredBy}) =>
+      MergingResult(
+        playlistId: playlistId ?? this.playlistId,
+        runDate: runDate ?? this.runDate,
+        successed: successed ?? this.successed,
+        durationMs: durationMs ?? this.durationMs,
+        triggeredBy: triggeredBy ?? this.triggeredBy,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('MergingResult(')
+          ..write('playlistId: $playlistId, ')
+          ..write('runDate: $runDate, ')
+          ..write('successed: $successed, ')
+          ..write('durationMs: $durationMs, ')
+          ..write('triggeredBy: $triggeredBy')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(playlistId, runDate, successed, durationMs, triggeredBy);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is MergingResult &&
+          other.playlistId == this.playlistId &&
+          other.runDate == this.runDate &&
+          other.successed == this.successed &&
+          other.durationMs == this.durationMs &&
+          other.triggeredBy == this.triggeredBy);
+}
+
+class MergingResultsCompanion extends UpdateCompanion<MergingResult> {
+  final Value<String> playlistId;
+  final Value<DateTime> runDate;
+  final Value<bool> successed;
+  final Value<int> durationMs;
+  final Value<TriggeredBy> triggeredBy;
+  const MergingResultsCompanion({
+    this.playlistId = const Value.absent(),
+    this.runDate = const Value.absent(),
+    this.successed = const Value.absent(),
+    this.durationMs = const Value.absent(),
+    this.triggeredBy = const Value.absent(),
+  });
+  MergingResultsCompanion.insert({
+    required String playlistId,
+    required DateTime runDate,
+    required bool successed,
+    required int durationMs,
+    required TriggeredBy triggeredBy,
+  })  : playlistId = Value(playlistId),
+        runDate = Value(runDate),
+        successed = Value(successed),
+        durationMs = Value(durationMs),
+        triggeredBy = Value(triggeredBy);
+  static Insertable<MergingResult> custom({
+    Expression<String>? playlistId,
+    Expression<DateTime>? runDate,
+    Expression<bool>? successed,
+    Expression<int>? durationMs,
+    Expression<TriggeredBy>? triggeredBy,
+  }) {
+    return RawValuesInsertable({
+      if (playlistId != null) 'playlist_id': playlistId,
+      if (runDate != null) 'run_date': runDate,
+      if (successed != null) 'successed': successed,
+      if (durationMs != null) 'duration_ms': durationMs,
+      if (triggeredBy != null) 'triggered_by': triggeredBy,
+    });
+  }
+
+  MergingResultsCompanion copyWith(
+      {Value<String>? playlistId,
+      Value<DateTime>? runDate,
+      Value<bool>? successed,
+      Value<int>? durationMs,
+      Value<TriggeredBy>? triggeredBy}) {
+    return MergingResultsCompanion(
+      playlistId: playlistId ?? this.playlistId,
+      runDate: runDate ?? this.runDate,
+      successed: successed ?? this.successed,
+      durationMs: durationMs ?? this.durationMs,
+      triggeredBy: triggeredBy ?? this.triggeredBy,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (playlistId.present) {
+      map['playlist_id'] = Variable<String>(playlistId.value);
+    }
+    if (runDate.present) {
+      map['run_date'] = Variable<DateTime>(runDate.value);
+    }
+    if (successed.present) {
+      map['successed'] = Variable<bool>(successed.value);
+    }
+    if (durationMs.present) {
+      map['duration_ms'] = Variable<int>(durationMs.value);
+    }
+    if (triggeredBy.present) {
+      final converter = $MergingResultsTable.$converter0;
+      map['triggered_by'] =
+          Variable<int>(converter.mapToSql(triggeredBy.value)!);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('MergingResultsCompanion(')
+          ..write('playlistId: $playlistId, ')
+          ..write('runDate: $runDate, ')
+          ..write('successed: $successed, ')
+          ..write('durationMs: $durationMs, ')
+          ..write('triggeredBy: $triggeredBy')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $MergingResultsTable extends MergingResults
+    with TableInfo<$MergingResultsTable, MergingResult> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $MergingResultsTable(this.attachedDatabase, [this._alias]);
+  final VerificationMeta _playlistIdMeta = const VerificationMeta('playlistId');
+  @override
+  late final GeneratedColumn<String?> playlistId = GeneratedColumn<String?>(
+      'playlist_id', aliasedName, false,
+      type: const StringType(),
+      requiredDuringInsert: true,
+      defaultConstraints:
+          'REFERENCES playlists (playlist_id) ON UPDATE CASCADE ON DELETE CASCADE');
+  final VerificationMeta _runDateMeta = const VerificationMeta('runDate');
+  @override
+  late final GeneratedColumn<DateTime?> runDate = GeneratedColumn<DateTime?>(
+      'run_date', aliasedName, false,
+      type: const IntType(), requiredDuringInsert: true);
+  final VerificationMeta _successedMeta = const VerificationMeta('successed');
+  @override
+  late final GeneratedColumn<bool?> successed = GeneratedColumn<bool?>(
+      'successed', aliasedName, false,
+      type: const BoolType(),
+      requiredDuringInsert: true,
+      defaultConstraints: 'CHECK (successed IN (0, 1))');
+  final VerificationMeta _durationMsMeta = const VerificationMeta('durationMs');
+  @override
+  late final GeneratedColumn<int?> durationMs = GeneratedColumn<int?>(
+      'duration_ms', aliasedName, false,
+      type: const IntType(), requiredDuringInsert: true);
+  final VerificationMeta _triggeredByMeta =
+      const VerificationMeta('triggeredBy');
+  @override
+  late final GeneratedColumnWithTypeConverter<TriggeredBy, int?> triggeredBy =
+      GeneratedColumn<int?>('triggered_by', aliasedName, false,
+              type: const IntType(), requiredDuringInsert: true)
+          .withConverter<TriggeredBy>($MergingResultsTable.$converter0);
+  @override
+  List<GeneratedColumn> get $columns =>
+      [playlistId, runDate, successed, durationMs, triggeredBy];
+  @override
+  String get aliasedName => _alias ?? 'merging_results';
+  @override
+  String get actualTableName => 'merging_results';
+  @override
+  VerificationContext validateIntegrity(Insertable<MergingResult> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('playlist_id')) {
+      context.handle(
+          _playlistIdMeta,
+          playlistId.isAcceptableOrUnknown(
+              data['playlist_id']!, _playlistIdMeta));
+    } else if (isInserting) {
+      context.missing(_playlistIdMeta);
+    }
+    if (data.containsKey('run_date')) {
+      context.handle(_runDateMeta,
+          runDate.isAcceptableOrUnknown(data['run_date']!, _runDateMeta));
+    } else if (isInserting) {
+      context.missing(_runDateMeta);
+    }
+    if (data.containsKey('successed')) {
+      context.handle(_successedMeta,
+          successed.isAcceptableOrUnknown(data['successed']!, _successedMeta));
+    } else if (isInserting) {
+      context.missing(_successedMeta);
+    }
+    if (data.containsKey('duration_ms')) {
+      context.handle(
+          _durationMsMeta,
+          durationMs.isAcceptableOrUnknown(
+              data['duration_ms']!, _durationMsMeta));
+    } else if (isInserting) {
+      context.missing(_durationMsMeta);
+    }
+    context.handle(_triggeredByMeta, const VerificationResult.success());
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {playlistId, runDate};
+  @override
+  MergingResult map(Map<String, dynamic> data, {String? tablePrefix}) {
+    return MergingResult.fromData(data,
+        prefix: tablePrefix != null ? '$tablePrefix.' : null);
+  }
+
+  @override
+  $MergingResultsTable createAlias(String alias) {
+    return $MergingResultsTable(attachedDatabase, alias);
+  }
+
+  static TypeConverter<TriggeredBy, int> $converter0 =
+      const EnumIndexConverter<TriggeredBy>(TriggeredBy.values);
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(SqlTypeSystem.defaultInstance, e);
   late final $PlaylistsTable playlists = $PlaylistsTable(this);
@@ -1961,6 +2264,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
       $TracksNewDistinctTable(this);
   late final $TracksToRemoveTable tracksToRemove = $TracksToRemoveTable(this);
   late final $TracksToAddTable tracksToAdd = $TracksToAddTable(this);
+  late final $MergingResultsTable mergingResults = $MergingResultsTable(this);
   late final PlaylistsDao playlistsDao = PlaylistsDao(this as AppDatabase);
   late final PlaylistsToMergeDao playlistsToMergeDao =
       PlaylistsToMergeDao(this as AppDatabase);
@@ -1974,6 +2278,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
       TracksToAddDao(this as AppDatabase);
   late final TracksToRemoveDao tracksToRemoveDao =
       TracksToRemoveDao(this as AppDatabase);
+  late final MergingResultsDao mergingResultsDao =
+      MergingResultsDao(this as AppDatabase);
   @override
   Iterable<TableInfo> get allTables => allSchemaEntities.whereType<TableInfo>();
   @override
@@ -1984,6 +2290,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
         tracksNewAll,
         tracksNewDistinct,
         tracksToRemove,
-        tracksToAdd
+        tracksToAdd,
+        mergingResults
       ];
 }

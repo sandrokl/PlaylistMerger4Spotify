@@ -2,12 +2,13 @@ import 'dart:math';
 
 import 'package:playlistmerger4spotify/database/database.dart';
 import 'package:playlistmerger4spotify/database/models/base/track.dart';
+import 'package:playlistmerger4spotify/database/models/merging_results.dart';
 import 'package:playlistmerger4spotify/helpers/notifications_helper.dart';
 import 'package:playlistmerger4spotify/helpers/spotify_client.dart';
 
 class MergingHelper {
-  static final MergingHelper _mergingHelper = MergingHelper._internal();
-  factory MergingHelper() => _mergingHelper;
+  static final MergingHelper _instance = MergingHelper._internal();
+  factory MergingHelper() => _instance;
   MergingHelper._internal();
 
   final _db = AppDatabase();
@@ -25,26 +26,47 @@ class MergingHelper {
   Future<bool> updateAllMergedPlaylists(
     String notificationInProgressChannelId,
     String notificationInProgressChannelName,
-    String notificationInProgressMessage,
-  ) async {
+    String notificationInProgressMessage, {
+    bool isAutomaticUpdate = false,
+  }) async {
     try {
       var mergingPlaylists = await _db.playlistsToMergeDao.getCurrentDestinationPlaylistsIds();
       if (mergingPlaylists.isNotEmpty) {
         for (var id in mergingPlaylists) {
           if (id != null) {
-            var result = await updateSpecificMergedPlaylist(
-              id,
-              notificationInProgressChannelId,
-              notificationInProgressChannelName,
-              notificationInProgressMessage,
-            );
-            if (!result) {
-              throw Exception("FAILED");
+            bool shouldUpdate = true;
+
+            if (isAutomaticUpdate) {
+              final MergingResult? lastSuccessfulUpdate = await _db.mergingResultsDao.getLastSuccessfulUpdate(id);
+              final now = DateTime.now();
+              if (lastSuccessfulUpdate != null) {
+                if (lastSuccessfulUpdate.runDate.year == now.year &&
+                    lastSuccessfulUpdate.runDate.month == now.month &&
+                    lastSuccessfulUpdate.runDate.day == now.day &&
+                    // don't do it before 2 AM
+                    now.hour >= 2) {
+                  shouldUpdate = false;
+                }
+              }
+            }
+
+            if (shouldUpdate) {
+              var result = await updateSpecificMergedPlaylist(
+                id,
+                notificationInProgressChannelId,
+                notificationInProgressChannelName,
+                notificationInProgressMessage,
+                isAutomaticUpdate: isAutomaticUpdate,
+              );
+              if (!result) {
+                throw Exception("FAILED");
+              }
             }
           }
         }
       }
 
+      await _db.mergingResultsDao.cleanOldRecords(30);
       // shrink empty space from database
       await _db.customStatement("VACUUM;");
       return true;
@@ -57,10 +79,12 @@ class MergingHelper {
     String playlistId,
     String notificationInProgressChannelId,
     String notificationInProgressChannelName,
-    String notificationInProgressMessage,
-  ) async {
+    String notificationInProgressMessage, {
+    bool isAutomaticUpdate = false,
+  }) async {
     final jobId = Random().nextInt(9999999);
     final notif = NotificationsHelper();
+    final startDate = DateTime.now();
 
     try {
       await notif.showPersistentNotification(
@@ -134,9 +158,24 @@ class MergingHelper {
       await clearTracksInDB(jobId);
       await notif.dismissPersistentNotification(jobId);
 
+      await _db.mergingResultsDao.insert(MergingResult(
+        playlistId: playlistId,
+        runDate: DateTime.now(),
+        successed: true,
+        durationMs: DateTime.now().difference(startDate).inMilliseconds,
+        triggeredBy: isAutomaticUpdate ? TriggeredBy.schedule : TriggeredBy.user,
+      ));
+
       return true;
     } catch (_) {
       await notif.dismissPersistentNotification(jobId);
+      await _db.mergingResultsDao.insert(MergingResult(
+        playlistId: playlistId,
+        runDate: DateTime.now(),
+        successed: false,
+        durationMs: DateTime.now().difference(startDate).inMilliseconds,
+        triggeredBy: isAutomaticUpdate ? TriggeredBy.schedule : TriggeredBy.user,
+      ));
       return false;
     }
   }

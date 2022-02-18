@@ -20,12 +20,12 @@ void callbackDispatcher() {
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  final sharedPrefs = await SharedPreferences.getInstance();
-  isFirstTime = sharedPrefs.getBool("isFirstTime") ?? true;
-
   await NotificationsHelper().initialize();
 
-  Workmanager().initialize(callbackDispatcher);
+  await Workmanager().initialize(callbackDispatcher);
+
+  final sharedPrefs = await SharedPreferences.getInstance();
+  isFirstTime = sharedPrefs.getBool("isFirstTime") ?? true;
 
   runApp(
     MultiProvider(
