@@ -44,7 +44,7 @@ class WorkManagerHelper {
       frequency: const Duration(hours: 24),
       constraints: Constraints(
         networkType: NetworkType.connected,
-        requiresCharging: true,
+        requiresBatteryNotLow: true,
       ),
       inputData: {
         "notificationInProgressChannelId": notificationInProgressChannelId,
