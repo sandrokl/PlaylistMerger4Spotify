@@ -1,0 +1,59 @@
+{
+  "appTitle": "PlaylistMerger 4 Spotify",
+  "spotifyUser": "Utilisateur de Spotify",
+  "ok": "D'accord",
+  "pleaseLoginToSpotify": "Veuillez vous connecter à Spotify",
+  "welcome": "Bienvenue",
+  "we_will_open_login": "Pour débuter, la page de connexion de Spotify s'ouvrira.",
+  "makeSureToChooseAPlaylistYouDontDirectlyAdd": "Au moment de choisir la PLAYLIST DE DESTINATION, veuillez vous assurer de ne pas choisir une playlist qui contient vos chansons.\nCelle-ci sera effacée et remplacée avec les résultats de la fusion.",
+  "carefulexclamation": "Attention!",
+  "nothingHereForNow": "Rien ici pour l'instant. Commencez à créer vos playlists fusionnées en utilisant le bouton ci-dessous.",
+  "confirm": "Confirmer",
+  "delete": "SUPPRIMER",
+  "cancel": "canceller",
+  "areYouSureYouWishToDelete_start": "Êtes vous certain de vouloir supprimer la definition de fusion pour ",
+  "areYouSureYouWishToDelete_end": "? Cela ne supprimera pas votre playlist sur Spotify.",
+  "saving_threedots": "Mise à jour...",
+  "openInSpotify": "Ouvrir sur Spotify",
+  "modifyThisMergingRule": "Modifier la définition de fusion",
+  "selectAPlaylist": "-- Choisir une playlist -- ",
+  "destinationPlaylist": "Playlist de destination",
+  "sourcePlaylists": "Playlists d'origine",
+  "dismiss": "FERMER",
+  "doNotShowAgain": "Ne plus afficher",
+  "changesSaved": "Changements sauvegardés. Vous pouvez éxécuter la mise à jour à nouveau pour rafraîchir la playlist sur Spotify.",
+  "deleteThisMergingRule": "Supprimer cette definition",
+  "createIt": "CRÉER",
+  "nameOfThePlaylist": "Nom de la nouvelle playlist",
+  "createNewPlaylist": "Créer une nouvelle playlist",
+  "pleaseEnterThePlaylistName": "Veuillez rentrer le nom de la playlist",
+  "playlistCreatedWithPlaylistmerger4Spotify": "Playlist créée avec PlaylistMerger 4 Spotify",
+  "importMergingDefinitions": "Importer les définitions",
+  "exportMergingDefinitions": "Exporter les définitions",
+  "settings": "Réglages...",
+  "updateThisInSpotify": "Mettre à jour sur Spotify",
+  "mergingDefinitionsImportedSuccessfully": "Définition des fusions importée avec succès. Les playlists absentes de votre bibliothèque actuelle n'ont pas été importées.",
+  "anUpdateToYourPlaylistIsBeingMadeInSpotify": "{howMany, plural, one {La mise à jour de votre playlist est lancée sur Spotify. On vous avisera quand ce sera terminé.} other {Les mises à jour de vos playlists sont lancées sur Spotify. On vous avisera quand ce sera terminé.}}",
+  "@anUpdateToYourPlaylistIsBeingMadeInSpotify": {
+    "placeholders": {
+      "howMany": {
+        "type": "int"
+      }
+    }
+  },
+  "notificationSuccessTitle": "<b>Succès!</b>",
+  "notificationFailureTitle": "<b>Échec</b>",
+  "notificationPlaylistUpdatedSuccessfully": "&#128516 Votre playlist fusionée <em>{name}</em> a été mise à jour.",
+  "@notificationPlaylistUpdatedSuccessfully": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationAllPlaylistsUpdatedSuccessfully": "&#128516 Toutes vos playlists ont bien été mises à jour.",
+  "notificationMergingFailed": "&#128577 Une erreur s'est passée pendant la mise à jour des playlists. Veuillez le réssayer à nouveau.",
+  "channelNameMergingResults": "Résultat des mises à jour des playlists",
+  "notificationInProgressChannelName": "Mise à jour en progrès",
+  "notificationInProgressMessage": "Mise à jour de playlist..."
+}
