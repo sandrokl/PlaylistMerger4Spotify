@@ -380,10 +380,10 @@ class S {
     );
   }
 
-  /// `Merging definitions imported successfully, as much as possible, respecting your current playlists.`
+  /// `Merging definitions imported successfully. Playlists absent from your current library have not been imported.`
   String get mergingDefinitionsImportedSuccessfully {
     return Intl.message(
-      'Merging definitions imported successfully, as much as possible, respecting your current playlists.',
+      'Merging definitions imported successfully. Playlists absent from your current library have not been imported.',
       name: 'mergingDefinitionsImportedSuccessfully',
       desc: '',
       args: [],
@@ -464,26 +464,6 @@ class S {
     );
   }
 
-  /// `<b>Busy</b>`
-  String get busyTitle {
-    return Intl.message(
-      '<b>Busy</b>',
-      name: 'busyTitle',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Please wait the current update to finish before starting a new one.`
-  String get busyMessage {
-    return Intl.message(
-      'Please wait the current update to finish before starting a new one.',
-      name: 'busyMessage',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Update in progress`
   String get notificationInProgressChannelName {
     return Intl.message(
@@ -511,6 +491,8 @@ class AppLocalizationDelegate extends LocalizationsDelegate<S> {
   List<Locale> get supportedLocales {
     return const <Locale>[
       Locale.fromSubtags(languageCode: 'en'),
+      Locale.fromSubtags(languageCode: 'fr'),
+      Locale.fromSubtags(languageCode: 'pt'),
     ];
   }
 

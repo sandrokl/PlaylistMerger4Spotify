@@ -35,9 +35,6 @@ class MessageLookup extends MessageLookupByLibrary {
             "\'s merging definition? This will not delete the playlist in Spotify."),
         "areYouSureYouWishToDelete_start": MessageLookupByLibrary.simpleMessage(
             "Are you sure you want to delete "),
-        "busyMessage": MessageLookupByLibrary.simpleMessage(
-            "Please wait the current update to finish before starting a new one."),
-        "busyTitle": MessageLookupByLibrary.simpleMessage("<b>Busy</b>"),
         "cancel": MessageLookupByLibrary.simpleMessage("cancel"),
         "carefulexclamation": MessageLookupByLibrary.simpleMessage("Careful!"),
         "changesSaved": MessageLookupByLibrary.simpleMessage(
@@ -65,7 +62,7 @@ class MessageLookup extends MessageLookupByLibrary {
                 "When asked to choose your DESTINATION PLAYLIST, make sure to choose a playlist that doesn\'t already contain your music.\nIt will be completely erased and replaced with the new merging results."),
         "mergingDefinitionsImportedSuccessfully":
             MessageLookupByLibrary.simpleMessage(
-                "Merging definitions imported successfully, as much as possible, respecting your current playlists."),
+                "Merging definitions imported successfully. Playlists absent from your current library have not been imported."),
         "modifyThisMergingRule": MessageLookupByLibrary.simpleMessage(
             "Modify this merging definition"),
         "nameOfThePlaylist":
