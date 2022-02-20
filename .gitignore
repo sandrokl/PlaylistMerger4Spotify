@@ -45,4 +45,8 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 
+# generated files
+**/generated/
+**/*.g.dart
+
 lib/spotify_secrets.dart
