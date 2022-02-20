@@ -30,7 +30,8 @@
   "playlistCreatedWithPlaylistmerger4Spotify": "Playlist criada usando PlaylistMerger 4 Spotify",
   "importMergingDefinitions": "Importar definições",
   "exportMergingDefinitions": "Exportar definições",
-  "settings": "Opções...",
+  "settings3dots": "Opções...",
+  "settings": "Opções",
   "updateThisInSpotify": "Atualizar no Spotify",
   "mergingDefinitionsImportedSuccessfully": "As definições de combinação foram importadas com sucesso. As playlists ausentes de sua biblioteca atual não foram importadas.",
   "anUpdateToYourPlaylistIsBeingMadeInSpotify": "{howMany, plural, one {Uma atualização de playlist está em progresso. Avisaremos quando tudo estiver pronto.} other {As atualizações de suas playlists estão em progresso. Avisaremos quando tudo estiver pronto.}}",
@@ -55,5 +56,17 @@
   "notificationMergingFailed": "&#128577 Erro ao tentar atualizar suas playlists. Por favor tente novamente mais tarde.",
   "channelNameMergingResults": "Resultados dos updates de playlists",
   "notificationInProgressChannelName": "Atualização em progresso",
-  "notificationInProgressMessage": "Atualizando playlist..."
+  "notificationInProgressMessage": "Atualizando playlist...",
+  "settingsAutomaticUpdates": "Atualizações automáticas",
+  "settingsAutomaticUpdatesDescription": "Escolher se o app deve atualizar as playlists diariamente",
+  "settingsApplicationTheme": "Tema do app",
+  "settingsUseSystemTheme": "Tema do aparelho",
+  "settingsUseLightTheme": "Tema claro",
+  "settingsUseDarkTheme": "Tema escuro",
+  "settingsLanguage": "Idioma",
+  "settingsLanguageAutomatic": "Automático",
+  "settingsMergingHistory": "Histórico de atualizações de playlists",
+  "settingsSupport": "Suporte",
+  "settingsByEmail": "por e-mail",
+  "settingsIfYouWantToContact": "Se você quiser avisar de um bug, fazer uma sugestão, ou simplesmente falar da sua experiência, por favor contatar o desenvolvedor "
 }

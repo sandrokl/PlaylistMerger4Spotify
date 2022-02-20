@@ -30,7 +30,8 @@
   "playlistCreatedWithPlaylistmerger4Spotify": "Playlist créée avec PlaylistMerger 4 Spotify",
   "importMergingDefinitions": "Importer les définitions",
   "exportMergingDefinitions": "Exporter les définitions",
-  "settings": "Réglages...",
+  "settings3dots": "Réglages...",
+  "settings": "Réglages",
   "updateThisInSpotify": "Mettre à jour sur Spotify",
   "mergingDefinitionsImportedSuccessfully": "Définition des fusions importée avec succès. Les playlists absentes de votre bibliothèque actuelle n'ont pas été importées.",
   "anUpdateToYourPlaylistIsBeingMadeInSpotify": "{howMany, plural, one {La mise à jour de votre playlist est lancée sur Spotify. On vous avisera quand ce sera terminé.} other {Les mises à jour de vos playlists sont lancées sur Spotify. On vous avisera quand ce sera terminé.}}",
@@ -55,5 +56,17 @@
   "notificationMergingFailed": "&#128577 Une erreur s'est passée pendant la mise à jour des playlists. Veuillez le réssayer à nouveau.",
   "channelNameMergingResults": "Résultat des mises à jour des playlists",
   "notificationInProgressChannelName": "Mise à jour en progrès",
-  "notificationInProgressMessage": "Mise à jour de playlist..."
+  "notificationInProgressMessage": "Mise à jour de playlist...",
+  "settingsAutomaticUpdates": "Mises à jour automatiques",
+  "settingsAutomaticUpdatesDescription": "Activer la mise à jour quotidienne automatique de vos playlists",
+  "settingsApplicationTheme": "Thème de l'appli",
+  "settingsUseSystemTheme": "Thème du systeme",
+  "settingsUseLightTheme": "Thème clair",
+  "settingsUseDarkTheme": "Thème sombre",
+  "settingsLanguage": "Langue",
+  "settingsLanguageAutomatic": "Automatique",
+  "settingsMergingHistory": "Historique des mises à jour des playlists",
+  "settingsSupport": "Support",
+  "settingsByEmail": "par courriel",
+  "settingsIfYouWantToContact": "Si vous voulez rapporter un bogue, faire une suggestion, ou tout simplement partager votre expérience, veuillez contacter le développeur "
 }

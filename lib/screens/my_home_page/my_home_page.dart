@@ -8,6 +8,7 @@ import 'package:playlistmerger4spotify/helpers/work_manager_helper.dart';
 import 'package:playlistmerger4spotify/screens/merging_definition/merging_definition.dart';
 import 'package:playlistmerger4spotify/screens/my_home_page/appbar_popup_menu_items.dart';
 import 'package:playlistmerger4spotify/screens/my_home_page/user_info.dart';
+import 'package:playlistmerger4spotify/screens/settings/settings.dart';
 import 'package:playlistmerger4spotify/store/spotify_user_store.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -79,6 +80,12 @@ class _MyHomePageState extends State<MyHomePage> {
     } else if (value == "import") {
       await importMergingDefinitions(context);
       _updateListMergedPlaylists();
+    } else if (value == "settings") {
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (_) => const Settings(),
+        ),
+      );
     }
   }
 
