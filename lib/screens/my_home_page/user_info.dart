@@ -36,7 +36,9 @@ class UserInfo extends StatelessWidget {
               ),
               Expanded(
                 child: Text(
-                  (store.user?.name == null) ? S.of(context).spotifyUser : store.user?.name as String,
+                  (store.user?.name == null)
+                      ? (store.user == null ? "" : S.of(context).spotifyUser)
+                      : store.user?.name as String,
                   style: Theme.of(context).textTheme.headline6,
                 ),
               ),

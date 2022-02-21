@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:playlistmerger4spotify/database/database.dart';
 import 'package:playlistmerger4spotify/generated/l10n.dart';
 import 'package:playlistmerger4spotify/helpers/import_export_helper.dart';
@@ -53,6 +54,11 @@ class _MyHomePageState extends State<MyHomePage> {
           S.of(context).notificationInProgressMessage,
         );
         await sharedPrefs.setBool("isUpdateSchedule", true);
+      }
+
+      var lang = sharedPrefs.getString("appLanguage");
+      if (lang != null && lang != Intl.defaultLocale) {
+        S.load(Locale(lang));
       }
     });
   }

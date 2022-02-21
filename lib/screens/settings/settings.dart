@@ -1,6 +1,11 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:playlistmerger4spotify/generated/l10n.dart';
+import 'package:playlistmerger4spotify/helpers/notifications_helper.dart';
+import 'package:playlistmerger4spotify/helpers/work_manager_helper.dart';
+import 'package:playlistmerger4spotify/screens/merging_history/merging_history.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Settings extends StatefulWidget {
@@ -11,6 +16,50 @@ class Settings extends StatefulWidget {
 }
 
 class _SettingsState extends State<Settings> {
+  late final SharedPreferences _sharedPrefs;
+  var _isUpdateSchedule = false;
+  String? _currentLanguage;
+
+  @override
+  void initState() {
+    super.initState();
+    SharedPreferences.getInstance().then((value) {
+      _sharedPrefs = value;
+
+      setState(() {
+        _isUpdateSchedule = _sharedPrefs.getBool("isUpdateSchedule") ?? false;
+        _currentLanguage = _sharedPrefs.getString("appLanguage") ?? Intl.defaultLocale!;
+      });
+    });
+  }
+
+  void _changeIsUpdateScheduled(bool newIsUpdateScheduled) async {
+    if (newIsUpdateScheduled) {
+      await WorkManagerHelper().createUpdateSchedule(
+        NotificationsHelper.CHANNEL_KEY_IN_PROGRESS,
+        S.of(context).notificationInProgressChannelName,
+        S.of(context).notificationInProgressMessage,
+      );
+    } else {
+      await WorkManagerHelper().deleteUpdateSchedule();
+    }
+
+    await _sharedPrefs.setBool("isUpdateSchedule", newIsUpdateScheduled);
+    setState(() {
+      _isUpdateSchedule = newIsUpdateScheduled;
+    });
+  }
+
+  void _changeLanguage(String? newLang) async {
+    if (newLang != null) {
+      await _sharedPrefs.setString("appLanguage", newLang);
+      await S.load(Locale(newLang));
+      setState(() {
+        _currentLanguage = newLang;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,8 +73,8 @@ class _SettingsState extends State<Settings> {
             children: [
               SwitchListTile(
                 contentPadding: const EdgeInsets.all(0),
-                value: true,
-                onChanged: (newValue) {},
+                value: _isUpdateSchedule,
+                onChanged: _changeIsUpdateScheduled,
                 title: Text(S.of(context).settingsAutomaticUpdates),
                 subtitle: Text(S.of(context).settingsAutomaticUpdatesDescription),
               ),
@@ -39,7 +88,6 @@ class _SettingsState extends State<Settings> {
                   DropdownButton<String>(
                     value: 'system',
                     icon: const Icon(Icons.arrow_drop_down),
-                    elevation: 16,
                     underline: Container(
                       height: 1,
                       color: Theme.of(context).primaryColor,
@@ -66,16 +114,14 @@ class _SettingsState extends State<Settings> {
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
                   DropdownButton<String>(
-                    value: 'automatic',
+                    value: _currentLanguage ?? 'en',
                     icon: const Icon(Icons.arrow_drop_down),
-                    elevation: 16,
                     underline: Container(
                       height: 1,
                       color: Theme.of(context).primaryColor,
                     ),
-                    onChanged: (String? newValue) {},
+                    onChanged: _changeLanguage,
                     items: <Map<String, String>>[
-                      {'value': 'automatic', 'text': S.of(context).settingsLanguageAutomatic},
                       {'value': 'en', 'text': 'English'},
                       {'value': 'fr', 'text': 'Français'},
                       {'value': 'pt', 'text': 'Português'},
@@ -89,7 +135,9 @@ class _SettingsState extends State<Settings> {
                 ],
               ),
               ListTile(
-                onTap: () {},
+                onTap: () {
+                  Navigator.of(context).push(MaterialPageRoute(builder: (_) => const MergingHistory()));
+                },
                 contentPadding: const EdgeInsets.all(0),
                 title: Text(S.of(context).settingsMergingHistory),
                 trailing: const Icon(Icons.arrow_right),
