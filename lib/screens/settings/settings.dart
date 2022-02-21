@@ -176,7 +176,7 @@ class _SettingsState extends State<Settings> {
                         text: S.of(context).settingsByEmail,
                         recognizer: TapGestureRecognizer()
                           ..onTap = () async {
-                            var url = "mailto:sandro.kl.80@gmail.com?subjet=PlaylistMerger 4 Spotify";
+                            var url = "mailto:sandro.kl.80@gmail.com?subject=PlaylistMerger 4 Spotify";
                             await launch(url);
                           }),
                     TextSpan(
