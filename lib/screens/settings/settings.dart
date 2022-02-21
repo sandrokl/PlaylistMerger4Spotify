@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -5,6 +7,8 @@ import 'package:playlistmerger4spotify/generated/l10n.dart';
 import 'package:playlistmerger4spotify/helpers/notifications_helper.dart';
 import 'package:playlistmerger4spotify/helpers/work_manager_helper.dart';
 import 'package:playlistmerger4spotify/screens/merging_history/merging_history.dart';
+import 'package:playlistmerger4spotify/store/theme_store.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -16,19 +20,19 @@ class Settings extends StatefulWidget {
 }
 
 class _SettingsState extends State<Settings> {
-  late final SharedPreferences _sharedPrefs;
   var _isUpdateSchedule = false;
   String? _currentLanguage;
+  String? _currentTheme;
 
   @override
   void initState() {
     super.initState();
-    SharedPreferences.getInstance().then((value) {
-      _sharedPrefs = value;
-
+    Timer.run(() async {
+      final _sharedPrefs = await SharedPreferences.getInstance();
       setState(() {
         _isUpdateSchedule = _sharedPrefs.getBool("isUpdateSchedule") ?? false;
         _currentLanguage = _sharedPrefs.getString("appLanguage") ?? Intl.defaultLocale!;
+        _currentTheme = _sharedPrefs.getString("appTheme") ?? AppThemes.system.name;
       });
     });
   }
@@ -44,6 +48,7 @@ class _SettingsState extends State<Settings> {
       await WorkManagerHelper().deleteUpdateSchedule();
     }
 
+    final _sharedPrefs = await SharedPreferences.getInstance();
     await _sharedPrefs.setBool("isUpdateSchedule", newIsUpdateScheduled);
     setState(() {
       _isUpdateSchedule = newIsUpdateScheduled;
@@ -52,10 +57,23 @@ class _SettingsState extends State<Settings> {
 
   void _changeLanguage(String? newLang) async {
     if (newLang != null) {
+      final _sharedPrefs = await SharedPreferences.getInstance();
       await _sharedPrefs.setString("appLanguage", newLang);
       await S.load(Locale(newLang));
       setState(() {
         _currentLanguage = newLang;
+      });
+    }
+  }
+
+  void _changeTheme(String? newTheme) async {
+    if (newTheme != null) {
+      final theme = AppThemes.values.firstWhere((t) => t.name == newTheme);
+      context.read<ThemeStore>().setTheme(theme);
+      final _sharedPrefs = await SharedPreferences.getInstance();
+      await _sharedPrefs.setString("appTheme", newTheme);
+      setState(() {
+        _currentTheme = theme.name;
       });
     }
   }
@@ -86,13 +104,12 @@ class _SettingsState extends State<Settings> {
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
                   DropdownButton<String>(
-                    value: 'system',
-                    icon: const Icon(Icons.arrow_drop_down),
+                    value: _currentTheme,
                     underline: Container(
                       height: 1,
                       color: Theme.of(context).primaryColor,
                     ),
-                    onChanged: (String? newValue) {},
+                    onChanged: _changeTheme,
                     items: <Map<String, String>>[
                       {'value': 'system', 'text': S.of(context).settingsUseSystemTheme},
                       {'value': 'light', 'text': S.of(context).settingsUseLightTheme},
@@ -115,7 +132,6 @@ class _SettingsState extends State<Settings> {
                   ),
                   DropdownButton<String>(
                     value: _currentLanguage ?? 'en',
-                    icon: const Icon(Icons.arrow_drop_down),
                     underline: Container(
                       height: 1,
                       color: Theme.of(context).primaryColor,
