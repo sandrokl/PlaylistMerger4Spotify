@@ -42,9 +42,7 @@ class MergingHelper {
               if (lastSuccessfulUpdate != null) {
                 if (lastSuccessfulUpdate.runDate.year == now.year &&
                     lastSuccessfulUpdate.runDate.month == now.month &&
-                    lastSuccessfulUpdate.runDate.day == now.day &&
-                    // don't do it before 2 AM
-                    now.hour >= 2) {
+                    lastSuccessfulUpdate.runDate.day == now.day) {
                   shouldUpdate = false;
                 }
               }
