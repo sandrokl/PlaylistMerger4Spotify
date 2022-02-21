@@ -161,29 +161,13 @@ class _SettingsState extends State<Settings> {
               ListTile(
                 contentPadding: const EdgeInsets.all(0),
                 title: Text(S.of(context).settingsSupport),
-                subtitle: Padding(
-                  padding: const EdgeInsets.only(top: 8.0),
-                  child: RichText(
-                      text: TextSpan(children: [
-                    TextSpan(
-                      text: S.of(context).settingsIfYouWantToContact,
-                      style: Theme.of(context).textTheme.bodyMedium,
-                    ),
-                    TextSpan(
-                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                              decoration: TextDecoration.underline,
-                            ),
-                        text: S.of(context).settingsByEmail,
-                        recognizer: TapGestureRecognizer()
-                          ..onTap = () async {
-                            var url = "mailto:sandro.kl.80@gmail.com?subject=PlaylistMerger 4 Spotify";
-                            await launch(url);
-                          }),
-                    TextSpan(
-                      text: ".",
-                      style: Theme.of(context).textTheme.bodyMedium,
-                    ),
-                  ])),
+                subtitle: Text(S.of(context).settingsIfYouWantToContact),
+                trailing: IconButton(
+                  onPressed: () async {
+                    var url = "mailto:sandro.kl.80@gmail.com?subject=PlaylistMerger 4 Spotify";
+                    await launch(url);
+                  },
+                  icon: const Icon(Icons.email),
                 ),
               ),
             ],
