@@ -37,15 +37,17 @@ class MergingHelper {
             bool shouldUpdate = true;
 
             if (isAutomaticUpdate) {
-              final MergingResult? lastSuccessfulUpdate = await _db.mergingResultsDao.getLastSuccessfulUpdate(id);
               final now = DateTime.now();
-              if (lastSuccessfulUpdate != null) {
-                if (lastSuccessfulUpdate.runDate.year == now.year &&
-                    lastSuccessfulUpdate.runDate.month == now.month &&
-                    lastSuccessfulUpdate.runDate.day == now.day &&
-                    // don't do it before 2 AM
-                    now.hour >= 2) {
-                  shouldUpdate = false;
+              if (now.hour < 2) {
+                shouldUpdate = false;
+              } else {
+                final MergingResult? lastSuccessfulUpdate = await _db.mergingResultsDao.getLastSuccessfulUpdate(id);
+                if (lastSuccessfulUpdate != null) {
+                  if (lastSuccessfulUpdate.runDate.year == now.year &&
+                      lastSuccessfulUpdate.runDate.month == now.month &&
+                      lastSuccessfulUpdate.runDate.day == now.day) {
+                    shouldUpdate = false;
+                  }
                 }
               }
             }
@@ -164,6 +166,8 @@ class MergingHelper {
         successed: true,
         durationMs: DateTime.now().difference(startDate).inMilliseconds,
         triggeredBy: isAutomaticUpdate ? TriggeredBy.schedule : TriggeredBy.user,
+        tracksAdded: tracksToAdd.length,
+        tracksRemoved: tracksToRemove.length,
       ));
 
       return true;

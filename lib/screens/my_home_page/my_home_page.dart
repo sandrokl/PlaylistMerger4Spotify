@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:playlistmerger4spotify/database/database.dart';
 import 'package:playlistmerger4spotify/generated/l10n.dart';
 import 'package:playlistmerger4spotify/helpers/import_export_helper.dart';
@@ -8,7 +9,9 @@ import 'package:playlistmerger4spotify/helpers/work_manager_helper.dart';
 import 'package:playlistmerger4spotify/screens/merging_definition/merging_definition.dart';
 import 'package:playlistmerger4spotify/screens/my_home_page/appbar_popup_menu_items.dart';
 import 'package:playlistmerger4spotify/screens/my_home_page/user_info.dart';
+import 'package:playlistmerger4spotify/screens/settings/settings.dart';
 import 'package:playlistmerger4spotify/store/spotify_user_store.dart';
+import 'package:playlistmerger4spotify/store/theme_store.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -53,6 +56,15 @@ class _MyHomePageState extends State<MyHomePage> {
         );
         await sharedPrefs.setBool("isUpdateSchedule", true);
       }
+
+      var lang = sharedPrefs.getString("appLanguage");
+      if (lang != null && lang != Intl.defaultLocale) {
+        S.load(Locale(lang));
+      }
+
+      var _currentTheme = sharedPrefs.getString("appTheme") ?? AppThemes.system.name;
+      final theme = AppThemes.values.firstWhere((t) => t.name == _currentTheme);
+      Provider.of<ThemeStore>(context, listen: false).setTheme(theme);
     });
   }
 
@@ -79,6 +91,12 @@ class _MyHomePageState extends State<MyHomePage> {
     } else if (value == "import") {
       await importMergingDefinitions(context);
       _updateListMergedPlaylists();
+    } else if (value == "settings") {
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (_) => const Settings(),
+        ),
+      );
     }
   }
 

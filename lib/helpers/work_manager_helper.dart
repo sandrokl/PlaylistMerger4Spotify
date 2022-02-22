@@ -22,7 +22,6 @@ class WorkManagerHelper {
   ) async {
     try {
       await Workmanager().cancelByTag(TASK_DO_MERGING_SCHEDULED_ALL);
-      await Future.delayed(const Duration(seconds: 5));
     } catch (_) {/* nothing to cancel */}
 
     await Workmanager().registerPeriodicTask(
@@ -41,6 +40,12 @@ class WorkManagerHelper {
         "notificationInProgressMessage": notificationInProgressMessage,
       },
     );
+  }
+
+  Future<void> deleteUpdateSchedule() async {
+    try {
+      await Workmanager().cancelByTag(TASK_DO_MERGING_SCHEDULED_ALL);
+    } catch (_) {/* nothing to cancel */}
   }
 
   Future<bool> handleTaskRequest(String task, Map<String, dynamic>? inputData) async {
