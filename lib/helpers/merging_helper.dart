@@ -166,6 +166,8 @@ class MergingHelper {
         successed: true,
         durationMs: DateTime.now().difference(startDate).inMilliseconds,
         triggeredBy: isAutomaticUpdate ? TriggeredBy.schedule : TriggeredBy.user,
+        tracksAdded: tracksToAdd.length,
+        tracksRemoved: tracksToRemove.length,
       ));
 
       return true;

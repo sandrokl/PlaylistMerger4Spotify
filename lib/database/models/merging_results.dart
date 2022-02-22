@@ -10,6 +10,8 @@ class MergingResults extends Table {
   BoolColumn get successed => boolean()();
   IntColumn get durationMs => integer()();
   IntColumn get triggeredBy => intEnum<TriggeredBy>()();
+  IntColumn get tracksAdded => integer().nullable()();
+  IntColumn get tracksRemoved => integer().nullable()();
 
   @override
   Set<Column>? get primaryKey => {playlistId, runDate};

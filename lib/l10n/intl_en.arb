@@ -67,5 +67,16 @@
   "settingsLanguageAutomatic": "Automatic",
   "settingsMergingHistory": "Merging history",
   "settingsSupport": "Support",
-  "settingsIfYouWantToContact": "If you want to report a bug, make a suggestion, help translate this app into your language, or simply talk about your experience, please contact the developer by email."
+  "settingsIfYouWantToContact": "If you want to report a bug, make a suggestion, help translate this app into your language, or simply talk about your experience, please contact the developer by email.",
+  "historyRecentUpdates": "Recent updates",
+  "historyViewAllPlaylistsHistory": "-- View all playlists history --",
+  "historyResult": "Result: ",
+  "historySuccess": "Success",
+  "historyFail": "Fail",
+  "historyPromptedBy": "Prompted by: ",
+  "historyYou": "You",
+  "historyAutomaticUpdate": "Automatic Update",
+  "historyNA": "N/A",
+  "historyTracksAdded": "Tracks Added: ",
+  "historySlashRemoved": " - Removed: "
 }

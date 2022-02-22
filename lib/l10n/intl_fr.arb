@@ -67,5 +67,16 @@
   "settingsLanguageAutomatic": "Automatique",
   "settingsMergingHistory": "Historique des mises à jour des playlists",
   "settingsSupport": "Support",
-  "settingsIfYouWantToContact": "Si vous voulez rapporter un bogue, faire une suggestion, ou tout simplement partager votre expérience, veuillez contacter le développeur par courriel."
+  "settingsIfYouWantToContact": "Si vous voulez rapporter un bogue, faire une suggestion, ou tout simplement partager votre expérience, veuillez contacter le développeur par courriel.",
+  "historyRecentUpdates": "Mises à jour récentes",
+  "historyViewAllPlaylistsHistory": "-- Voir toutes les playlists --",
+  "historyResult": "Résultat: ",
+  "historySuccess": "Succès",
+  "historyFail": "Échec",
+  "historyPromptedBy": "Initié par: ",
+  "historyYou": "Vous-même",
+  "historyAutomaticUpdate": "Mise à Jour Automatique",
+  "historyNA": "S/O",
+  "historyTracksAdded": "Chansons ajoutées: ",
+  "historySlashRemoved": " - Retirées: "
 }

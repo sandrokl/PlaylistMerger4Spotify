@@ -67,5 +67,16 @@
   "settingsLanguageAutomatic": "Automático",
   "settingsMergingHistory": "Histórico de atualizações de playlists",
   "settingsSupport": "Suporte",
-  "settingsIfYouWantToContact": "Se você quiser avisar de um bug, fazer uma sugestão, ou simplesmente falar da sua experiência, por favor contatar o desenvolvedor por email."
+  "settingsIfYouWantToContact": "Se você quiser avisar de um bug, fazer uma sugestão, ou simplesmente falar da sua experiência, por favor contatar o desenvolvedor por email.",
+  "historyRecentUpdates": "Atualizações recentes",
+  "historyViewAllPlaylistsHistory": "-- Histórico de tudo --",
+  "historyResult": "Resultado: ",
+  "historySuccess": "Sucesso",
+  "historyFail": "Falha",
+  "historyPromptedBy": "Iniciado por: ",
+  "historyYou": "Você",
+  "historyAutomaticUpdate": "Atualização Automática",
+  "historyNA": "N.A.",
+  "historyTracksAdded": "Faixas adicionadas: ",
+  "historySlashRemoved": " - Removidas: "
 }

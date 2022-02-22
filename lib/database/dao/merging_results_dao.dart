@@ -12,9 +12,10 @@ class MergingResultsDao extends DatabaseAccessor<AppDatabase> with _$MergingResu
     await into(mergingResults).insert(mr);
   }
 
-  Future<List<MergingResult>> getAll({int? limit}) async {
+  Future<List<MergingResult>> getAll({int? limit, bool? mostRecentFirst}) async {
     var query = select(mergingResults);
     if (limit != null) query.limit(limit);
+    if (mostRecentFirst != null) query.orderBy([(p) => OrderingTerm(expression: p.runDate, mode: OrderingMode.desc)]);
     return query.get();
   }
 
