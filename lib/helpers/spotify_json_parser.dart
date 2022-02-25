@@ -1,5 +1,6 @@
 import 'package:playlistmerger4spotify/database/database.dart';
 import 'package:playlistmerger4spotify/database/models/base/track.dart';
+import 'package:diacritic/diacritic.dart';
 
 Playlist playlistFromSpotifyJson(Map<String, dynamic> json) {
   return Playlist(
@@ -13,7 +14,7 @@ Playlist playlistFromSpotifyJson(Map<String, dynamic> json) {
 
 Track trackFromSpotifyJson(int jobId, String playlistId, Map<String, dynamic> json) {
   var allArtists = (json["track"]["artists"] as List<dynamic>).cast<Map<String, dynamic>>();
-  var artistsList = allArtists.map((artist) => artist["name"].toString()).toList()..sort();
+  var artistsList = allArtists.map((artist) => removeDiacritics(artist["name"].toString()).trim().toLowerCase()).toList()..sort();
   var artistsNames = artistsList.join("~");
 
   return Track(

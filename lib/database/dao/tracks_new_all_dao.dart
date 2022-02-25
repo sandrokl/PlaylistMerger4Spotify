@@ -22,7 +22,7 @@ class TracksNewAllDao extends DatabaseAccessor<AppDatabase> with _$TracksNewAllD
         where job_id = ?
         group by name, track_artists
         HAVING ROWID = MIN(ROWID)
-        order by added_at desc;""",
+        order by added_at ASC;""",
       variables: [Variable.withInt(jobId)],
       readsFrom: {db.tracksNewAll},
     ).get();

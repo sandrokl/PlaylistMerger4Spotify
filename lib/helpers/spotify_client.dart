@@ -13,7 +13,7 @@ import 'package:http/http.dart' as http;
 
 class SpotifyClient {
   final _apiUrlBase = "https://api.spotify.com/v1";
-  final _pageSize = 20;
+  final _pageSize = 50;
   final _statusCodeTooManyRequests = 429;
   final _retryDelay = const Duration(seconds: 15);
 

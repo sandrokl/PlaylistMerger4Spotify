@@ -58,7 +58,7 @@
   "notificationInProgressChannelName": "Mise à jour en progrès",
   "notificationInProgressMessage": "Mise à jour de playlist...",
   "settingsAutomaticUpdates": "Mises à jour automatiques",
-  "settingsAutomaticUpdatesDescription": "Activer la mise à jour quotidienne automatique de vos playlists",
+  "settingsAutomaticUpdatesDescription": "Activer la mise à jour quotidienne automatique de vos playlists (expérimental)",
   "settingsApplicationTheme": "Thème de l'appli",
   "settingsUseSystemTheme": "Thème du systeme",
   "settingsUseLightTheme": "Thème clair",
@@ -77,6 +77,5 @@
   "historyYou": "Vous-même",
   "historyAutomaticUpdate": "Mise à Jour Automatique",
   "historyNA": "S/O",
-  "historyTracksAdded": "Chansons ajoutées: ",
-  "historySlashRemoved": " - Retirées: "
+  "historyTracksAddedRemoved": "Chansons ajoutées: {added} - Retirées: {removed}"
 }
