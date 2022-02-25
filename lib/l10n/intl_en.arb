@@ -73,9 +73,26 @@
   "historyResult": "Result: ",
   "historySuccess": "Success",
   "historyFail": "Fail",
-  "historyPromptedBy": "Prompted by: ",
+  "historyPromptedBy": "Prompted by: {who}",
+  "@historyPromptedBy": {
+    "placeholders": {
+      "who": {
+        "type": "String"
+      }
+    }
+  },
   "historyYou": "You",
   "historyAutomaticUpdate": "Automatic Update",
   "historyNA": "N/A",
-  "historyTracksAddedRemoved": "Tracks Added: {added} - Removed: {removed}"
+  "historyTracksAddedRemoved": "Tracks Added: {added} - Removed: {removed}",
+  "@historyTracksAddedRemoved": {
+    "placeholders": {
+      "added": {
+        "type": "String"
+      },
+      "removed": {
+        "type": "String"
+      }
+    }
+  }
 }

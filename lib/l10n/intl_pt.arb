@@ -73,9 +73,26 @@
   "historyResult": "Resultado: ",
   "historySuccess": "Sucesso",
   "historyFail": "Falha",
-  "historyPromptedBy": "Iniciado por: ",
+  "historyPromptedBy": "Iniciado por: {who}",
+  "@historyPromptedBy": {
+    "placeholders": {
+      "who": {
+        "type": "String"
+      }
+    }
+  },
   "historyYou": "Você",
   "historyAutomaticUpdate": "Atualização Automática",
   "historyNA": "N.A.",
-  "historyTracksAddedRemoved": "Faixas adicionadas: {added} - Removidas: {removed}"
+  "historyTracksAddedRemoved": "Faixas adicionadas: {added} - Removidas: {removed}",
+  "@historyTracksAddedRemoved": {
+    "placeholders": {
+      "added": {
+        "type": "String"
+      },
+      "removed": {
+        "type": "String"
+      }
+    }
+  }
 }

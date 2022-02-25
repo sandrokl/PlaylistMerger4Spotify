@@ -73,9 +73,26 @@
   "historyResult": "Résultat: ",
   "historySuccess": "Succès",
   "historyFail": "Échec",
-  "historyPromptedBy": "Initié par: ",
+  "historyPromptedBy": "Initié par: {who}",
+  "@historyPromptedBy": {
+    "placeholders": {
+      "who": {
+        "type": "String"
+      }
+    }
+  },
   "historyYou": "Vous-même",
   "historyAutomaticUpdate": "Mise à Jour Automatique",
   "historyNA": "S/O",
-  "historyTracksAddedRemoved": "Chansons ajoutées: {added} - Retirées: {removed}"
+  "historyTracksAddedRemoved": "Chansons ajoutées: {added} - Retirées: {removed}",
+  "@historyTracksAddedRemoved": {
+    "placeholders": {
+      "added": {
+        "type": "String"
+      },
+      "removed": {
+        "type": "String"
+      }
+    }
+  }
 }

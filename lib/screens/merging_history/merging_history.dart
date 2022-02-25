@@ -88,14 +88,15 @@ class _MergingHistoryState extends State<MergingHistory> {
                       Text(DateFormat.yMd().add_jms().format(item.runDate)),
                       Text(S.of(context).historyResult +
                           (item.successed ? S.of(context).historySuccess : S.of(context).historyFail)),
-                      Text(S.of(context).historyTracksAdded +
-                          (item.tracksAdded?.toString() ?? S.of(context).historyNA) +
-                          S.of(context).historySlashRemoved +
-                          (item.tracksRemoved?.toString() ?? S.of(context).historyNA)),
-                      Text(S.of(context).historyPromptedBy +
-                          (item.triggeredBy == TriggeredBy.user
-                              ? S.of(context).historyYou
-                              : S.of(context).historyAutomaticUpdate)),
+                      Text(
+                        S.of(context).historyTracksAddedRemoved(item.tracksAdded?.toString() ?? S.of(context).historyNA,
+                            item.tracksRemoved?.toString() ?? S.of(context).historyNA),
+                      ),
+                      Text(
+                        S.of(context).historyPromptedBy(item.triggeredBy == TriggeredBy.user
+                            ? S.of(context).historyYou
+                            : S.of(context).historyAutomaticUpdate),
+                      ),
                     ],
                   );
                 }),
