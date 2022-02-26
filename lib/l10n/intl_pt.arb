@@ -58,7 +58,7 @@
   "notificationInProgressChannelName": "Atualização em progresso",
   "notificationInProgressMessage": "Atualizando playlist...",
   "settingsAutomaticUpdates": "Atualizações automáticas",
-  "settingsAutomaticUpdatesDescription": "Escolher se o app deve atualizar as playlists diariamente",
+  "settingsAutomaticUpdatesDescription": "Escolher se o app deve atualizar as playlists diariamente (experimental)",
   "settingsApplicationTheme": "Tema do app",
   "settingsUseSystemTheme": "Tema do aparelho",
   "settingsUseLightTheme": "Tema claro",
@@ -73,10 +73,26 @@
   "historyResult": "Resultado: ",
   "historySuccess": "Sucesso",
   "historyFail": "Falha",
-  "historyPromptedBy": "Iniciado por: ",
+  "historyPromptedBy": "Iniciado por: {who}",
+  "@historyPromptedBy": {
+    "placeholders": {
+      "who": {
+        "type": "String"
+      }
+    }
+  },
   "historyYou": "Você",
   "historyAutomaticUpdate": "Atualização Automática",
   "historyNA": "N.A.",
-  "historyTracksAdded": "Faixas adicionadas: ",
-  "historySlashRemoved": " - Removidas: "
+  "historyTracksAddedRemoved": "Faixas adicionadas: {added} - Removidas: {removed}",
+  "@historyTracksAddedRemoved": {
+    "placeholders": {
+      "added": {
+        "type": "String"
+      },
+      "removed": {
+        "type": "String"
+      }
+    }
+  }
 }
