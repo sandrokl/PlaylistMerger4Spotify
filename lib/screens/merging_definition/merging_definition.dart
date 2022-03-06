@@ -25,6 +25,7 @@ class _MergingDefinitionState extends State<MergingDefinition> {
   List<String> _selectedSourcePlaylists = [];
 
   bool _doNotShowAgainChecked = false;
+  bool _hasPlaylistsToIgnore = false;
 
   final _formKey = GlobalKey<FormState>();
   final _newPlaylistName = TextEditingController();
@@ -121,9 +122,13 @@ class _MergingDefinitionState extends State<MergingDefinition> {
     } else {
       _selectedDestinationPlaylist = widget.editingPlaylistId!;
       _destinationPlaylistOptions = _db.playlistsDao.getPlaylistsByIdList([widget.editingPlaylistId!]);
-      _db.playlistsToMergeDao.getPlaylistsToMergeByDestinationId(widget.editingPlaylistId!).then((list) {
+      _db.playlistsToMergeDao.getPlaylistsToMergeByDestinationId(widget.editingPlaylistId!).then((list) async {
+        bool hasPlaylistsToIgnore =
+            (await _db.playlistsToIgnoreDao.getByDestinationId(_selectedDestinationPlaylist!)).isNotEmpty;
+
         setState(() {
           _selectedSourcePlaylists = list.map((p) => p.sourcePlaylistId).toList();
+          _hasPlaylistsToIgnore = hasPlaylistsToIgnore;
         });
       });
     }
@@ -228,6 +233,17 @@ class _MergingDefinitionState extends State<MergingDefinition> {
       child: Scaffold(
         appBar: AppBar(
           title: Text(S.of(context).appTitle),
+          actions: <Widget>[
+            IconButton(
+              onPressed: () {},
+              icon: Icon(
+                Icons.music_off_outlined,
+                color: _hasPlaylistsToIgnore
+                    ? Theme.of(context).colorScheme.error
+                    : Theme.of(context).appBarTheme.foregroundColor,
+              ),
+            ),
+          ],
         ),
         body: Padding(
           padding: const EdgeInsets.all(16.0),

@@ -4,6 +4,7 @@ import 'package:drift/native.dart';
 import 'package:path/path.dart' as p;
 import 'package:playlistmerger4spotify/database/dao/merging_results_dao.dart';
 import 'package:playlistmerger4spotify/database/dao/playlists_dao.dart';
+import 'package:playlistmerger4spotify/database/dao/playlists_to_ignore_dao.dart';
 import 'package:playlistmerger4spotify/database/dao/playlists_to_merge_dao.dart';
 import 'package:playlistmerger4spotify/database/dao/tracks_current_dao.dart';
 import 'package:playlistmerger4spotify/database/dao/tracks_new_all_dao.dart';
@@ -11,6 +12,7 @@ import 'package:playlistmerger4spotify/database/dao/tracks_new_distinct_dao.dart
 import 'package:playlistmerger4spotify/database/dao/tracks_to_add_dao.dart';
 import 'package:playlistmerger4spotify/database/dao/tracks_to_remove_dao.dart';
 import 'package:playlistmerger4spotify/database/models/merging_results.dart';
+import 'package:playlistmerger4spotify/database/models/playlists_to_ignore.dart';
 import 'package:playlistmerger4spotify/database/models/tracks_current.dart';
 import 'package:playlistmerger4spotify/database/models/tracks_new_all.dart';
 import 'package:playlistmerger4spotify/database/models/tracks_new_distinct.dart';
@@ -37,6 +39,7 @@ LazyDatabase _openConnection() {
   tables: [
     Playlists,
     PlaylistsToMerge,
+    PlaylistsToIgnore,
     TracksCurrent,
     TracksNewAll,
     TracksNewDistinct,
@@ -47,6 +50,7 @@ LazyDatabase _openConnection() {
   daos: [
     PlaylistsDao,
     PlaylistsToMergeDao,
+    PlaylistsToIgnoreDao,
     TracksCurrentDao,
     TracksNewAllDao,
     TracksNewDistinctDao,
@@ -61,7 +65,7 @@ class AppDatabase extends _$AppDatabase {
   factory AppDatabase() => _singleton;
 
   @override
-  int get schemaVersion => 9;
+  int get schemaVersion => 10;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
