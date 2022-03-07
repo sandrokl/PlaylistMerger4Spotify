@@ -1,11 +1,12 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:playlistmerger4spotify/helpers/spotify_client.dart';
-import 'package:playlistmerger4spotify/store/spotify_user_store.dart';
-import 'package:provider/provider.dart';
 import 'package:playlistmerger4spotify/database/database.dart';
 import 'package:playlistmerger4spotify/generated/l10n.dart';
+import 'package:playlistmerger4spotify/helpers/spotify_client.dart';
+import 'package:playlistmerger4spotify/screens/merging_ignore/merging_ignore.dart';
+import 'package:playlistmerger4spotify/store/spotify_user_store.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MergingDefinition extends StatefulWidget {
@@ -23,9 +24,9 @@ class _MergingDefinitionState extends State<MergingDefinition> {
 
   String? _selectedDestinationPlaylist;
   List<String> _selectedSourcePlaylists = [];
+  List<PlaylistToIgnore> _playlistsToIgnore = [];
 
   bool _doNotShowAgainChecked = false;
-  bool _hasPlaylistsToIgnore = false;
 
   final _formKey = GlobalKey<FormState>();
   final _newPlaylistName = TextEditingController();
@@ -123,12 +124,11 @@ class _MergingDefinitionState extends State<MergingDefinition> {
       _selectedDestinationPlaylist = widget.editingPlaylistId!;
       _destinationPlaylistOptions = _db.playlistsDao.getPlaylistsByIdList([widget.editingPlaylistId!]);
       _db.playlistsToMergeDao.getPlaylistsToMergeByDestinationId(widget.editingPlaylistId!).then((list) async {
-        bool hasPlaylistsToIgnore =
-            (await _db.playlistsToIgnoreDao.getByDestinationId(_selectedDestinationPlaylist!)).isNotEmpty;
+        final pToIgnore = (await _db.playlistsToIgnoreDao.getByDestinationId(_selectedDestinationPlaylist!));
 
         setState(() {
           _selectedSourcePlaylists = list.map((p) => p.sourcePlaylistId).toList();
-          _hasPlaylistsToIgnore = hasPlaylistsToIgnore;
+          _playlistsToIgnore = pToIgnore;
         });
       });
     }
@@ -201,10 +201,23 @@ class _MergingDefinitionState extends State<MergingDefinition> {
   }
 
   Future<void> saveChanges() async {
+    var _db = Provider.of<AppDatabase>(context, listen: false);
     if (_selectedDestinationPlaylist != null) {
-      await Provider.of<AppDatabase>(context, listen: false)
-          .playlistsToMergeDao
-          .updateMergedPlaylist(_selectedDestinationPlaylist!, _selectedSourcePlaylists);
+      await _db.playlistsToMergeDao.updateMergedPlaylist(_selectedDestinationPlaylist!, _selectedSourcePlaylists);
+      await _db.playlistsToIgnoreDao.updateIgnoredPlaylists(_selectedDestinationPlaylist!, _playlistsToIgnore);
+    }
+  }
+
+  Future<void> _updateIgnoreList(BuildContext context) async {
+    var newList = await Navigator.of(context).push<List<PlaylistToIgnore>>(
+      MaterialPageRoute(
+        builder: (_) => MergingIgnore(_playlistsToIgnore),
+      ),
+    );
+    if (newList != null) {
+      setState(() {
+        _playlistsToIgnore = newList;
+      });
     }
   }
 
@@ -235,10 +248,12 @@ class _MergingDefinitionState extends State<MergingDefinition> {
           title: Text(S.of(context).appTitle),
           actions: <Widget>[
             IconButton(
-              onPressed: () {},
+              onPressed: () async {
+                await _updateIgnoreList(context);
+              },
               icon: Icon(
                 Icons.music_off_outlined,
-                color: _hasPlaylistsToIgnore
+                color: _playlistsToIgnore.isNotEmpty
                     ? Theme.of(context).colorScheme.error
                     : Theme.of(context).appBarTheme.foregroundColor,
               ),

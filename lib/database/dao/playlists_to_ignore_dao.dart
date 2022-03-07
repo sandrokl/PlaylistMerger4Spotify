@@ -11,4 +11,15 @@ class PlaylistsToIgnoreDao extends DatabaseAccessor<AppDatabase> with _$Playlist
   Future<List<PlaylistToIgnore>> getByDestinationId(String destinationId) {
     return (select(playlistsToIgnore)..where((p) => p.destinationPlaylistId.equals(destinationId))).get();
   }
+
+  Future<void> deletePlaylistsToIgnoreByDestinationId(String destinationPlaylistId) async {
+    await (delete(playlistsToIgnore)..where((p) => p.destinationPlaylistId.equals(destinationPlaylistId))).go();
+  }
+
+  Future<void> updateIgnoredPlaylists(String destinationPlaylistId, List<PlaylistToIgnore> listToIgnore) async {
+    deletePlaylistsToIgnoreByDestinationId(destinationPlaylistId);
+    db.batch((batch) {
+      batch.insertAllOnConflictUpdate(playlistsToIgnore, listToIgnore);
+    });
+  }
 }

@@ -94,5 +94,6 @@
         "type": "String"
       }
     }
-  }
+  },
+  "playlistIgnoreList": "Liste à ignorer"
 }
