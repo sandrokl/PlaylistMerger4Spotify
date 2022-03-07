@@ -65,7 +65,7 @@ class AppDatabase extends _$AppDatabase {
   factory AppDatabase() => _singleton;
 
   @override
-  int get schemaVersion => 11;
+  int get schemaVersion => 12;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -112,6 +112,15 @@ class AppDatabase extends _$AppDatabase {
               await m.addColumn(mergingResults, mergingResults.tracksAdded);
               await m.addColumn(mergingResults, mergingResults.tracksRemoved);
             } catch (_) {/* column already exists */}
+          }
+
+          if (from <= 11) {
+            try {
+              await m.deleteTable(playlistsToIgnore.actualTableName);
+            } catch (_) {/* nothing to do here */}
+            try {
+              await m.createTable(playlistsToIgnore);
+            } catch (_) {/* nothing to do here */}
           }
         },
       );
