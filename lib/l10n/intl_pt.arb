@@ -95,5 +95,7 @@
       }
     }
   },
-  "playlistIgnoreList": "Lista à ignorar"
+  "playlistIgnoreList": "Lista à ignorar",
+  "ignoreNothingHere": "Nothing here for the moment",
+  "howToAddToIgnoreList": "How to add to ignore list (external)"
 }

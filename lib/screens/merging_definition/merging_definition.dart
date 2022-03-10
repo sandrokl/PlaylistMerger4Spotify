@@ -252,7 +252,7 @@ class _MergingDefinitionState extends State<MergingDefinition> {
                 await _updateIgnoreList(context);
               },
               icon: Icon(
-                Icons.music_off_outlined,
+                Icons.filter_alt_off,
                 color: _playlistsToIgnore.isNotEmpty
                     ? Theme.of(context).colorScheme.error
                     : Theme.of(context).appBarTheme.foregroundColor,
