@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:playlistmerger4spotify/database/database.dart';
 import 'package:playlistmerger4spotify/generated/l10n.dart';
 import 'package:playlistmerger4spotify/helpers/spotify_client.dart';
-import 'package:playlistmerger4spotify/screens/merging_ignore/merging_ignore.dart';
 import 'package:playlistmerger4spotify/store/spotify_user_store.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -23,6 +22,7 @@ class _MergingDefinitionState extends State<MergingDefinition> {
   Future<List<Playlist>>? _sourcePlaylistsOptions;
 
   String? _selectedDestinationPlaylist;
+  int _selectedTab = 0;
   List<String> _selectedSourcePlaylists = [];
   List<PlaylistToIgnore> _playlistsToIgnore = [];
 
@@ -208,19 +208,6 @@ class _MergingDefinitionState extends State<MergingDefinition> {
     }
   }
 
-  Future<void> _updateIgnoreList(BuildContext context) async {
-    var newList = await Navigator.of(context).push<List<PlaylistToIgnore>>(
-      MaterialPageRoute(
-        builder: (_) => MergingIgnore(_playlistsToIgnore),
-      ),
-    );
-    if (newList != null) {
-      setState(() {
-        _playlistsToIgnore = newList;
-      });
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -246,19 +233,25 @@ class _MergingDefinitionState extends State<MergingDefinition> {
       child: Scaffold(
         appBar: AppBar(
           title: Text(S.of(context).appTitle),
-          actions: <Widget>[
-            IconButton(
-              onPressed: () async {
-                await _updateIgnoreList(context);
-              },
-              icon: Icon(
-                Icons.filter_alt_off,
-                color: _playlistsToIgnore.isNotEmpty
-                    ? Theme.of(context).colorScheme.error
-                    : Theme.of(context).appBarTheme.foregroundColor,
-              ),
+        ),
+        bottomNavigationBar: BottomNavigationBar(
+          items: const <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              icon: Icon(Icons.merge),
+              label: 'To Merge',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.merge),
+              label: 'To Exclude',
             ),
           ],
+          currentIndex: _selectedTab,
+          selectedFontSize: 16,
+          unselectedFontSize: 14,
+          iconSize: 0.0,
+          onTap: (index) {
+            setState(() => _selectedTab = index);
+          },
         ),
         body: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -317,53 +310,66 @@ class _MergingDefinitionState extends State<MergingDefinition> {
                   }
                 },
               ),
-              Padding(
-                padding: const EdgeInsets.only(top: 12.0),
-                child: Text(
-                  S.of(context).sourcePlaylists,
-                  style: Theme.of(context).textTheme.headline6,
+              Visibility(
+                visible: _selectedTab == 0,
+                child: Padding(
+                  padding: const EdgeInsets.all(0.0),
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(top: 12.0),
+                        child: Text(
+                          S.of(context).sourcePlaylists,
+                          style: Theme.of(context).textTheme.headline6,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-              Expanded(
-                child: FutureBuilder<List<Playlist>>(
-                  future: _sourcePlaylistsOptions,
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.done && snapshot.hasData) {
-                      return Padding(
-                        padding: const EdgeInsets.only(top: 8.0),
-                        child: SingleChildScrollView(
-                          child: Column(
-                            children: snapshot.data!.map((e) {
-                              return CheckboxListTile(
-                                contentPadding: const EdgeInsets.only(right: 0.0, left: 0.0),
-                                visualDensity: VisualDensity.compact,
-                                value: (e.playlistId != _selectedDestinationPlaylist &&
-                                    _selectedSourcePlaylists.contains(e.playlistId)),
-                                title: Text(e.name),
-                                onChanged: _selectedDestinationPlaylist != e.playlistId
-                                    ? (newValue) {
-                                        if (e.playlistId != _selectedDestinationPlaylist) {
-                                          setState(() {
-                                            if (newValue != null) {
-                                              if (newValue) {
-                                                _selectedSourcePlaylists.add(e.playlistId);
-                                              } else {
-                                                _selectedSourcePlaylists.remove(e.playlistId);
+              Visibility(
+                visible: _selectedTab == 0,
+                child: Expanded(
+                  child: FutureBuilder<List<Playlist>>(
+                    future: _sourcePlaylistsOptions,
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.done && snapshot.hasData) {
+                        return Padding(
+                          padding: const EdgeInsets.only(top: 8.0),
+                          child: SingleChildScrollView(
+                            child: Column(
+                              children: snapshot.data!.map((e) {
+                                return CheckboxListTile(
+                                  contentPadding: const EdgeInsets.only(right: 0.0, left: 0.0),
+                                  visualDensity: VisualDensity.compact,
+                                  value: (e.playlistId != _selectedDestinationPlaylist &&
+                                      _selectedSourcePlaylists.contains(e.playlistId)),
+                                  title: Text(e.name),
+                                  onChanged: _selectedDestinationPlaylist != e.playlistId
+                                      ? (newValue) {
+                                          if (e.playlistId != _selectedDestinationPlaylist) {
+                                            setState(() {
+                                              if (newValue != null) {
+                                                if (newValue) {
+                                                  _selectedSourcePlaylists.add(e.playlistId);
+                                                } else {
+                                                  _selectedSourcePlaylists.remove(e.playlistId);
+                                                }
                                               }
-                                            }
-                                          });
+                                            });
+                                          }
                                         }
-                                      }
-                                    : null,
-                              );
-                            }).toList(),
+                                      : null,
+                                );
+                              }).toList(),
+                            ),
                           ),
-                        ),
-                      );
-                    } else {
-                      return Container();
-                    }
-                  },
+                        );
+                      } else {
+                        return Container();
+                      }
+                    },
+                  ),
                 ),
               ),
             ],

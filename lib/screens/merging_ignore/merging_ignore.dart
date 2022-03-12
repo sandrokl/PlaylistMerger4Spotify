@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:playlistmerger4spotify/database/database.dart';
 import 'package:playlistmerger4spotify/generated/l10n.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class MergingIgnore extends StatefulWidget {
   final List<PlaylistToIgnore> playlistsToIgnore;
@@ -16,36 +17,37 @@ class _MergingIgnoreState extends State<MergingIgnore> {
     showModalBottomSheet(
         isScrollControlled: true,
         context: context,
-        isDismissible: false,
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(top: Radius.circular(24.0)),
         ),
         builder: (context) {
           return Padding(
-            padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 8.0),
+            padding: EdgeInsets.fromLTRB(
+              16.0,
+              16.0,
+              16.0,
+              MediaQuery.of(context).viewInsets.bottom + 24.0,
+            ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const TextField(),
-                Padding(
-                  padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      TextButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        child: Text(S.of(context).cancel),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Expanded(
+                      child: TextFormField(
+                        decoration: InputDecoration(
+                          border: const UnderlineInputBorder(),
+                          labelText: S.of(context).ignorePasteLinkToThePlaylist,
+                        ),
                       ),
-                      TextButton(
-                        onPressed: () async {
-                          Navigator.pop(context);
-                        },
-                        child: Text(S.of(context).createIt),
-                      ),
-                    ],
-                  ),
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.keyboard_double_arrow_right),
+                      onPressed: () {},
+                    )
+                  ],
                 )
               ],
             ),
@@ -87,7 +89,9 @@ class _MergingIgnoreState extends State<MergingIgnore> {
                         ),
                         IconButton(
                           icon: const Icon(Icons.open_in_new_outlined),
-                          onPressed: () {},
+                          onPressed: () async {
+                            await launch('https://sandrokl.net/playlistmerger4spotify/addtoignore/');
+                          },
                         )
                       ],
                     )),
