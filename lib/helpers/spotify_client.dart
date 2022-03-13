@@ -5,6 +5,7 @@ import 'package:oauth2_client/spotify_oauth2_client.dart';
 import 'package:playlistmerger4spotify/database/database.dart';
 import 'package:playlistmerger4spotify/database/models/base/track.dart';
 import 'package:playlistmerger4spotify/generated/l10n.dart';
+import 'package:playlistmerger4spotify/models/playlist_info_for_exclusion.dart';
 import 'package:playlistmerger4spotify/models/spotify_uri.dart';
 import 'package:playlistmerger4spotify/models/spotify_user.dart';
 import 'package:playlistmerger4spotify/spotify_secrets.dart' as secrets;
@@ -156,5 +157,27 @@ class SpotifyClient {
 
       i++;
     } while (i < slices);
+  }
+
+  Future<PlaylistInfoForExclusion?> getPlaylistInfo(String id) async {
+    var response =
+        await _httpHelper.get("$_apiUrlBase/playlists/$id?fields=id,name,external_urls,images,owner,tracks(total)");
+
+    if (response.statusCode == 200) {
+      var json = jsonDecode(response.body);
+      var allImages = (json["images"] as List<dynamic>).cast<Map<String, dynamic>>();
+
+      return PlaylistInfoForExclusion(
+        destinationPlaylistId: '',
+        playlistId: json['id'],
+        name: json['name'],
+        ownerId: json['owner']['id'],
+        ownerName: json['owner']['display_name'],
+        openUrl: json['external_urls']['spotify'],
+        playlistCoverArt: allImages[allImages.length - 1]['url'],
+        totalTracks: json['tracks']['total'],
+      );
+    }
+    return null;
   }
 }

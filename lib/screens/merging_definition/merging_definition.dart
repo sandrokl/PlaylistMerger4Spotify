@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:playlistmerger4spotify/database/database.dart';
 import 'package:playlistmerger4spotify/generated/l10n.dart';
 import 'package:playlistmerger4spotify/helpers/spotify_client.dart';
+import 'package:playlistmerger4spotify/models/playlist_info_for_exclusion.dart';
 import 'package:playlistmerger4spotify/store/spotify_user_store.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -29,8 +30,13 @@ class _MergingDefinitionState extends State<MergingDefinition> {
 
   bool _doNotShowAgainChecked = false;
 
-  final _formKey = GlobalKey<FormState>();
-  final _newPlaylistName = TextEditingController();
+  final _formKeyCreate = GlobalKey<FormState>();
+  final _formKeyAddExclude = GlobalKey<FormState>();
+  final _newPlaylistNameController = TextEditingController();
+  final _playlinkLinkController = TextEditingController();
+  final _playlistLinkRegex = RegExp(r'(?<=\/playlist\/).*?(?=\?|$)', caseSensitive: false);
+
+  PlaylistInfoForExclusion? _tempPlaylistForExclusion;
 
   late final SpotifyUserStore _userStore;
 
@@ -48,7 +54,7 @@ class _MergingDefinitionState extends State<MergingDefinition> {
         return Padding(
           padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 8.0),
           child: Form(
-            key: _formKey,
+            key: _formKeyCreate,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -60,7 +66,7 @@ class _MergingDefinitionState extends State<MergingDefinition> {
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 12.0),
                   child: TextFormField(
-                    controller: _newPlaylistName,
+                    controller: _newPlaylistNameController,
                     textCapitalization: TextCapitalization.sentences,
                     decoration: InputDecoration(
                       hintText: S.of(context).nameOfThePlaylist,
@@ -80,16 +86,16 @@ class _MergingDefinitionState extends State<MergingDefinition> {
                     children: [
                       TextButton(
                         onPressed: () {
-                          _newPlaylistName.text = "";
+                          _newPlaylistNameController.text = "";
                           Navigator.of(context).pop();
                         },
                         child: Text(S.of(context).cancel),
                       ),
                       TextButton(
                         onPressed: () async {
-                          if (_formKey.currentState!.validate()) {
-                            await _createNewPlaylist(_newPlaylistName.text);
-                            _newPlaylistName.text = "";
+                          if (_formKeyCreate.currentState!.validate()) {
+                            await _createNewPlaylist(_newPlaylistNameController.text);
+                            _newPlaylistNameController.text = "";
                             Navigator.of(context).pop();
                           }
                         },
@@ -106,46 +112,97 @@ class _MergingDefinitionState extends State<MergingDefinition> {
     );
   }
 
-  void _showAddExcludePlaylist() {
-    showModalBottomSheet(
+  Future<void> _showAddExcludePlaylist() async {
+    await showModalBottomSheet(
         isScrollControlled: true,
         context: context,
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(top: Radius.circular(24.0)),
         ),
         builder: (context) {
-          return Padding(
-            padding: EdgeInsets.fromLTRB(
-              16.0,
-              16.0,
-              16.0,
-              MediaQuery.of(context).viewInsets.bottom + 24.0,
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Expanded(
-                      child: TextFormField(
-                        decoration: InputDecoration(
-                          border: const UnderlineInputBorder(),
-                          labelText: S.of(context).excludePasteLinkToThePlaylist,
+          return StatefulBuilder(
+            builder: (context, setState) {
+              return Padding(
+                padding: EdgeInsets.fromLTRB(
+                  16.0,
+                  16.0,
+                  16.0,
+                  MediaQuery.of(context).viewInsets.bottom + 24.0,
+                ),
+                child: Form(
+                  key: _formKeyAddExclude,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 12.0),
+                        child: Text(
+                          S.of(context).excludeTitle,
+                          style: Theme.of(context).textTheme.headline6,
                         ),
                       ),
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.keyboard_double_arrow_right),
-                      onPressed: () {},
-                    )
-                  ],
+                      Row(
+                        children: [
+                          Expanded(
+                            child: TextFormField(
+                              controller: _playlinkLinkController,
+                              keyboardType: TextInputType.url,
+                              decoration: InputDecoration(
+                                labelText: S.of(context).excludePasteLinkToThePlaylist,
+                              ),
+                              validator: (value) {
+                                if (value == null || value.isEmpty || !_playlistLinkRegex.hasMatch(value)) {
+                                  return S.of(context).validationPlaylistLink;
+                                }
+                                return null;
+                              },
+                            ),
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.keyboard_double_arrow_right),
+                            onPressed: () async {
+                              if (_formKeyAddExclude.currentState!.validate()) {
+                                final id = _playlistLinkRegex.stringMatch(_playlinkLinkController.text)!;
+                                var playlist = await SpotifyClient().getPlaylistInfo(id);
+                                setState(() {
+                                  _tempPlaylistForExclusion = playlist;
+                                });
+                                FocusScope.of(context).unfocus();
+                              }
+                            },
+                          ),
+                        ],
+                      ),
+                      if (_tempPlaylistForExclusion != null)
+                        Visibility(
+                          visible: _tempPlaylistForExclusion != null,
+                          child: ListTile(
+                            contentPadding: const EdgeInsets.only(top: 16.0),
+                            leading: SizedBox.fromSize(
+                              size: const Size(50.0, 50.0),
+                              child: Image.network(_tempPlaylistForExclusion!.playlistCoverArt),
+                            ),
+                            title: Text(
+                              _tempPlaylistForExclusion!.name,
+                            ),
+                            subtitle: Text(
+                              S.of(context).subTitlePlaylistToExclude(
+                                    _tempPlaylistForExclusion!.ownerName,
+                                    _tempPlaylistForExclusion!.totalTracks,
+                                  ),
+                            ),
+                          ),
+                        )
+                    ],
+                  ),
                 ),
-              ],
-            ),
+              );
+            },
           );
         });
+    _playlinkLinkController.clear();
+    _tempPlaylistForExclusion = null;
   }
 
   Future<void> _createNewPlaylist(String playlistName) async {
@@ -441,22 +498,23 @@ class _MergingDefinitionState extends State<MergingDefinition> {
                   child: Column(
                     children: [
                       Padding(
-                          padding: const EdgeInsets.only(bottom: 16.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Text(
-                                S.of(context).howToAddToExcludeList,
-                                style: Theme.of(context).textTheme.bodyText1,
-                              ),
-                              IconButton(
-                                icon: const Icon(Icons.open_in_new_outlined),
-                                onPressed: () async {
-                                  await launch('https://sandrokl.net/playlistmerger4spotify/add-to-exclude-list/');
-                                },
-                              )
-                            ],
-                          )),
+                        padding: const EdgeInsets.only(bottom: 16.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text(
+                              S.of(context).howToAddToExcludeList,
+                              style: Theme.of(context).textTheme.bodyText1,
+                            ),
+                            IconButton(
+                              icon: const Icon(Icons.open_in_new_outlined),
+                              onPressed: () async {
+                                await launch('https://sandrokl.net/playlistmerger4spotify/add-to-exclude-list/');
+                              },
+                            )
+                          ],
+                        ),
+                      ),
                       ..._playlistsToIgnore.map((e) {
                         return ListTile(
                           title: Text(e.name),

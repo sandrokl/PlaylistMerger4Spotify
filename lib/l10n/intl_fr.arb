@@ -98,5 +98,18 @@
   "playlistExcludeList": "Liste à exclure",
   "excludeNothingHere": "Nothing to exclude for now",
   "howToAddToExcludeList": "How to add music to exclusion list (external)",
-  "excludePasteLinkToThePlaylist": "Paste link to the playlist here"
+  "excludePasteLinkToThePlaylist": "Paste link to the playlist here",
+  "validationPlaylistLink": "Please enter a valid playlist link",
+  "excludeTitle": "Playlist with tracks to exclude",
+  "subTitlePlaylistToExclude": "By {ownerName} - {totalTracks} tracks",
+  "@subTitlePlaylistToExclude": {
+    "placeholders": {
+      "ownerName": {
+        "type": "String"
+      },
+      "totalTracks": {
+        "type": "int"
+      }
+    }
+  }
 }
