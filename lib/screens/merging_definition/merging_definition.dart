@@ -7,6 +7,7 @@ import 'package:playlistmerger4spotify/helpers/spotify_client.dart';
 import 'package:playlistmerger4spotify/store/spotify_user_store.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class MergingDefinition extends StatefulWidget {
   final String? editingPlaylistId;
@@ -103,6 +104,86 @@ class _MergingDefinitionState extends State<MergingDefinition> {
         );
       },
     );
+  }
+
+  _showAddIgnorePlaylist() {
+    showModalBottomSheet(
+        isScrollControlled: true,
+        context: context,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(24.0)),
+        ),
+        builder: (context) {
+          return Padding(
+            padding: EdgeInsets.fromLTRB(
+              16.0,
+              16.0,
+              16.0,
+              MediaQuery.of(context).viewInsets.bottom + 24.0,
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Expanded(
+                      child: TextFormField(
+                        decoration: InputDecoration(
+                          border: const UnderlineInputBorder(),
+                          labelText: S.of(context).excludePasteLinkToThePlaylist,
+                        ),
+                      ),
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.keyboard_double_arrow_right),
+                      onPressed: () {},
+                    )
+                  ],
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        Padding(
+                            padding: const EdgeInsets.only(bottom: 16.0),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  S.of(context).howToAddToExcludeList,
+                                  style: Theme.of(context).textTheme.bodyText1,
+                                ),
+                                IconButton(
+                                  icon: const Icon(Icons.open_in_new_outlined),
+                                  onPressed: () async {
+                                    await launch('https://sandrokl.net/playlistmerger4spotify/addtoignore/');
+                                  },
+                                )
+                              ],
+                            )),
+                        ..._playlistsToIgnore.map((e) {
+                          return ListTile(
+                            title: Text(e.name),
+                            subtitle: Text(e.ownerName),
+                            trailing: IconButton(
+                              onPressed: () {},
+                              icon: const Icon(Icons.delete),
+                            ),
+                          );
+                        }).toList(),
+                        if (_playlistsToIgnore.isEmpty) Text(S.of(context).excludeNothingHere),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          );
+        });
   }
 
   Future<void> _createNewPlaylist(String playlistName) async {
@@ -234,24 +315,27 @@ class _MergingDefinitionState extends State<MergingDefinition> {
         appBar: AppBar(
           title: Text(S.of(context).appTitle),
         ),
-        bottomNavigationBar: BottomNavigationBar(
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: Icon(Icons.merge),
-              label: 'To Merge',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.merge),
-              label: 'To Exclude',
-            ),
-          ],
-          currentIndex: _selectedTab,
-          selectedFontSize: 16,
-          unselectedFontSize: 14,
-          iconSize: 0.0,
-          onTap: (index) {
-            setState(() => _selectedTab = index);
-          },
+        bottomNavigationBar: SizedBox(
+          height: 50.0,
+          child: BottomNavigationBar(
+            items: const <BottomNavigationBarItem>[
+              BottomNavigationBarItem(
+                icon: Icon(Icons.merge),
+                label: 'To Merge',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.merge),
+                label: 'To Exclude',
+              ),
+            ],
+            currentIndex: _selectedTab,
+            selectedFontSize: 16,
+            unselectedFontSize: 14,
+            iconSize: 0.0,
+            onTap: (index) {
+              setState(() => _selectedTab = index);
+            },
+          ),
         ),
         body: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -369,6 +453,61 @@ class _MergingDefinitionState extends State<MergingDefinition> {
                         return Container();
                       }
                     },
+                  ),
+                ),
+              ),
+              Visibility(
+                visible: _selectedTab == 1,
+                child: Padding(
+                  padding: const EdgeInsets.all(0.0),
+                  child: Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(top: 12.0),
+                        child: Text(
+                          S.of(context).playlistIgnoreList,
+                          style: Theme.of(context).textTheme.headline6,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Visibility(
+                visible: _selectedTab == 1,
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Padding(
+                          padding: const EdgeInsets.only(bottom: 16.0),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                S.of(context).howToAddToExcludeList,
+                                style: Theme.of(context).textTheme.bodyText1,
+                              ),
+                              IconButton(
+                                icon: const Icon(Icons.open_in_new_outlined),
+                                onPressed: () async {
+                                  await launch('https://sandrokl.net/playlistmerger4spotify/addtoignore/');
+                                },
+                              )
+                            ],
+                          )),
+                      ..._playlistsToIgnore.map((e) {
+                        return ListTile(
+                          title: Text(e.name),
+                          subtitle: Text(e.ownerName),
+                          trailing: IconButton(
+                            onPressed: () {},
+                            icon: const Icon(Icons.delete),
+                          ),
+                        );
+                      }).toList(),
+                      if (_playlistsToIgnore.isEmpty) Text(S.of(context).excludeNothingHere),
+                    ],
                   ),
                 ),
               ),

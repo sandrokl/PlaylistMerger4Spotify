@@ -95,8 +95,8 @@
       }
     }
   },
-  "playlistIgnoreList": "Ignore list",
-  "ignoreNothingHere": "Nothing here for the moment",
-  "howToAddToIgnoreList": "How to add music to ignore list (external)",
-  "ignorePasteLinkToThePlaylist": "Paste link to the playlist here"
+  "playlistIgnoreList": "Exclude list",
+  "excludeNothingHere": "Nothing here for the moment",
+  "howToAddToExcludeList": "How to add music to exclusion list (external)",
+  "excludePasteLinkToThePlaylist": "Paste link to the playlist here"
 }
