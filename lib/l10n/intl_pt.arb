@@ -96,7 +96,7 @@
     }
   },
   "playlistExcludeList": "Lista à excluir",
-  "excludeNothingHere": "Nothing here for the moment",
+  "excludeNothingHere": "Nothing to exclude for now",
   "howToAddToExcludeList": "How to add music to exclusion list (external)",
   "excludePasteLinkToThePlaylist": "Paste link to the playlist here"
 }

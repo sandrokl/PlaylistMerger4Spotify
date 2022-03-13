@@ -106,7 +106,7 @@ class _MergingDefinitionState extends State<MergingDefinition> {
     );
   }
 
-  _showAddIgnorePlaylist() {
+  void _showAddExcludePlaylist() {
     showModalBottomSheet(
         isScrollControlled: true,
         context: context,
@@ -141,44 +141,6 @@ class _MergingDefinitionState extends State<MergingDefinition> {
                       onPressed: () {},
                     )
                   ],
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        Padding(
-                            padding: const EdgeInsets.only(bottom: 16.0),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.max,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  S.of(context).howToAddToExcludeList,
-                                  style: Theme.of(context).textTheme.bodyText1,
-                                ),
-                                IconButton(
-                                  icon: const Icon(Icons.open_in_new_outlined),
-                                  onPressed: () async {
-                                    await launch('https://sandrokl.net/playlistmerger4spotify/addtoignore/');
-                                  },
-                                )
-                              ],
-                            )),
-                        ..._playlistsToIgnore.map((e) {
-                          return ListTile(
-                            title: Text(e.name),
-                            subtitle: Text(e.ownerName),
-                            trailing: IconButton(
-                              onPressed: () {},
-                              icon: const Icon(Icons.delete),
-                            ),
-                          );
-                        }).toList(),
-                        if (_playlistsToIgnore.isEmpty) Text(S.of(context).excludeNothingHere),
-                      ],
-                    ),
-                  ),
                 ),
               ],
             ),
@@ -458,19 +420,19 @@ class _MergingDefinitionState extends State<MergingDefinition> {
               ),
               Visibility(
                 visible: _selectedTab == 1,
-                child: Padding(
-                  padding: const EdgeInsets.all(0.0),
-                  child: Row(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(top: 12.0),
-                        child: Text(
-                          S.of(context).playlistIgnoreList,
-                          style: Theme.of(context).textTheme.headline6,
-                        ),
-                      ),
-                    ],
-                  ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      S.of(context).playlistIgnoreList,
+                      style: Theme.of(context).textTheme.headline6,
+                    ),
+                    IconButton(
+                      padding: const EdgeInsets.fromLTRB(8.0, 8.0, 0.0, 8.0),
+                      onPressed: _showAddExcludePlaylist,
+                      icon: const Icon(Icons.playlist_add),
+                    ),
+                  ],
                 ),
               ),
               Visibility(
@@ -481,8 +443,7 @@ class _MergingDefinitionState extends State<MergingDefinition> {
                       Padding(
                           padding: const EdgeInsets.only(bottom: 16.0),
                           child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               Text(
                                 S.of(context).howToAddToExcludeList,
@@ -491,7 +452,7 @@ class _MergingDefinitionState extends State<MergingDefinition> {
                               IconButton(
                                 icon: const Icon(Icons.open_in_new_outlined),
                                 onPressed: () async {
-                                  await launch('https://sandrokl.net/playlistmerger4spotify/addtoignore/');
+                                  await launch('https://sandrokl.net/playlistmerger4spotify/add-to-exclude-list/');
                                 },
                               )
                             ],
