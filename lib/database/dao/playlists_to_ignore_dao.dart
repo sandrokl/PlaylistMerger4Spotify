@@ -18,8 +18,18 @@ class PlaylistsToIgnoreDao extends DatabaseAccessor<AppDatabase> with _$Playlist
 
   Future<void> updateIgnoredPlaylists(String destinationPlaylistId, List<PlaylistToIgnore> listToIgnore) async {
     deletePlaylistsToIgnoreByDestinationId(destinationPlaylistId);
+
+    final listWithDestinationId = listToIgnore
+        .map((e) => PlaylistToIgnore(
+            destinationPlaylistId: destinationPlaylistId,
+            name: e.name,
+            openUrl: e.openUrl,
+            ownerId: e.ownerId,
+            ownerName: e.ownerName,
+            playlistId: e.playlistId))
+        .toList();
     db.batch((batch) {
-      batch.insertAllOnConflictUpdate(playlistsToIgnore, listToIgnore);
+      batch.insertAllOnConflictUpdate(playlistsToIgnore, listWithDestinationId);
     });
   }
 }

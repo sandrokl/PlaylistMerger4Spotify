@@ -15,7 +15,7 @@
   "areYouSureYouWishToDelete_end": "? Cela ne supprimera pas votre playlist sur Spotify.",
   "saving_threedots": "Mise à jour...",
   "openInSpotify": "Ouvrir sur Spotify",
-  "modifyThisMergingRule": "Modifier la définition de fusion",
+  "modifyThisMergingRule": "Modifier la définition",
   "selectAPlaylist": "-- Choisir une playlist -- ",
   "destinationPlaylist": "Playlist de destination",
   "sourcePlaylists": "Playlists d'origine",
@@ -111,5 +111,6 @@
         "type": "int"
       }
     }
-  }
+  },
+  "excludeList_AreYouSureDelete": "Are you sure you want to delete "
 }

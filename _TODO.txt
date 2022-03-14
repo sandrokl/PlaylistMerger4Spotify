@@ -1,0 +1,4 @@
+- traducoes para tela de exclusao
+- importar e exportar regras de exclusao
+- exclusao propriamente dita no processo de atualizacao de playlist
+- pagina web para explicar o processo de exclusao

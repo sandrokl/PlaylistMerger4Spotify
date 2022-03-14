@@ -111,5 +111,6 @@
         "type": "int"
       }
     }
-  }
+  },
+  "excludeList_AreYouSureDelete": "Are you sure you want to delete "
 }

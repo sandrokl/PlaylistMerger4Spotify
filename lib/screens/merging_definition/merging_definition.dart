@@ -26,7 +26,7 @@ class _MergingDefinitionState extends State<MergingDefinition> {
   String? _selectedDestinationPlaylist;
   int _selectedTab = 0;
   List<String> _selectedSourcePlaylists = [];
-  List<PlaylistToIgnore> _playlistsToIgnore = [];
+  List<PlaylistToIgnore> _playlistsToExclude = [];
 
   bool _doNotShowAgainChecked = false;
 
@@ -193,7 +193,23 @@ class _MergingDefinitionState extends State<MergingDefinition> {
                                   ),
                             ),
                           ),
-                        )
+                        ),
+                      if (_tempPlaylistForExclusion != null)
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: Text(S.of(context).cancel),
+                            ),
+                            TextButton(
+                              onPressed: _addToExcludeList,
+                              child: Text(S.of(context).confirm.toUpperCase()),
+                            ),
+                          ],
+                        ),
                     ],
                   ),
                 ),
@@ -214,6 +230,21 @@ class _MergingDefinitionState extends State<MergingDefinition> {
     _selectedDestinationPlaylist = createdPlaylist.playlistId;
   }
 
+  void _addToExcludeList() {
+    setState(() {
+      _playlistsToExclude.add(PlaylistToIgnore(
+        destinationPlaylistId: '',
+        playlistId: _tempPlaylistForExclusion!.playlistId,
+        name: _tempPlaylistForExclusion!.name,
+        ownerId: _tempPlaylistForExclusion!.ownerId,
+        ownerName: _tempPlaylistForExclusion!.ownerName,
+        openUrl: _tempPlaylistForExclusion!.openUrl,
+      ));
+      _playlistsToExclude.sort((a, b) => a.name.compareTo(b.name));
+    });
+    Navigator.of(context).pop();
+  }
+
   void _loadPlaylistsForScreen() {
     final _db = context.read<AppDatabase>();
     final _userId = _userStore.user!.id;
@@ -228,7 +259,7 @@ class _MergingDefinitionState extends State<MergingDefinition> {
 
         setState(() {
           _selectedSourcePlaylists = list.map((p) => p.sourcePlaylistId).toList();
-          _playlistsToIgnore = pToIgnore;
+          _playlistsToExclude = pToIgnore..sort((a, b) => a.name.compareTo(b.name));
         });
       });
     }
@@ -304,7 +335,7 @@ class _MergingDefinitionState extends State<MergingDefinition> {
     var _db = Provider.of<AppDatabase>(context, listen: false);
     if (_selectedDestinationPlaylist != null) {
       await _db.playlistsToMergeDao.updateMergedPlaylist(_selectedDestinationPlaylist!, _selectedSourcePlaylists);
-      await _db.playlistsToIgnoreDao.updateIgnoredPlaylists(_selectedDestinationPlaylist!, _playlistsToIgnore);
+      await _db.playlistsToIgnoreDao.updateIgnoredPlaylists(_selectedDestinationPlaylist!, _playlistsToExclude);
     }
   }
 
@@ -337,6 +368,7 @@ class _MergingDefinitionState extends State<MergingDefinition> {
         bottomNavigationBar: SizedBox(
           height: 50.0,
           child: BottomNavigationBar(
+            elevation: 16.0,
             items: const <BottomNavigationBarItem>[
               BottomNavigationBarItem(
                 icon: Icon(Icons.merge),
@@ -495,38 +527,87 @@ class _MergingDefinitionState extends State<MergingDefinition> {
               Visibility(
                 visible: _selectedTab == 1,
                 child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 16.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Text(
-                              S.of(context).howToAddToExcludeList,
-                              style: Theme.of(context).textTheme.bodyText1,
-                            ),
-                            IconButton(
-                              icon: const Icon(Icons.open_in_new_outlined),
-                              onPressed: () async {
-                                await launch('https://sandrokl.net/playlistmerger4spotify/add-to-exclude-list/');
-                              },
-                            )
-                          ],
-                        ),
-                      ),
-                      ..._playlistsToIgnore.map((e) {
-                        return ListTile(
-                          title: Text(e.name),
-                          subtitle: Text(e.ownerName),
-                          trailing: IconButton(
-                            onPressed: () {},
-                            icon: const Icon(Icons.delete),
+                  child: Padding(
+                    padding: const EdgeInsets.all(0.0),
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(0.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Flexible(
+                                child: Text(
+                                  S.of(context).howToAddToExcludeList,
+                                  style: Theme.of(context).textTheme.labelMedium,
+                                  textAlign: TextAlign.left,
+                                ),
+                              ),
+                              IconButton(
+                                icon: const Icon(Icons.open_in_new_outlined),
+                                onPressed: () async {
+                                  await launch('https://sandrokl.net/playlistmerger4spotify/add-to-exclude-list/');
+                                },
+                              )
+                            ],
                           ),
-                        );
-                      }).toList(),
-                      if (_playlistsToIgnore.isEmpty) Text(S.of(context).excludeNothingHere),
-                    ],
+                        ),
+                        ..._playlistsToExclude.map((e) {
+                          return ListTile(
+                            contentPadding: const EdgeInsets.all(0.0),
+                            title: Text(e.name),
+                            subtitle: Text(e.ownerName),
+                            visualDensity: VisualDensity.compact,
+                            trailing: IconButton(
+                              onPressed: () async {
+                                await showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      title: Text(S.of(context).confirm),
+                                      content: RichText(
+                                        text: TextSpan(
+                                          style: Theme.of(context).textTheme.bodyText2,
+                                          text: S.of(context).excludeList_AreYouSureDelete,
+                                          children: <TextSpan>[
+                                            TextSpan(
+                                              text: e.name,
+                                              style: const TextStyle(fontWeight: FontWeight.bold),
+                                            ),
+                                            const TextSpan(text: ' ?'),
+                                          ],
+                                        ),
+                                      ),
+                                      actions: <Widget>[
+                                        TextButton(
+                                          onPressed: () => Navigator.of(context).pop(),
+                                          child: Text(S.of(context).cancel),
+                                        ),
+                                        TextButton(
+                                          onPressed: () async {
+                                            setState(() {
+                                              _playlistsToExclude.remove(e);
+                                            });
+                                            Navigator.pop(context);
+                                          },
+                                          child: Text(S.of(context).delete),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                              },
+                              icon: const Icon(Icons.delete),
+                            ),
+                          );
+                        }).toList(),
+                        if (_playlistsToExclude.isEmpty)
+                          Padding(
+                            padding: const EdgeInsets.only(top: 24.0),
+                            child: Text(S.of(context).excludeNothingHere),
+                          ),
+                      ],
+                    ),
                   ),
                 ),
               ),
