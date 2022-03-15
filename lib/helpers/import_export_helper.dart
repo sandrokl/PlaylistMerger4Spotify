@@ -25,12 +25,25 @@ Future<void> exportMergingDefinitions(BuildContext context) async {
   for (var destination in mergings) {
     var r = Rule(destinationId: destination.playlistId, destinationName: destination.name);
     r.sources = [];
+    r.exclusions = [];
 
     var sourcesId = await db.playlistsToMergeDao.getPlaylistsToMergeByDestinationId(destination.playlistId);
     var sources = await db.playlistsDao.getPlaylistsByIdList(sourcesId.map((e) => e.sourcePlaylistId).toList());
     for (var source in sources) {
       r.sources!.add(Source(id: source.playlistId, name: source.name, owner: source.ownerId));
     }
+
+    var exclusions = await db.playlistsToIgnoreDao.getByDestinationId(destination.playlistId);
+    for (var exclusion in exclusions) {
+      r.exclusions!.add(Exclusion(
+        playlistId: exclusion.playlistId,
+        name: exclusion.name,
+        ownerId: exclusion.ownerId,
+        ownerName: exclusion.ownerName,
+        openUrl: exclusion.openUrl,
+      ));
+    }
+
     backupInfo.rules!.add(r);
   }
 
@@ -59,9 +72,31 @@ Future<void> importMergingDefinitions(BuildContext context) async {
     if (backup.rules != null && backup.rules!.isNotEmpty) {
       for (var destination in backup.rules!) {
         if (destination.sources != null && destination.sources!.isNotEmpty) {
+          final sources = destination.sources!.map((e) => e.id!).toList();
           await db.playlistsToMergeDao.updateMergedPlaylist(
-              destination.destinationId!, destination.sources!.map((e) => e.id!).toList(),
-              deleteBeforeInsert: false);
+            destination.destinationId!,
+            sources,
+            deleteBeforeInsert: false,
+          );
+
+          if (destination.exclusions != null && destination.exclusions!.isNotEmpty) {
+            await db.playlistsToIgnoreDao.updateIgnoredPlaylists(
+              destination.destinationId!,
+              destination.exclusions!
+                  .map(
+                    (e) => PlaylistToIgnore(
+                      destinationPlaylistId: destination.destinationId!,
+                      playlistId: e.playlistId!,
+                      name: e.name!,
+                      ownerId: e.ownerId!,
+                      ownerName: e.ownerName!,
+                      openUrl: e.openUrl!,
+                    ),
+                  )
+                  .toList(),
+              deleteBeforeInsert: false,
+            );
+          }
         }
       }
     }

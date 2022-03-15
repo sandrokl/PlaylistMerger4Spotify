@@ -1,5 +1,3 @@
-- importar e exportar regras de exclusao
-- traducoes para tela de exclusao
-- verificar se tenta adicionar uma 2a vez a mesma lista de exclusao
 - exclusao propriamente dita no processo de atualizacao de playlist
+- traducoes para tela de exclusao
 - pagina web para explicar o processo de exclusao

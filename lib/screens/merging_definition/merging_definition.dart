@@ -231,17 +231,25 @@ class _MergingDefinitionState extends State<MergingDefinition> {
   }
 
   void _addToExcludeList() {
-    setState(() {
-      _playlistsToExclude.add(PlaylistToIgnore(
-        destinationPlaylistId: '',
-        playlistId: _tempPlaylistForExclusion!.playlistId,
-        name: _tempPlaylistForExclusion!.name,
-        ownerId: _tempPlaylistForExclusion!.ownerId,
-        ownerName: _tempPlaylistForExclusion!.ownerName,
-        openUrl: _tempPlaylistForExclusion!.openUrl,
-      ));
-      _playlistsToExclude.sort((a, b) => a.name.compareTo(b.name));
-    });
+    if (_playlistsToExclude.where((p) => p.playlistId == _tempPlaylistForExclusion!.playlistId).isEmpty) {
+      setState(() {
+        _playlistsToExclude.add(PlaylistToIgnore(
+          destinationPlaylistId: '',
+          playlistId: _tempPlaylistForExclusion!.playlistId,
+          name: _tempPlaylistForExclusion!.name,
+          ownerId: _tempPlaylistForExclusion!.ownerId,
+          ownerName: _tempPlaylistForExclusion!.ownerName,
+          openUrl: _tempPlaylistForExclusion!.openUrl,
+        ));
+        _playlistsToExclude.sort((a, b) => a.name.compareTo(b.name));
+      });
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(S.of(context).exclusionPlaylistAlreadyAdded),
+        ),
+      );
+    }
     Navigator.of(context).pop();
   }
 

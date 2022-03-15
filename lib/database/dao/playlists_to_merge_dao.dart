@@ -23,23 +23,32 @@ class PlaylistsToMergeDao extends DatabaseAccessor<AppDatabase> with _$Playlists
     await (delete(playlistsToMerge)..where((p) => p.destinationPlaylistId.equals(playlistId))).go();
   }
 
-  Future<void> updateMergedPlaylist(String destinationPlaylistId, List<String> sourcePlaylistsId,
-      {bool deleteBeforeInsert = true}) async {
+  Future<void> updateMergedPlaylist(
+    String destinationPlaylistId,
+    List<String> sourcePlaylistsId, {
+    bool deleteBeforeInsert = true,
+  }) async {
     final destinationPlaylist = await db.playlistsDao.getPlaylistsByIdList([destinationPlaylistId]);
     if (destinationPlaylist.isNotEmpty) {
       final sourcesPlaylists = await db.playlistsDao.getPlaylistsByIdList(sourcePlaylistsId);
       if (sourcesPlaylists.isNotEmpty) {
         await batch((batch) {
+          // import sources
           if (deleteBeforeInsert) {
             batch.deleteWhere(
                 playlistsToMerge, (_) => playlistsToMerge.destinationPlaylistId.equals(destinationPlaylistId));
           }
           batch.insertAllOnConflictUpdate(
-              playlistsToMerge,
-              sourcesPlaylists
-                  .map((e) => PlaylistsToMergeCompanion(
-                      destinationPlaylistId: Value(destinationPlaylistId), sourcePlaylistId: Value(e.playlistId)))
-                  .toList());
+            playlistsToMerge,
+            sourcesPlaylists
+                .map(
+                  (e) => PlaylistsToMergeCompanion(
+                    destinationPlaylistId: Value(destinationPlaylistId),
+                    sourcePlaylistId: Value(e.playlistId),
+                  ),
+                )
+                .toList(),
+          );
         });
       }
     }

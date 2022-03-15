@@ -34,8 +34,9 @@ class Rule {
   String? destinationId;
   String? destinationName;
   List<Source>? sources;
+  List<Exclusion>? exclusions;
 
-  Rule({this.destinationId, this.destinationName, this.sources});
+  Rule({this.destinationId, this.destinationName, this.sources, this.exclusions});
 
   Rule.fromJson(Map<String, dynamic> json) {
     destinationId = json['destinationId'];
@@ -46,6 +47,12 @@ class Rule {
         sources!.add(Source.fromJson(v));
       });
     }
+    if (json['exclusions'] != null) {
+      exclusions = <Exclusion>[];
+      json['exclusions'].forEach((v) {
+        exclusions!.add(Exclusion.fromJson(v));
+      });
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -54,6 +61,9 @@ class Rule {
     data['destinationName'] = destinationName;
     if (sources != null) {
       data['sources'] = sources!.map((v) => v.toJson()).toList();
+    }
+    if (exclusions != null) {
+      data['exclusions'] = exclusions!.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -77,6 +87,34 @@ class Source {
     data['id'] = id;
     data['name'] = name;
     data['owner'] = owner;
+    return data;
+  }
+}
+
+class Exclusion {
+  String? playlistId;
+  String? name;
+  String? ownerId;
+  String? ownerName;
+  String? openUrl;
+
+  Exclusion({this.playlistId, this.name, this.ownerId, this.ownerName, this.openUrl});
+
+  Exclusion.fromJson(Map<String, dynamic> json) {
+    playlistId = json['playlistId'];
+    name = json['name'];
+    ownerId = json['ownerId'];
+    ownerName = json['ownerName'];
+    openUrl = json['openUrl'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['playlistId'] = playlistId;
+    data['name'] = name;
+    data['ownerId'] = ownerId;
+    data['ownerName'] = ownerName;
+    data['openUrl'] = openUrl;
     return data;
   }
 }

@@ -112,5 +112,6 @@
       }
     }
   },
-  "excludeList_AreYouSureDelete": "Are you sure you want to delete "
+  "excludeList_AreYouSureDelete": "Are you sure you want to delete ",
+  "exclusionPlaylistAlreadyAdded": "Playlist already in exclusion list"
 }
