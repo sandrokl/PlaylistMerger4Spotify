@@ -155,6 +155,8 @@ class MergingHelper {
       }
 
       // STEP 4.2 : remove tracks from step 4.1 from tracksNewDistinct
+      var ids = await _db.tracksNewDistinctDao.getTracksToIgnore(jobId);
+      await _db.tracksNewDistinctDao.deleteByIds(jobId, ids);
 
       // STEP 5: generate list of tracks to add
       var tracksToAdd = await _db.tracksNewDistinctDao.getTracksNotInCurrent(jobId);

@@ -1,4 +1,2 @@
-- exclusao propriamente dita no processo de atualizacao de playlist
 - scroll pour la liste d'exclusion
-- traducoes para tela de exclusao
 - pagina web para explicar o processo de exclusao

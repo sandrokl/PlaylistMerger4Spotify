@@ -97,7 +97,7 @@
   },
   "playlistIgnoreList": "Exclude list",
   "excludeNothingHere": "Nothing to exclude for now",
-  "howToAddToExcludeList": "How to add music to exclusion list (external)",
+  "howToAddToExcludeList": "How to add music to exclusion list (external link)",
   "excludePasteLinkToThePlaylist": "Paste link to the playlist here",
   "validationPlaylistLink": "Please enter a valid playlist link",
   "excludeTitle": "Playlist with tracks to exclude",
@@ -113,5 +113,7 @@
     }
   },
   "excludeList_AreYouSureDelete": "Are you sure you want to delete ",
-  "exclusionPlaylistAlreadyAdded": "Playlist already in exclusion list"
+  "exclusionPlaylistAlreadyAdded": "Playlist already in exclusion list",
+  "definitionToMerge": "To Merge",
+  "definitionToExclude": "To Exclude"
 }

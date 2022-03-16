@@ -377,14 +377,14 @@ class _MergingDefinitionState extends State<MergingDefinition> {
           height: 50.0,
           child: BottomNavigationBar(
             elevation: 16.0,
-            items: const <BottomNavigationBarItem>[
+            items: <BottomNavigationBarItem>[
               BottomNavigationBarItem(
-                icon: Icon(Icons.merge),
-                label: 'To Merge',
+                icon: const Icon(Icons.call_merge),
+                label: S.of(context).definitionToMerge,
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.merge),
-                label: 'To Exclude',
+                icon: const Icon(Icons.call_merge),
+                label: S.of(context).definitionToExclude,
               ),
             ],
             currentIndex: _selectedTab,

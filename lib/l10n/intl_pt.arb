@@ -95,13 +95,13 @@
       }
     }
   },
-  "playlistExcludeList": "Lista à excluir",
-  "excludeNothingHere": "Nothing to exclude for now",
-  "howToAddToExcludeList": "How to add music to exclusion list (external)",
-  "excludePasteLinkToThePlaylist": "Paste link to the playlist here",
-  "validationPlaylistLink": "Please enter a valid playlist link",
-  "excludeTitle": "Playlist with tracks to exclude",
-  "subTitlePlaylistToExclude": "By {ownerName} - {totalTracks} tracks",
+  "playlistIgnoreList": "Lista à excluir",
+  "excludeNothingHere": "Nada a excluir no momento",
+  "howToAddToExcludeList": "Como adicionar músicas à lista à excluir (link externo)",
+  "excludePasteLinkToThePlaylist": "Cole aqui o link para a playlist",
+  "validationPlaylistLink": "Por favor entre um link válido para a playlist",
+  "excludeTitle": "Playlist com as faixas à excluir",
+  "subTitlePlaylistToExclude": "De {ownerName} - {totalTracks} faixas",
   "@subTitlePlaylistToExclude": {
     "placeholders": {
       "ownerName": {
@@ -112,6 +112,8 @@
       }
     }
   },
-  "excludeList_AreYouSureDelete": "Are you sure you want to delete ",
-  "exclusionPlaylistAlreadyAdded": "Playlist already in exclusion list"
+  "excludeList_AreYouSureDelete": "Tem certeza que você deseja deletar ",
+  "exclusionPlaylistAlreadyAdded": "Playlist já presente na lista à excluir",
+  "definitionToMerge": "À combinar",
+  "definitionToExclude": "À excluir"
 }
