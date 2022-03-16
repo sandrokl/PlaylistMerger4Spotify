@@ -21,6 +21,7 @@ class MergingHelper {
     await _db.tracksNewDistinctDao.deleteAll(jobId);
     await _db.tracksToAddDao.deleteAll(jobId);
     await _db.tracksToRemoveDao.deleteAll(jobId);
+    await _db.tracksToExcludeDao.deleteAll(jobId);
   }
 
   Future<bool> updateAllMergedPlaylists(
@@ -136,28 +137,47 @@ class MergingHelper {
       var tracksWithoutDuplicates = await _db.tracksNewAllDao.getTracksWithoutDuplicates(jobId);
       await _db.tracksNewDistinctDao.insertAll(tracksWithoutDuplicates);
 
-      // STEP 4: generate list of tracks to add
+      // STEP 4.1 : get tracks from playlists to exclude from merging
+      var exclusions = await _db.playlistsToIgnoreDao.getByDestinationId(playlistId);
+      for (var exclusion in exclusions) {
+        await for (var track in _spotifyClient.getTracksFromPlaylist(exclusion.playlistId)) {
+          track.jobId = jobId;
+          tracks.add(track);
+          if (tracks.length == _databaseBatchSize) {
+            await _db.tracksToExcludeDao.insertAll(tracks);
+            tracks.clear();
+          }
+        }
+        if (tracks.isNotEmpty) {
+          await _db.tracksToExcludeDao.insertAll(tracks);
+          tracks.clear();
+        }
+      }
+
+      // STEP 4.2 : remove tracks from step 4.1 from tracksNewDistinct
+
+      // STEP 5: generate list of tracks to add
       var tracksToAdd = await _db.tracksNewDistinctDao.getTracksNotInCurrent(jobId);
       await _db.tracksToAddDao.insertAll(tracksToAdd);
 
-      // STEP 5: generate list of tracks to remove
+      // STEP 6: generate list of tracks to remove
       var tracksToRemove = await _db.tracksCurrentDao.getTracksNotNewDistinct(jobId);
       await _db.tracksToRemoveDao.insertAll(tracksToRemove);
 
-      // STEP 6: add tracks to Spotify
+      // STEP 7: add tracks to Spotify
       tracksToAdd = await _db.tracksToAddDao.getAll(jobId);
       if (tracksToAdd.isNotEmpty) {
         await _spotifyClient.insertTracksInPlaylist(playlistId, tracksToAdd);
       }
 
-      // STEP 7: remove tracks from Spotify
+      // STEP 8: remove tracks from Spotify
       tracksToRemove = await _db.tracksToRemoveDao.getAll(jobId);
       if (tracksToRemove.isNotEmpty) {
         await _spotifyClient.removeTracksInPlaylist(playlistId, tracksToRemove);
       }
 
       // STEP N : clear tracks from DB
-      await clearTracksInDB(jobId);
+      // await clearTracksInDB(jobId);
       await notif.dismissPersistentNotification(jobId);
 
       await _db.mergingResultsDao.insert(MergingResult(
