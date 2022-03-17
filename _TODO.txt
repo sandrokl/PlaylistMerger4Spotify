@@ -1,2 +1,0 @@
-- scroll pour la liste d'exclusion
-- pagina web para explicar o processo de exclusao

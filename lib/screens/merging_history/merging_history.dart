@@ -73,39 +73,45 @@ class _MergingHistoryState extends State<MergingHistory> {
                 isExpanded: true,
                 value: _selectedFilter),
             Expanded(
-              child: ListView.separated(
-                itemBuilder: ((context, index) {
-                  final item = _filteredList[index];
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        _listMergedPlaylists.firstWhere((p) => p.playlistId == item.playlistId).name,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
+              child: Scrollbar(
+                isAlwaysShown: true,
+                thickness: 1.0,
+                child: ListView.separated(
+                  padding: const EdgeInsets.only(right: 8.0),
+                  itemBuilder: ((context, index) {
+                    final item = _filteredList[index];
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          _listMergedPlaylists.firstWhere((p) => p.playlistId == item.playlistId).name,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                      Text(DateFormat.yMd().add_jms().format(item.runDate)),
-                      Text(S.of(context).historyResult +
-                          (item.successed ? S.of(context).historySuccess : S.of(context).historyFail)),
-                      Text(
-                        S.of(context).historyTracksAddedRemoved(item.tracksAdded?.toString() ?? S.of(context).historyNA,
-                            item.tracksRemoved?.toString() ?? S.of(context).historyNA),
-                      ),
-                      Text(
-                        S.of(context).historyPromptedBy(item.triggeredBy == TriggeredBy.user
-                            ? S.of(context).historyYou
-                            : S.of(context).historyAutomaticUpdate),
-                      ),
-                    ],
-                  );
-                }),
-                separatorBuilder: (_, __) {
-                  return Divider(
-                    color: Theme.of(context).primaryColor,
-                  );
-                },
-                itemCount: _filteredList.length,
+                        Text(DateFormat.yMd().add_jms().format(item.runDate)),
+                        Text(S.of(context).historyResult +
+                            (item.successed ? S.of(context).historySuccess : S.of(context).historyFail)),
+                        Text(
+                          S.of(context).historyTracksAddedRemoved(
+                              item.tracksAdded?.toString() ?? S.of(context).historyNA,
+                              item.tracksRemoved?.toString() ?? S.of(context).historyNA),
+                        ),
+                        Text(
+                          S.of(context).historyPromptedBy(item.triggeredBy == TriggeredBy.user
+                              ? S.of(context).historyYou
+                              : S.of(context).historyAutomaticUpdate),
+                        ),
+                      ],
+                    );
+                  }),
+                  separatorBuilder: (_, __) {
+                    return Divider(
+                      color: Theme.of(context).primaryColor,
+                    );
+                  },
+                  itemCount: _filteredList.length,
+                ),
               ),
             ),
           ],

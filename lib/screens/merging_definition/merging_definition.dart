@@ -241,7 +241,7 @@ class _MergingDefinitionState extends State<MergingDefinition> {
           ownerName: _tempPlaylistForExclusion!.ownerName,
           openUrl: _tempPlaylistForExclusion!.openUrl,
         ));
-        _playlistsToExclude.sort((a, b) => a.name.compareTo(b.name));
+        _playlistsToExclude.sort((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
       });
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -267,7 +267,7 @@ class _MergingDefinitionState extends State<MergingDefinition> {
 
         setState(() {
           _selectedSourcePlaylists = list.map((p) => p.sourcePlaylistId).toList();
-          _playlistsToExclude = pToIgnore..sort((a, b) => a.name.compareTo(b.name));
+          _playlistsToExclude = pToIgnore..sort((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
         });
       });
     }
@@ -479,32 +479,36 @@ class _MergingDefinitionState extends State<MergingDefinition> {
                       if (snapshot.connectionState == ConnectionState.done && snapshot.hasData) {
                         return Padding(
                           padding: const EdgeInsets.only(top: 8.0),
-                          child: SingleChildScrollView(
-                            child: Column(
-                              children: snapshot.data!.map((e) {
-                                return CheckboxListTile(
-                                  contentPadding: const EdgeInsets.only(right: 0.0, left: 0.0),
-                                  visualDensity: VisualDensity.compact,
-                                  value: (e.playlistId != _selectedDestinationPlaylist &&
-                                      _selectedSourcePlaylists.contains(e.playlistId)),
-                                  title: Text(e.name),
-                                  onChanged: _selectedDestinationPlaylist != e.playlistId
-                                      ? (newValue) {
-                                          if (e.playlistId != _selectedDestinationPlaylist) {
-                                            setState(() {
-                                              if (newValue != null) {
-                                                if (newValue) {
-                                                  _selectedSourcePlaylists.add(e.playlistId);
-                                                } else {
-                                                  _selectedSourcePlaylists.remove(e.playlistId);
+                          child: Scrollbar(
+                            isAlwaysShown: true,
+                            thickness: 1.0,
+                            child: SingleChildScrollView(
+                              child: Column(
+                                children: snapshot.data!.map((e) {
+                                  return CheckboxListTile(
+                                    contentPadding: const EdgeInsets.only(right: 0.0, left: 0.0),
+                                    visualDensity: VisualDensity.compact,
+                                    value: (e.playlistId != _selectedDestinationPlaylist &&
+                                        _selectedSourcePlaylists.contains(e.playlistId)),
+                                    title: Text(e.name),
+                                    onChanged: _selectedDestinationPlaylist != e.playlistId
+                                        ? (newValue) {
+                                            if (e.playlistId != _selectedDestinationPlaylist) {
+                                              setState(() {
+                                                if (newValue != null) {
+                                                  if (newValue) {
+                                                    _selectedSourcePlaylists.add(e.playlistId);
+                                                  } else {
+                                                    _selectedSourcePlaylists.remove(e.playlistId);
+                                                  }
                                                 }
-                                              }
-                                            });
+                                              });
+                                            }
                                           }
-                                        }
-                                      : null,
-                                );
-                              }).toList(),
+                                        : null,
+                                  );
+                                }).toList(),
+                              ),
                             ),
                           ),
                         );
@@ -534,87 +538,93 @@ class _MergingDefinitionState extends State<MergingDefinition> {
               ),
               Visibility(
                 visible: _selectedTab == 1,
-                child: SingleChildScrollView(
-                  child: Padding(
-                    padding: const EdgeInsets.all(0.0),
-                    child: Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(0.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Flexible(
-                                child: Text(
-                                  S.of(context).howToAddToExcludeList,
-                                  style: Theme.of(context).textTheme.labelMedium,
-                                  textAlign: TextAlign.left,
-                                ),
+                child: Expanded(
+                  child: Scrollbar(
+                    isAlwaysShown: true,
+                    thickness: 1.0,
+                    child: SingleChildScrollView(
+                      child: Padding(
+                        padding: const EdgeInsets.all(0.0),
+                        child: Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(0.0),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Flexible(
+                                    child: Text(
+                                      S.of(context).howToAddToExcludeList,
+                                      style: Theme.of(context).textTheme.labelMedium,
+                                      textAlign: TextAlign.left,
+                                    ),
+                                  ),
+                                  IconButton(
+                                    icon: const Icon(Icons.open_in_new_outlined),
+                                    onPressed: () async {
+                                      await launch('https://sandrokl.net/playlistmerger4spotify/add-to-exclude-list/');
+                                    },
+                                  )
+                                ],
                               ),
-                              IconButton(
-                                icon: const Icon(Icons.open_in_new_outlined),
-                                onPressed: () async {
-                                  await launch('https://sandrokl.net/playlistmerger4spotify/add-to-exclude-list/');
-                                },
-                              )
-                            ],
-                          ),
-                        ),
-                        ..._playlistsToExclude.map((e) {
-                          return ListTile(
-                            contentPadding: const EdgeInsets.all(0.0),
-                            title: Text(e.name),
-                            subtitle: Text(e.ownerName),
-                            visualDensity: VisualDensity.compact,
-                            trailing: IconButton(
-                              onPressed: () async {
-                                await showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return AlertDialog(
-                                      title: Text(S.of(context).confirm),
-                                      content: RichText(
-                                        text: TextSpan(
-                                          style: Theme.of(context).textTheme.bodyText2,
-                                          text: S.of(context).excludeList_AreYouSureDelete,
-                                          children: <TextSpan>[
-                                            TextSpan(
-                                              text: e.name,
-                                              style: const TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            ..._playlistsToExclude.map((e) {
+                              return ListTile(
+                                contentPadding: const EdgeInsets.all(0.0),
+                                title: Text(e.name),
+                                subtitle: Text(e.ownerName),
+                                visualDensity: VisualDensity.compact,
+                                trailing: IconButton(
+                                  onPressed: () async {
+                                    await showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return AlertDialog(
+                                          title: Text(S.of(context).confirm),
+                                          content: RichText(
+                                            text: TextSpan(
+                                              style: Theme.of(context).textTheme.bodyText2,
+                                              text: S.of(context).excludeList_AreYouSureDelete,
+                                              children: <TextSpan>[
+                                                TextSpan(
+                                                  text: e.name,
+                                                  style: const TextStyle(fontWeight: FontWeight.bold),
+                                                ),
+                                                const TextSpan(text: ' ?'),
+                                              ],
                                             ),
-                                            const TextSpan(text: ' ?'),
+                                          ),
+                                          actions: <Widget>[
+                                            TextButton(
+                                              onPressed: () => Navigator.of(context).pop(),
+                                              child: Text(S.of(context).cancel),
+                                            ),
+                                            TextButton(
+                                              onPressed: () async {
+                                                setState(() {
+                                                  _playlistsToExclude.remove(e);
+                                                });
+                                                Navigator.pop(context);
+                                              },
+                                              child: Text(S.of(context).delete),
+                                            ),
                                           ],
-                                        ),
-                                      ),
-                                      actions: <Widget>[
-                                        TextButton(
-                                          onPressed: () => Navigator.of(context).pop(),
-                                          child: Text(S.of(context).cancel),
-                                        ),
-                                        TextButton(
-                                          onPressed: () async {
-                                            setState(() {
-                                              _playlistsToExclude.remove(e);
-                                            });
-                                            Navigator.pop(context);
-                                          },
-                                          child: Text(S.of(context).delete),
-                                        ),
-                                      ],
+                                        );
+                                      },
                                     );
                                   },
-                                );
-                              },
-                              icon: const Icon(Icons.delete),
-                            ),
-                          );
-                        }).toList(),
-                        if (_playlistsToExclude.isEmpty)
-                          Padding(
-                            padding: const EdgeInsets.only(top: 24.0),
-                            child: Text(S.of(context).excludeNothingHere),
-                          ),
-                      ],
+                                  icon: const Icon(Icons.delete),
+                                ),
+                              );
+                            }).toList(),
+                            if (_playlistsToExclude.isEmpty)
+                              Padding(
+                                padding: const EdgeInsets.only(top: 24.0),
+                                child: Text(S.of(context).excludeNothingHere),
+                              ),
+                          ],
+                        ),
+                      ),
                     ),
                   ),
                 ),

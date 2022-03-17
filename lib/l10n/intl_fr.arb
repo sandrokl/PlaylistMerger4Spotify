@@ -100,7 +100,7 @@
   "howToAddToExcludeList": "Comment ajouter de la musique à la liste à exclure (lien externe)",
   "excludePasteLinkToThePlaylist": "Collez ici le lien vers la playlist",
   "validationPlaylistLink": "Veuillez informer un lien valide.",
-  "excludeTitle": "Playlist avec des chansons à excluire",
+  "excludeTitle": "Playlist avec chansons à excluire",
   "subTitlePlaylistToExclude": "Par {ownerName} - {totalTracks} chansons",
   "@subTitlePlaylistToExclude": {
     "placeholders": {

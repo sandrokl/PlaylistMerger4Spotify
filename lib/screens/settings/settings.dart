@@ -85,91 +85,95 @@ class _SettingsState extends State<Settings> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              SwitchListTile(
-                contentPadding: const EdgeInsets.all(0),
-                value: _isUpdateSchedule,
-                onChanged: _changeIsUpdateScheduled,
-                title: Text(S.of(context).settingsAutomaticUpdates),
-                subtitle: Text(S.of(context).settingsAutomaticUpdatesDescription),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    S.of(context).settingsApplicationTheme,
-                    style: Theme.of(context).textTheme.titleMedium,
-                  ),
-                  DropdownButton<String>(
-                    value: _currentTheme,
-                    underline: Container(
-                      height: 1,
-                      color: Theme.of(context).primaryColor,
-                    ),
-                    onChanged: _changeTheme,
-                    items: <Map<String, String>>[
-                      {'value': 'system', 'text': S.of(context).settingsUseSystemTheme},
-                      {'value': 'light', 'text': S.of(context).settingsUseLightTheme},
-                      {'value': 'dark', 'text': S.of(context).settingsUseDarkTheme},
-                    ].map<DropdownMenuItem<String>>((Map<String, String> value) {
-                      return DropdownMenuItem<String>(
-                        value: value['value'],
-                        child: Text(value['text']!),
-                      );
-                    }).toList(),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    S.of(context).settingsLanguage,
-                    style: Theme.of(context).textTheme.titleMedium,
-                  ),
-                  DropdownButton<String>(
-                    value: _currentLanguage ?? 'en',
-                    underline: Container(
-                      height: 1,
-                      color: Theme.of(context).primaryColor,
-                    ),
-                    onChanged: _changeLanguage,
-                    items: <Map<String, String>>[
-                      {'value': 'en', 'text': 'English'},
-                      {'value': 'fr', 'text': 'Français'},
-                      {'value': 'pt', 'text': 'Português'},
-                    ].map<DropdownMenuItem<String>>((Map<String, String> value) {
-                      return DropdownMenuItem<String>(
-                        value: value['value'],
-                        child: Text(value['text']!),
-                      );
-                    }).toList(),
-                  ),
-                ],
-              ),
-              ListTile(
-                onTap: () {
-                  Navigator.of(context).push(MaterialPageRoute(builder: (_) => const MergingHistory()));
-                },
-                contentPadding: const EdgeInsets.all(0),
-                title: Text(S.of(context).settingsMergingHistory),
-                trailing: const Icon(Icons.arrow_right),
-              ),
-              ListTile(
-                contentPadding: const EdgeInsets.all(0),
-                title: Text(S.of(context).settingsSupport),
-                subtitle: Text(S.of(context).settingsIfYouWantToContact),
-                trailing: IconButton(
-                  onPressed: () async {
-                    var url = "mailto:sandro.kl.80@gmail.com?subject=PlaylistMerger 4 Spotify";
-                    await launch(url);
-                  },
-                  icon: const Icon(Icons.email),
+        child: Scrollbar(
+          isAlwaysShown: true,
+          thickness: 1.0,
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                SwitchListTile(
+                  contentPadding: const EdgeInsets.all(0),
+                  value: _isUpdateSchedule,
+                  onChanged: _changeIsUpdateScheduled,
+                  title: Text(S.of(context).settingsAutomaticUpdates),
+                  subtitle: Text(S.of(context).settingsAutomaticUpdatesDescription),
                 ),
-              ),
-            ],
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      S.of(context).settingsApplicationTheme,
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                    DropdownButton<String>(
+                      value: _currentTheme,
+                      underline: Container(
+                        height: 1,
+                        color: Theme.of(context).primaryColor,
+                      ),
+                      onChanged: _changeTheme,
+                      items: <Map<String, String>>[
+                        {'value': 'system', 'text': S.of(context).settingsUseSystemTheme},
+                        {'value': 'light', 'text': S.of(context).settingsUseLightTheme},
+                        {'value': 'dark', 'text': S.of(context).settingsUseDarkTheme},
+                      ].map<DropdownMenuItem<String>>((Map<String, String> value) {
+                        return DropdownMenuItem<String>(
+                          value: value['value'],
+                          child: Text(value['text']!),
+                        );
+                      }).toList(),
+                    ),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      S.of(context).settingsLanguage,
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                    DropdownButton<String>(
+                      value: _currentLanguage ?? 'en',
+                      underline: Container(
+                        height: 1,
+                        color: Theme.of(context).primaryColor,
+                      ),
+                      onChanged: _changeLanguage,
+                      items: <Map<String, String>>[
+                        {'value': 'en', 'text': 'English'},
+                        {'value': 'fr', 'text': 'Français'},
+                        {'value': 'pt', 'text': 'Português'},
+                      ].map<DropdownMenuItem<String>>((Map<String, String> value) {
+                        return DropdownMenuItem<String>(
+                          value: value['value'],
+                          child: Text(value['text']!),
+                        );
+                      }).toList(),
+                    ),
+                  ],
+                ),
+                ListTile(
+                  onTap: () {
+                    Navigator.of(context).push(MaterialPageRoute(builder: (_) => const MergingHistory()));
+                  },
+                  contentPadding: const EdgeInsets.all(0),
+                  title: Text(S.of(context).settingsMergingHistory),
+                  trailing: const Icon(Icons.arrow_right),
+                ),
+                ListTile(
+                  contentPadding: const EdgeInsets.all(0),
+                  title: Text(S.of(context).settingsSupport),
+                  subtitle: Text(S.of(context).settingsIfYouWantToContact),
+                  trailing: IconButton(
+                    onPressed: () async {
+                      var url = "mailto:sandro.kl.80@gmail.com?subject=PlaylistMerger 4 Spotify";
+                      await launch(url);
+                    },
+                    icon: const Icon(Icons.email),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
