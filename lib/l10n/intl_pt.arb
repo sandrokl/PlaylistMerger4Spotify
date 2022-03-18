@@ -94,5 +94,26 @@
         "type": "String"
       }
     }
-  }
+  },
+  "playlistIgnoreList": "Lista não-incluir",
+  "excludeNothingHere": "Nada em não-incluir no momento",
+  "howToAddToExcludeList": "Como adicionar músicas à lista não-incluir (link externo)",
+  "excludePasteLinkToThePlaylist": "Cole aqui o link para a playlist",
+  "validationPlaylistLink": "Por favor entre um link válido para a playlist",
+  "excludeTitle": "Playlist com as faixas não-incluir",
+  "subTitlePlaylistToExclude": "De {ownerName} - {totalTracks} faixas",
+  "@subTitlePlaylistToExclude": {
+    "placeholders": {
+      "ownerName": {
+        "type": "String"
+      },
+      "totalTracks": {
+        "type": "int"
+      }
+    }
+  },
+  "excludeList_AreYouSureDelete": "Tem certeza que você deseja deletar ",
+  "exclusionPlaylistAlreadyAdded": "Playlist já presente na lista não-incluir",
+  "definitionToMerge": "À combinar",
+  "definitionToExclude": "Não incluir"
 }

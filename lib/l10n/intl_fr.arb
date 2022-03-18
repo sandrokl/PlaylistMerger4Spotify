@@ -15,7 +15,7 @@
   "areYouSureYouWishToDelete_end": "? Cela ne supprimera pas votre playlist sur Spotify.",
   "saving_threedots": "Mise à jour...",
   "openInSpotify": "Ouvrir sur Spotify",
-  "modifyThisMergingRule": "Modifier la définition de fusion",
+  "modifyThisMergingRule": "Modifier la définition",
   "selectAPlaylist": "-- Choisir une playlist -- ",
   "destinationPlaylist": "Playlist de destination",
   "sourcePlaylists": "Playlists d'origine",
@@ -94,5 +94,26 @@
         "type": "String"
       }
     }
-  }
+  },
+  "playlistIgnoreList": "Liste pas-inclure",
+  "excludeNothingHere": "Rien dans pas-inclure pour l'instant",
+  "howToAddToExcludeList": "Comment ajouter de la musique à la liste pas-inclure (lien externe)",
+  "excludePasteLinkToThePlaylist": "Collez ici le lien vers la playlist",
+  "validationPlaylistLink": "Veuillez informer un lien valide.",
+  "excludeTitle": "Playlist avec chansons pas-inclure",
+  "subTitlePlaylistToExclude": "Par {ownerName} - {totalTracks} chansons",
+  "@subTitlePlaylistToExclude": {
+    "placeholders": {
+      "ownerName": {
+        "type": "String"
+      },
+      "totalTracks": {
+        "type": "int"
+      }
+    }
+  },
+  "excludeList_AreYouSureDelete": "Êtes-vous certain de vouloir supprimer  ",
+  "exclusionPlaylistAlreadyAdded": "Playlist déjà dans votre liste pas-inclure",
+  "definitionToMerge": "À jumeler",
+  "definitionToExclude": "À pas inclure"
 }

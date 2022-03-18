@@ -4,19 +4,23 @@ import 'package:drift/native.dart';
 import 'package:path/path.dart' as p;
 import 'package:playlistmerger4spotify/database/dao/merging_results_dao.dart';
 import 'package:playlistmerger4spotify/database/dao/playlists_dao.dart';
+import 'package:playlistmerger4spotify/database/dao/playlists_to_ignore_dao.dart';
 import 'package:playlistmerger4spotify/database/dao/playlists_to_merge_dao.dart';
 import 'package:playlistmerger4spotify/database/dao/tracks_current_dao.dart';
 import 'package:playlistmerger4spotify/database/dao/tracks_new_all_dao.dart';
 import 'package:playlistmerger4spotify/database/dao/tracks_new_distinct_dao.dart';
 import 'package:playlistmerger4spotify/database/dao/tracks_to_add_dao.dart';
+import 'package:playlistmerger4spotify/database/dao/tracks_to_exclude_dao.dart';
 import 'package:playlistmerger4spotify/database/dao/tracks_to_remove_dao.dart';
 import 'package:playlistmerger4spotify/database/models/merging_results.dart';
+import 'package:playlistmerger4spotify/database/models/playlists_to_ignore.dart';
 import 'package:playlistmerger4spotify/database/models/tracks_current.dart';
 import 'package:playlistmerger4spotify/database/models/tracks_new_all.dart';
 import 'package:playlistmerger4spotify/database/models/tracks_new_distinct.dart';
 import 'package:playlistmerger4spotify/database/models/playlists.dart';
 import 'package:playlistmerger4spotify/database/models/playlists_to_merge.dart';
 import 'package:playlistmerger4spotify/database/models/tracks_to_add.dart';
+import 'package:playlistmerger4spotify/database/models/tracks_to_exclude.dart';
 import 'package:playlistmerger4spotify/database/models/tracks_to_remove.dart';
 import 'package:playlistmerger4spotify/database/models/base/track.dart';
 import 'package:sqflite/sqflite.dart' as sqflite;
@@ -37,21 +41,25 @@ LazyDatabase _openConnection() {
   tables: [
     Playlists,
     PlaylistsToMerge,
+    PlaylistsToIgnore,
     TracksCurrent,
     TracksNewAll,
     TracksNewDistinct,
     TracksToRemove,
     TracksToAdd,
+    TracksToExclude,
     MergingResults,
   ],
   daos: [
     PlaylistsDao,
     PlaylistsToMergeDao,
+    PlaylistsToIgnoreDao,
     TracksCurrentDao,
     TracksNewAllDao,
     TracksNewDistinctDao,
     TracksToAddDao,
     TracksToRemoveDao,
+    TracksToExcludeDao,
     MergingResultsDao,
   ],
 )
@@ -61,7 +69,7 @@ class AppDatabase extends _$AppDatabase {
   factory AppDatabase() => _singleton;
 
   @override
-  int get schemaVersion => 9;
+  int get schemaVersion => 16;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -108,6 +116,24 @@ class AppDatabase extends _$AppDatabase {
               await m.addColumn(mergingResults, mergingResults.tracksAdded);
               await m.addColumn(mergingResults, mergingResults.tracksRemoved);
             } catch (_) {/* column already exists */}
+          }
+
+          if (from <= 11) {
+            try {
+              await m.deleteTable(playlistsToIgnore.actualTableName);
+            } catch (_) {/* nothing to do here */}
+            try {
+              await m.createTable(playlistsToIgnore);
+            } catch (_) {/* nothing to do here */}
+          }
+
+          if (from <= 15) {
+            try {
+              await m.deleteTable(tracksToExclude.actualTableName);
+            } catch (_) {/* nothing to do here */}
+            try {
+              await m.createTable(tracksToExclude);
+            } catch (_) {/* nothing to do here */}
           }
         },
       );

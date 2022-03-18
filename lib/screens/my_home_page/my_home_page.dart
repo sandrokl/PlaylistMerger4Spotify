@@ -193,234 +193,238 @@ class _MyHomePageState extends State<MyHomePage> {
                               ),
                             )
                           : Expanded(
-                              child: ListView.builder(
-                                itemCount: snapshot.data!.length,
-                                itemBuilder: (context, index) {
-                                  var p = snapshot.data![index];
-                                  return Dismissible(
-                                    key: Key(p.name + DateTime.now().millisecondsSinceEpoch.toString()),
-                                    direction: DismissDirection.horizontal,
-                                    confirmDismiss: (DismissDirection direction) async {
-                                      return await showDialog(
-                                        context: context,
-                                        builder: (BuildContext context) {
-                                          return AlertDialog(
-                                            title: Text(S.of(context).confirm),
-                                            content: RichText(
-                                              text: TextSpan(
-                                                style: Theme.of(context).textTheme.bodyText2,
-                                                text: S.of(context).areYouSureYouWishToDelete_start,
-                                                children: <TextSpan>[
-                                                  TextSpan(
-                                                    text: p.name,
-                                                    style: const TextStyle(fontWeight: FontWeight.bold),
-                                                  ),
-                                                  TextSpan(text: S.of(context).areYouSureYouWishToDelete_end),
-                                                ],
-                                              ),
-                                            ),
-                                            actions: <Widget>[
-                                              TextButton(
-                                                onPressed: () => Navigator.of(context).pop(false),
-                                                child: Text(S.of(context).cancel),
-                                              ),
-                                              TextButton(
-                                                onPressed: () => Navigator.of(context).pop(true),
-                                                child: Text(S.of(context).delete),
-                                              ),
-                                            ],
-                                          );
-                                        },
-                                      );
-                                    },
-                                    secondaryBackground: Container(
-                                      color: Colors.red,
-                                      padding: const EdgeInsets.only(right: 10.0),
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.end,
-                                        children: const [
-                                          Icon(
-                                            Icons.delete,
-                                            color: Colors.white,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    background: Container(
-                                      color: Colors.red,
-                                      padding: const EdgeInsets.only(left: 10.0),
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.start,
-                                        children: const [
-                                          Icon(
-                                            Icons.delete,
-                                            color: Colors.white,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    onDismissed: (direction) {
-                                      _removeMergedPlaylist(index);
-                                    },
-                                    child: GestureDetector(
-                                      onTap: () async {
-                                        await showDialog(
-                                            context: context,
-                                            builder: (context) {
-                                              return AlertDialog(
-                                                title: Text(p.name),
-                                                contentPadding:
-                                                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-                                                content: Column(
-                                                  mainAxisSize: MainAxisSize.min,
-                                                  children: [
-                                                    ListTile(
-                                                      visualDensity: VisualDensity.compact,
-                                                      contentPadding: const EdgeInsets.all(4.0),
-                                                      dense: true,
-                                                      onTap: () async {
-                                                        await Workmanager().registerOneOffTask(
-                                                          DateTime.now().millisecond.toString(),
-                                                          WorkManagerHelper.TASK_DO_MERGING_NOW_SPECIFIC,
-                                                          inputData: {
-                                                            "playlistId": p.playlistId,
-                                                            "notificationChannelId":
-                                                                NotificationsHelper.CHANNEL_KEY_MERGING_RESULTS,
-                                                            "notificationChannelName":
-                                                                S.of(context).channelNameMergingResults,
-                                                            "successTitle": S.of(context).notificationSuccessTitle,
-                                                            "successMessage": S
-                                                                .of(context)
-                                                                .notificationPlaylistUpdatedSuccessfully(p.name),
-                                                            "failureTitle": S.of(context).notificationFailureTitle,
-                                                            "failureMessage": S.of(context).notificationMergingFailed,
-                                                            "notificationInProgressChannelId":
-                                                                NotificationsHelper.CHANNEL_KEY_IN_PROGRESS,
-                                                            "notificationInProgressChannelName":
-                                                                S.of(context).notificationInProgressChannelName,
-                                                            "notificationInProgressMessage":
-                                                                S.of(context).notificationInProgressMessage,
-                                                          },
-                                                        );
-                                                        ScaffoldMessenger.of(context).showSnackBar(
-                                                          SnackBar(
-                                                            content: Text(S
-                                                                .of(context)
-                                                                .anUpdateToYourPlaylistIsBeingMadeInSpotify(1)),
-                                                          ),
-                                                        );
-                                                        Navigator.pop(context);
-                                                      },
-                                                      title: Text(
-                                                        S.of(context).updateThisInSpotify,
-                                                        style: Theme.of(context).textTheme.bodyText2,
-                                                      ),
-                                                      leading: const Icon(
-                                                        Icons.call_merge,
-                                                        size: 30.0,
-                                                      ),
+                              child: Scrollbar(
+                                isAlwaysShown: true,
+                                thickness: 1.0,
+                                child: ListView.builder(
+                                  itemCount: snapshot.data!.length,
+                                  itemBuilder: (context, index) {
+                                    var p = snapshot.data![index];
+                                    return Dismissible(
+                                      key: Key(p.name + DateTime.now().millisecondsSinceEpoch.toString()),
+                                      direction: DismissDirection.horizontal,
+                                      confirmDismiss: (DismissDirection direction) async {
+                                        return await showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return AlertDialog(
+                                              title: Text(S.of(context).confirm),
+                                              content: RichText(
+                                                text: TextSpan(
+                                                  style: Theme.of(context).textTheme.bodyText2,
+                                                  text: S.of(context).areYouSureYouWishToDelete_start,
+                                                  children: <TextSpan>[
+                                                    TextSpan(
+                                                      text: p.name,
+                                                      style: const TextStyle(fontWeight: FontWeight.bold),
                                                     ),
-                                                    ListTile(
-                                                      visualDensity: VisualDensity.compact,
-                                                      contentPadding: const EdgeInsets.all(4.0),
-                                                      dense: true,
-                                                      onTap: () async {
-                                                        Navigator.pop(context);
-                                                        launch(p.playUrl);
-                                                      },
-                                                      title: Text(
-                                                        S.of(context).openInSpotify,
-                                                        style: Theme.of(context).textTheme.bodyText2,
-                                                      ),
-                                                      leading: const Icon(Icons.play_circle_fill_outlined),
-                                                    ),
-                                                    ListTile(
-                                                      visualDensity: VisualDensity.compact,
-                                                      contentPadding: const EdgeInsets.all(4.0),
-                                                      dense: true,
-                                                      onTap: () async {
-                                                        await showDialog(
-                                                          context: context,
-                                                          builder: (BuildContext context) {
-                                                            return AlertDialog(
-                                                              title: Text(S.of(context).confirm),
-                                                              content: RichText(
-                                                                text: TextSpan(
-                                                                  style: Theme.of(context).textTheme.bodyText2,
-                                                                  text: S.of(context).areYouSureYouWishToDelete_start,
-                                                                  children: <TextSpan>[
-                                                                    TextSpan(
-                                                                      text: p.name,
-                                                                      style:
-                                                                          const TextStyle(fontWeight: FontWeight.bold),
-                                                                    ),
-                                                                    TextSpan(
-                                                                        text: S
-                                                                            .of(context)
-                                                                            .areYouSureYouWishToDelete_end),
-                                                                  ],
-                                                                ),
-                                                              ),
-                                                              actions: <Widget>[
-                                                                TextButton(
-                                                                  onPressed: () => Navigator.of(context).pop(),
-                                                                  child: Text(S.of(context).cancel),
-                                                                ),
-                                                                TextButton(
-                                                                  onPressed: () async {
-                                                                    await _removeMergedPlaylist(index);
-                                                                    Navigator.popUntil(context,
-                                                                        (Route<dynamic> route) => route.isFirst);
-                                                                  },
-                                                                  child: Text(S.of(context).delete),
-                                                                ),
-                                                              ],
-                                                            );
-                                                          },
-                                                        );
-                                                      },
-                                                      title: Text(
-                                                        S.of(context).deleteThisMergingRule,
-                                                        style: Theme.of(context).textTheme.bodyText2,
-                                                      ),
-                                                      leading: const Icon(Icons.delete),
-                                                    ),
-                                                    ListTile(
-                                                      visualDensity: VisualDensity.compact,
-                                                      contentPadding: const EdgeInsets.all(4.0),
-                                                      dense: true,
-                                                      onTap: () async {
-                                                        Navigator.pop(context);
-                                                        await Navigator.push(
-                                                          context,
-                                                          MaterialPageRoute(
-                                                            builder: (context) => MergingDefinition(
-                                                              editingPlaylistId: p.playlistId,
-                                                            ),
-                                                          ),
-                                                        );
-                                                        _updateListMergedPlaylists();
-                                                      },
-                                                      title: Text(
-                                                        S.of(context).modifyThisMergingRule,
-                                                        style: Theme.of(context).textTheme.bodyText2,
-                                                      ),
-                                                      leading: const Icon(Icons.edit_rounded),
-                                                    ),
+                                                    TextSpan(text: S.of(context).areYouSureYouWishToDelete_end),
                                                   ],
                                                 ),
-                                              );
-                                            });
+                                              ),
+                                              actions: <Widget>[
+                                                TextButton(
+                                                  onPressed: () => Navigator.of(context).pop(false),
+                                                  child: Text(S.of(context).cancel),
+                                                ),
+                                                TextButton(
+                                                  onPressed: () => Navigator.of(context).pop(true),
+                                                  child: Text(S.of(context).delete),
+                                                ),
+                                              ],
+                                            );
+                                          },
+                                        );
                                       },
-                                      child: ListTile(
-                                        title: Text(p.name),
-                                        trailing: const Icon(
-                                          Icons.more_vert,
+                                      secondaryBackground: Container(
+                                        color: Colors.red,
+                                        padding: const EdgeInsets.only(right: 10.0),
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.end,
+                                          children: const [
+                                            Icon(
+                                              Icons.delete,
+                                              color: Colors.white,
+                                            ),
+                                          ],
                                         ),
                                       ),
-                                    ),
-                                  );
-                                },
+                                      background: Container(
+                                        color: Colors.red,
+                                        padding: const EdgeInsets.only(left: 10.0),
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.start,
+                                          children: const [
+                                            Icon(
+                                              Icons.delete,
+                                              color: Colors.white,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      onDismissed: (direction) {
+                                        _removeMergedPlaylist(index);
+                                      },
+                                      child: GestureDetector(
+                                        onTap: () async {
+                                          await showDialog(
+                                              context: context,
+                                              builder: (context) {
+                                                return AlertDialog(
+                                                  title: Text(p.name),
+                                                  contentPadding:
+                                                      const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+                                                  content: Column(
+                                                    mainAxisSize: MainAxisSize.min,
+                                                    children: [
+                                                      ListTile(
+                                                        visualDensity: VisualDensity.compact,
+                                                        contentPadding: const EdgeInsets.all(4.0),
+                                                        dense: true,
+                                                        onTap: () async {
+                                                          await Workmanager().registerOneOffTask(
+                                                            DateTime.now().millisecond.toString(),
+                                                            WorkManagerHelper.TASK_DO_MERGING_NOW_SPECIFIC,
+                                                            inputData: {
+                                                              "playlistId": p.playlistId,
+                                                              "notificationChannelId":
+                                                                  NotificationsHelper.CHANNEL_KEY_MERGING_RESULTS,
+                                                              "notificationChannelName":
+                                                                  S.of(context).channelNameMergingResults,
+                                                              "successTitle": S.of(context).notificationSuccessTitle,
+                                                              "successMessage": S
+                                                                  .of(context)
+                                                                  .notificationPlaylistUpdatedSuccessfully(p.name),
+                                                              "failureTitle": S.of(context).notificationFailureTitle,
+                                                              "failureMessage": S.of(context).notificationMergingFailed,
+                                                              "notificationInProgressChannelId":
+                                                                  NotificationsHelper.CHANNEL_KEY_IN_PROGRESS,
+                                                              "notificationInProgressChannelName":
+                                                                  S.of(context).notificationInProgressChannelName,
+                                                              "notificationInProgressMessage":
+                                                                  S.of(context).notificationInProgressMessage,
+                                                            },
+                                                          );
+                                                          ScaffoldMessenger.of(context).showSnackBar(
+                                                            SnackBar(
+                                                              content: Text(S
+                                                                  .of(context)
+                                                                  .anUpdateToYourPlaylistIsBeingMadeInSpotify(1)),
+                                                            ),
+                                                          );
+                                                          Navigator.pop(context);
+                                                        },
+                                                        title: Text(
+                                                          S.of(context).updateThisInSpotify,
+                                                          style: Theme.of(context).textTheme.bodyText2,
+                                                        ),
+                                                        leading: const Icon(
+                                                          Icons.call_merge,
+                                                          size: 30.0,
+                                                        ),
+                                                      ),
+                                                      ListTile(
+                                                        visualDensity: VisualDensity.compact,
+                                                        contentPadding: const EdgeInsets.all(4.0),
+                                                        dense: true,
+                                                        onTap: () async {
+                                                          Navigator.pop(context);
+                                                          launch(p.playUrl);
+                                                        },
+                                                        title: Text(
+                                                          S.of(context).openInSpotify,
+                                                          style: Theme.of(context).textTheme.bodyText2,
+                                                        ),
+                                                        leading: const Icon(Icons.play_circle_fill_outlined),
+                                                      ),
+                                                      ListTile(
+                                                        visualDensity: VisualDensity.compact,
+                                                        contentPadding: const EdgeInsets.all(4.0),
+                                                        dense: true,
+                                                        onTap: () async {
+                                                          await showDialog(
+                                                            context: context,
+                                                            builder: (BuildContext context) {
+                                                              return AlertDialog(
+                                                                title: Text(S.of(context).confirm),
+                                                                content: RichText(
+                                                                  text: TextSpan(
+                                                                    style: Theme.of(context).textTheme.bodyText2,
+                                                                    text: S.of(context).areYouSureYouWishToDelete_start,
+                                                                    children: <TextSpan>[
+                                                                      TextSpan(
+                                                                        text: p.name,
+                                                                        style: const TextStyle(
+                                                                            fontWeight: FontWeight.bold),
+                                                                      ),
+                                                                      TextSpan(
+                                                                          text: S
+                                                                              .of(context)
+                                                                              .areYouSureYouWishToDelete_end),
+                                                                    ],
+                                                                  ),
+                                                                ),
+                                                                actions: <Widget>[
+                                                                  TextButton(
+                                                                    onPressed: () => Navigator.of(context).pop(),
+                                                                    child: Text(S.of(context).cancel),
+                                                                  ),
+                                                                  TextButton(
+                                                                    onPressed: () async {
+                                                                      await _removeMergedPlaylist(index);
+                                                                      Navigator.popUntil(context,
+                                                                          (Route<dynamic> route) => route.isFirst);
+                                                                    },
+                                                                    child: Text(S.of(context).delete),
+                                                                  ),
+                                                                ],
+                                                              );
+                                                            },
+                                                          );
+                                                        },
+                                                        title: Text(
+                                                          S.of(context).deleteThisMergingRule,
+                                                          style: Theme.of(context).textTheme.bodyText2,
+                                                        ),
+                                                        leading: const Icon(Icons.delete),
+                                                      ),
+                                                      ListTile(
+                                                        visualDensity: VisualDensity.compact,
+                                                        contentPadding: const EdgeInsets.all(4.0),
+                                                        dense: true,
+                                                        onTap: () async {
+                                                          Navigator.pop(context);
+                                                          await Navigator.push(
+                                                            context,
+                                                            MaterialPageRoute(
+                                                              builder: (context) => MergingDefinition(
+                                                                editingPlaylistId: p.playlistId,
+                                                              ),
+                                                            ),
+                                                          );
+                                                          _updateListMergedPlaylists();
+                                                        },
+                                                        title: Text(
+                                                          S.of(context).modifyThisMergingRule,
+                                                          style: Theme.of(context).textTheme.bodyText2,
+                                                        ),
+                                                        leading: const Icon(Icons.edit_rounded),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                );
+                                              });
+                                        },
+                                        child: ListTile(
+                                          title: Text(p.name),
+                                          trailing: const Icon(
+                                            Icons.more_vert,
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
                               ),
                             );
                     } else if (snapshot.hasError) {

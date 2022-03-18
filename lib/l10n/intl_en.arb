@@ -94,5 +94,26 @@
         "type": "String"
       }
     }
-  }
+  },
+  "playlistIgnoreList": "No-include list",
+  "excludeNothingHere": "Nothing in no-include for now",
+  "howToAddToExcludeList": "How to add music to no-include list (external link)",
+  "excludePasteLinkToThePlaylist": "Paste link to the playlist here",
+  "validationPlaylistLink": "Please enter a valid playlist link",
+  "excludeTitle": "Playlist with tracks no-include",
+  "subTitlePlaylistToExclude": "By {ownerName} - {totalTracks} tracks",
+  "@subTitlePlaylistToExclude": {
+    "placeholders": {
+      "ownerName": {
+        "type": "String"
+      },
+      "totalTracks": {
+        "type": "int"
+      }
+    }
+  },
+  "excludeList_AreYouSureDelete": "Are you sure you want to delete ",
+  "exclusionPlaylistAlreadyAdded": "Playlist already in no-include list",
+  "definitionToMerge": "To Merge",
+  "definitionToExclude": "Don't include"
 }
