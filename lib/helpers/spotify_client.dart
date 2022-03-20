@@ -93,6 +93,10 @@ class SpotifyClient {
       if (httpResponse.statusCode == _statusCodeTooManyRequests) {
         await Future.delayed(_retryDelay);
         continue;
+      } else if (httpResponse.statusCode == 404) {
+        // an error in the spotify API sometimes returns "Not found" on playlists that exist.
+        // we will continue with the other playlists instead of exiting in error.
+        break;
       }
 
       var jsonListTracks = jsonDecode(httpResponse.body);

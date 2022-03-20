@@ -562,7 +562,8 @@ class _MergingDefinitionState extends State<MergingDefinition> {
                                   IconButton(
                                     icon: const Icon(Icons.open_in_new_outlined),
                                     onPressed: () async {
-                                      await launch('https://sandrokl.net/playlistmerger4spotify/add-to-exclude-list/');
+                                      await launch(
+                                          'https://sandrokl.net/playlistmerger4spotify/add-to-noinclude-list/');
                                     },
                                   )
                                 ],
