@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:playlistmerger4spotify/database/database.dart';
 import 'package:playlistmerger4spotify/database/models/base/track.dart';
 import 'package:playlistmerger4spotify/database/models/merging_results.dart';
+import 'package:playlistmerger4spotify/helpers/deduplicator_helper.dart';
 import 'package:playlistmerger4spotify/helpers/notifications_helper.dart';
 import 'package:playlistmerger4spotify/helpers/spotify_client.dart';
 
@@ -175,8 +176,12 @@ class MergingHelper {
       // STEP 8: remove tracks from Spotify
       tracksToRemove = await _db.tracksToRemoveDao.getAll(jobId);
       if (tracksToRemove.isNotEmpty) {
-        await _spotifyClient.removeTracksInPlaylist(playlistId, tracksToRemove);
+        await _spotifyClient.removeTracksByIdInPlaylist(playlistId, tracksToRemove);
       }
+
+      // STEP 9: if a Spotify bug caused duplicates, remove them
+      final _dedup = DeduplicatorHelper();
+      await _dedup.deduplicateTracks(playlistId);
 
       // STEP N : clear tracks from DB
       // await clearTracksInDB(jobId);
