@@ -3,8 +3,8 @@ class SpotifyUri {
 
   SpotifyUri(this.uri);
 
-  Map<String, String> toMap() {
-    final Map<String, String> data = <String, String>{};
+  Map<String, dynamic> toMap() {
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['uri'] = uri;
     return data;
   }

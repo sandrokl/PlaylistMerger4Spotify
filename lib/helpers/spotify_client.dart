@@ -7,6 +7,7 @@ import 'package:playlistmerger4spotify/database/models/base/track.dart';
 import 'package:playlistmerger4spotify/generated/l10n.dart';
 import 'package:playlistmerger4spotify/models/playlist_info_for_exclusion.dart';
 import 'package:playlistmerger4spotify/models/spotify_uri.dart';
+import 'package:playlistmerger4spotify/models/spotify_uri_with_positions.dart';
 import 'package:playlistmerger4spotify/models/spotify_user.dart';
 import 'package:playlistmerger4spotify/spotify_secrets.dart' as secrets;
 import 'package:playlistmerger4spotify/helpers/spotify_json_parser.dart';
@@ -109,6 +110,36 @@ class SpotifyClient {
     } while (next != null);
   }
 
+  Stream<String> getUrisFromPlaylist(String playlistId) async* {
+    var page = 0;
+    String? next = "";
+
+    do {
+      var offset = (page * _pageSize);
+      var httpResponse = await _httpHelper.get(
+        "$_apiUrlBase/playlists/$playlistId/tracks?fields=items(track(uri)),previous,next&limit=$_pageSize&offset=$offset",
+      );
+
+      // if Spotify returns "too many requests", wait 15s to retry
+      if (httpResponse.statusCode == _statusCodeTooManyRequests) {
+        await Future.delayed(_retryDelay);
+        continue;
+      } else if (httpResponse.statusCode == 404) {
+        // an error in the spotify API sometimes returns "Not found" on playlists that exist.
+        // we will continue with the other playlists instead of exiting in error.
+        break;
+      }
+
+      var jsonListTracks = jsonDecode(httpResponse.body);
+      for (var jsonTrack in jsonListTracks["items"]) {
+        yield jsonTrack["track"]["uri"].toString();
+      }
+
+      next = jsonListTracks["next"];
+      page++;
+    } while (next != null);
+  }
+
   Future<void> insertTracksInPlaylist(String playlistId, List<Track> tracksToAdd) async {
     var slices = (tracksToAdd.length / _pageSize).ceil();
     var i = 0;
@@ -134,7 +165,7 @@ class SpotifyClient {
     } while (i < slices);
   }
 
-  Future<void> removeTracksInPlaylist(String playlistId, List<Track> tracksToRemove) async {
+  Future<void> removeTracksByIdInPlaylist(String playlistId, List<Track> tracksToRemove) async {
     var slices = (tracksToRemove.length / _pageSize).ceil();
     var i = 0;
     do {
@@ -145,6 +176,35 @@ class SpotifyClient {
       var toDelete = <String, dynamic>{};
       var listUris = (tracks.map((t) => SpotifyUri(t.trackUri).toMap())).toList();
       toDelete["tracks"] = listUris;
+      var accessToken = (await _httpHelper.getToken())!.accessToken!;
+
+      var req = http.Request("DELETE", Uri.parse("$_apiUrlBase/playlists/$playlistId/tracks"));
+      req.headers["Accept"] = "application/json";
+      req.headers["Content-Type"] = "application/json";
+      req.headers["Authorization"] = "Bearer $accessToken";
+      req.body = jsonEncode(toDelete);
+      var httpResponse = await req.send();
+
+      if (httpResponse.statusCode == _statusCodeTooManyRequests) {
+        await Future.delayed(_retryDelay);
+        continue;
+      }
+
+      i++;
+    } while (i < slices);
+  }
+
+  Future<void> removeTracksByIdAndPositionInPlaylist(
+      String playlistId, List<SpotifyUriWithPositions> tracksToRemove) async {
+    var slices = (tracksToRemove.length / _pageSize).ceil();
+    var i = 0;
+    do {
+      var tracks = i == (slices - 1)
+          ? tracksToRemove.sublist(i * _pageSize)
+          : tracksToRemove.sublist(i * _pageSize, (i * _pageSize) + _pageSize);
+
+      var toDelete = <String, dynamic>{};
+      toDelete["tracks"] = tracks.map((e) => e.toMap()).toList();
       var accessToken = (await _httpHelper.getToken())!.accessToken!;
 
       var req = http.Request("DELETE", Uri.parse("$_apiUrlBase/playlists/$playlistId/tracks"));
