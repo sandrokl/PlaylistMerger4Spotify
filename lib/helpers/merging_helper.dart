@@ -180,8 +180,7 @@ class MergingHelper {
       }
 
       // STEP 9: if a Spotify bug caused duplicates, remove them
-      final _dedup = DeduplicatorHelper();
-      await _dedup.deduplicateTracks(playlistId);
+      final nbRemovedDuplicates = await DeduplicatorHelper().deduplicateTracks(playlistId);
 
       // STEP N : clear tracks from DB
       // await clearTracksInDB(jobId);
@@ -194,7 +193,7 @@ class MergingHelper {
         durationMs: DateTime.now().difference(startDate).inMilliseconds,
         triggeredBy: isAutomaticUpdate ? TriggeredBy.schedule : TriggeredBy.user,
         tracksAdded: tracksToAdd.length,
-        tracksRemoved: tracksToRemove.length,
+        tracksRemoved: tracksToRemove.length + nbRemovedDuplicates,
       ));
 
       return true;

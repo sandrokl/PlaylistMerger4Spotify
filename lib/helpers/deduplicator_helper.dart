@@ -8,7 +8,7 @@ class DeduplicatorHelper {
 
   final _spotifyClient = SpotifyClient();
 
-  Future<void> deduplicateTracks(String playlistId) async {
+  Future<int> deduplicateTracks(String playlistId) async {
     var allIds = <String>[];
     await for (var id in _spotifyClient.getUrisFromPlaylist(playlistId)) {
       allIds.add(id);
@@ -28,5 +28,7 @@ class DeduplicatorHelper {
     if (duplicates.isNotEmpty) {
       await _spotifyClient.removeTracksByIdAndPositionInPlaylist(playlistId, duplicates.reversed.toList());
     }
+
+    return duplicates.length;
   }
 }
