@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 import 'package:playlistmerger4spotify/generated/l10n.dart';
@@ -9,7 +11,7 @@ class Onboarding extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var _listPagesViewModel = [
+    var listPagesViewModel = [
       PageViewModel(
         title: S.of(context).welcome,
         body: S.of(context).appTitle,
@@ -46,7 +48,7 @@ class Onboarding extends StatelessWidget {
 
     return SafeArea(
       child: IntroductionScreen(
-        pages: _listPagesViewModel,
+        pages: listPagesViewModel,
         next: const Icon(Icons.arrow_forward),
         done: Text(S.of(context).ok,
             style: const TextStyle(fontWeight: FontWeight.w600)),

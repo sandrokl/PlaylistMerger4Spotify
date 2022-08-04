@@ -1,17 +1,20 @@
+// ignore_for_file: depend_on_referenced_packages
+
 import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:oauth2_client/oauth2_helper.dart';
 import 'package:oauth2_client/spotify_oauth2_client.dart';
 import 'package:playlistmerger4spotify/database/database.dart';
 import 'package:playlistmerger4spotify/database/models/base/track.dart';
 import 'package:playlistmerger4spotify/generated/l10n.dart';
+import 'package:playlistmerger4spotify/helpers/spotify_json_parser.dart';
 import 'package:playlistmerger4spotify/models/playlist_info_for_exclusion.dart';
 import 'package:playlistmerger4spotify/models/spotify_uri.dart';
 import 'package:playlistmerger4spotify/models/spotify_uri_with_positions.dart';
 import 'package:playlistmerger4spotify/models/spotify_user.dart';
 import 'package:playlistmerger4spotify/spotify_secrets.dart' as secrets;
-import 'package:playlistmerger4spotify/helpers/spotify_json_parser.dart';
-import 'package:http/http.dart' as http;
 
 class SpotifyClient {
   final _apiUrlBase = "https://api.spotify.com/v1";

@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -9,7 +11,7 @@ import 'package:playlistmerger4spotify/screens/merging_history/merging_history.d
 import 'package:playlistmerger4spotify/store/theme_store.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class Settings extends StatefulWidget {
   const Settings({Key? key}) : super(key: key);
@@ -27,11 +29,11 @@ class _SettingsState extends State<Settings> {
   void initState() {
     super.initState();
     Timer.run(() async {
-      final _sharedPrefs = await SharedPreferences.getInstance();
+      final sharedPrefs = await SharedPreferences.getInstance();
       setState(() {
-        _isUpdateSchedule = _sharedPrefs.getBool("isUpdateSchedule") ?? false;
-        _currentLanguage = _sharedPrefs.getString("appLanguage") ?? Intl.defaultLocale!;
-        _currentTheme = _sharedPrefs.getString("appTheme") ?? AppThemes.system.name;
+        _isUpdateSchedule = sharedPrefs.getBool("isUpdateSchedule") ?? false;
+        _currentLanguage = sharedPrefs.getString("appLanguage") ?? Intl.defaultLocale!;
+        _currentTheme = sharedPrefs.getString("appTheme") ?? AppThemes.system.name;
       });
     });
   }
@@ -47,8 +49,8 @@ class _SettingsState extends State<Settings> {
       await WorkManagerHelper().deleteUpdateSchedule();
     }
 
-    final _sharedPrefs = await SharedPreferences.getInstance();
-    await _sharedPrefs.setBool("isUpdateSchedule", newIsUpdateScheduled);
+    final sharedPrefs = await SharedPreferences.getInstance();
+    await sharedPrefs.setBool("isUpdateSchedule", newIsUpdateScheduled);
     setState(() {
       _isUpdateSchedule = newIsUpdateScheduled;
     });
@@ -56,8 +58,8 @@ class _SettingsState extends State<Settings> {
 
   void _changeLanguage(String? newLang) async {
     if (newLang != null) {
-      final _sharedPrefs = await SharedPreferences.getInstance();
-      await _sharedPrefs.setString("appLanguage", newLang);
+      final sharedPrefs = await SharedPreferences.getInstance();
+      await sharedPrefs.setString("appLanguage", newLang);
       await S.load(Locale(newLang));
       setState(() {
         _currentLanguage = newLang;
@@ -69,8 +71,8 @@ class _SettingsState extends State<Settings> {
     if (newTheme != null) {
       final theme = AppThemes.values.firstWhere((t) => t.name == newTheme);
       context.read<ThemeStore>().setTheme(theme);
-      final _sharedPrefs = await SharedPreferences.getInstance();
-      await _sharedPrefs.setString("appTheme", newTheme);
+      final sharedPrefs = await SharedPreferences.getInstance();
+      await sharedPrefs.setString("appTheme", newTheme);
       setState(() {
         _currentTheme = theme.name;
       });
@@ -86,7 +88,7 @@ class _SettingsState extends State<Settings> {
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Scrollbar(
-          isAlwaysShown: true,
+          thumbVisibility: true,
           thickness: 1.0,
           child: SingleChildScrollView(
             child: Column(
@@ -167,7 +169,7 @@ class _SettingsState extends State<Settings> {
                   trailing: IconButton(
                     onPressed: () async {
                       var url = "mailto:sandro.kl.80@gmail.com?subject=PlaylistMerger 4 Spotify";
-                      await launch(url);
+                      await launchUrlString(url);
                     },
                     icon: const Icon(Icons.email),
                   ),
