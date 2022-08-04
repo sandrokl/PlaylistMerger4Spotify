@@ -45,7 +45,7 @@ android {
         main.java.srcDirs += 'src/main/kotlin'
     }
 
-    compileSdkVersion 31
+    compileSdkVersion 33
 
     defaultConfig {
         applicationId "net.sandrokl.playlistmerger4spotify"
