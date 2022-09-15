@@ -3,7 +3,7 @@ description: PlaylistMerger 4 Spotify
 
 publish_to: 'none'
 
-version: 2.7.220804-1+202208041
+version: 2.7.220915-1+202209151
 
 environment:
   sdk: '>=2.15.1 <3.0.0'
