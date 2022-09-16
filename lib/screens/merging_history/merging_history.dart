@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -32,9 +34,9 @@ class _MergingHistoryState extends State<MergingHistory> {
   void initState() {
     super.initState();
     Timer.run(() async {
-      final _db = Provider.of<AppDatabase>(context, listen: false);
-      final merged = await _db.playlistsDao.getMergedPlaylists();
-      var history = await _db.mergingResultsDao.getAll(limit: 500, mostRecentFirst: true);
+      final db = Provider.of<AppDatabase>(context, listen: false);
+      final merged = await db.playlistsDao.getMergedPlaylists();
+      var history = await db.mergingResultsDao.getAll(limit: 500, mostRecentFirst: true);
       history = history.where((h) => merged.where((m) => m.playlistId == h.playlistId).isNotEmpty).toList();
 
       setState(() {
@@ -55,13 +57,13 @@ class _MergingHistoryState extends State<MergingHistory> {
             DropdownButton<String>(
                 items: <DropdownMenuItem<String>>[
                   DropdownMenuItem<String>(
-                    child: Text(S.of(context).historyViewAllPlaylistsHistory),
                     value: "",
+                    child: Text(S.of(context).historyViewAllPlaylistsHistory),
                   ),
                   ..._listMergedPlaylists
                       .map((e) => DropdownMenuItem<String>(
-                            child: Text(e.name),
                             value: e.playlistId,
+                            child: Text(e.name),
                           ))
                       .toList(),
                 ],
@@ -74,7 +76,7 @@ class _MergingHistoryState extends State<MergingHistory> {
                 value: _selectedFilter),
             Expanded(
               child: Scrollbar(
-                isAlwaysShown: true,
+                thumbVisibility: true,
                 thickness: 1.0,
                 child: ListView.separated(
                   padding: const EdgeInsets.only(right: 8.0),

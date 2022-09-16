@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:playlistmerger4spotify/database/database.dart';
@@ -15,7 +17,7 @@ import 'package:playlistmerger4spotify/store/theme_store.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:upgrader/upgrader.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 import 'package:workmanager/workmanager.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -57,8 +59,8 @@ class _MyHomePageState extends State<MyHomePage> {
         S.load(Locale(lang));
       }
 
-      var _currentTheme = sharedPrefs.getString("appTheme") ?? AppThemes.system.name;
-      final theme = AppThemes.values.firstWhere((t) => t.name == _currentTheme);
+      var currentTheme = sharedPrefs.getString("appTheme") ?? AppThemes.system.name;
+      final theme = AppThemes.values.firstWhere((t) => t.name == currentTheme);
       Provider.of<ThemeStore>(context, listen: false).setTheme(theme);
     });
   }
@@ -164,7 +166,9 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
       body: UpgradeAlert(
-        showReleaseNotes: false,
+        upgrader: Upgrader(
+          showReleaseNotes: false,
+        ),
         child: RefreshIndicator(
           onRefresh: () async => refreshUserPlaylistsFromSpotify(context),
           child: Center(
@@ -206,7 +210,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                   child: Padding(
                                     padding: const EdgeInsets.only(right: 12.0),
                                     child: Scrollbar(
-                                      isAlwaysShown: true,
+                                      thumbVisibility: true,
                                       thickness: 1.0,
                                       child: ListView.builder(
                                         itemCount: snapshot.data!.length,
@@ -345,7 +349,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                                               dense: true,
                                                               onTap: () async {
                                                                 Navigator.pop(context);
-                                                                launch(p.playUrl);
+                                                                launchUrlString(p.playUrl);
                                                               },
                                                               title: Text(
                                                                 S.of(context).openInSpotify,

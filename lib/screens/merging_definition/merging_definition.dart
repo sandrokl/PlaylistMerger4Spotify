@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api, use_build_context_synchronously
+
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -8,7 +10,7 @@ import 'package:playlistmerger4spotify/models/playlist_info_for_exclusion.dart';
 import 'package:playlistmerger4spotify/store/spotify_user_store.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class MergingDefinition extends StatefulWidget {
   final String? editingPlaylistId;
@@ -254,16 +256,16 @@ class _MergingDefinitionState extends State<MergingDefinition> {
   }
 
   void _loadPlaylistsForScreen() {
-    final _db = context.read<AppDatabase>();
-    final _userId = _userStore.user!.id;
+    final db = context.read<AppDatabase>();
+    final userId = _userStore.user!.id;
 
     if (widget.editingPlaylistId == null) {
-      _destinationPlaylistOptions = _db.playlistsDao.getPossibleNewMergingPlaylists(_userId);
+      _destinationPlaylistOptions = db.playlistsDao.getPossibleNewMergingPlaylists(userId);
     } else {
       _selectedDestinationPlaylist = widget.editingPlaylistId!;
-      _destinationPlaylistOptions = _db.playlistsDao.getPlaylistsByIdList([widget.editingPlaylistId!]);
-      _db.playlistsToMergeDao.getPlaylistsToMergeByDestinationId(widget.editingPlaylistId!).then((list) async {
-        final pToIgnore = (await _db.playlistsToIgnoreDao.getByDestinationId(_selectedDestinationPlaylist!));
+      _destinationPlaylistOptions = db.playlistsDao.getPlaylistsByIdList([widget.editingPlaylistId!]);
+      db.playlistsToMergeDao.getPlaylistsToMergeByDestinationId(widget.editingPlaylistId!).then((list) async {
+        final pToIgnore = (await db.playlistsToIgnoreDao.getByDestinationId(_selectedDestinationPlaylist!));
 
         setState(() {
           _selectedSourcePlaylists = list.map((p) => p.sourcePlaylistId).toList();
@@ -273,7 +275,7 @@ class _MergingDefinitionState extends State<MergingDefinition> {
     }
 
     setState(() {
-      _sourcePlaylistsOptions = _db.playlistsDao.getAllUserPlaylists();
+      _sourcePlaylistsOptions = db.playlistsDao.getAllUserPlaylists();
     });
   }
 
@@ -340,10 +342,10 @@ class _MergingDefinitionState extends State<MergingDefinition> {
   }
 
   Future<void> saveChanges() async {
-    var _db = Provider.of<AppDatabase>(context, listen: false);
+    var db = Provider.of<AppDatabase>(context, listen: false);
     if (_selectedDestinationPlaylist != null) {
-      await _db.playlistsToMergeDao.updateMergedPlaylist(_selectedDestinationPlaylist!, _selectedSourcePlaylists);
-      await _db.playlistsToIgnoreDao.updateIgnoredPlaylists(_selectedDestinationPlaylist!, _playlistsToExclude);
+      await db.playlistsToMergeDao.updateMergedPlaylist(_selectedDestinationPlaylist!, _selectedSourcePlaylists);
+      await db.playlistsToIgnoreDao.updateIgnoredPlaylists(_selectedDestinationPlaylist!, _playlistsToExclude);
     }
   }
 
@@ -417,8 +419,8 @@ class _MergingDefinitionState extends State<MergingDefinition> {
                             child: DropdownButton<String>(
                               items: snapshot.data!.map((e) {
                                 return DropdownMenuItem<String>(
-                                  child: Text(e.name),
                                   value: e.playlistId,
+                                  child: Text(e.name),
                                 );
                               }).toList(),
                               isExpanded: true,
@@ -480,7 +482,7 @@ class _MergingDefinitionState extends State<MergingDefinition> {
                         return Padding(
                           padding: const EdgeInsets.only(top: 8.0),
                           child: Scrollbar(
-                            isAlwaysShown: true,
+                            thumbVisibility: true,
                             thickness: 1.0,
                             child: SingleChildScrollView(
                               child: Column(
@@ -540,7 +542,7 @@ class _MergingDefinitionState extends State<MergingDefinition> {
                 visible: _selectedTab == 1,
                 child: Expanded(
                   child: Scrollbar(
-                    isAlwaysShown: true,
+                    thumbVisibility: true,
                     thickness: 1.0,
                     child: SingleChildScrollView(
                       child: Padding(
@@ -562,7 +564,7 @@ class _MergingDefinitionState extends State<MergingDefinition> {
                                   IconButton(
                                     icon: const Icon(Icons.open_in_new_outlined),
                                     onPressed: () async {
-                                      await launch(
+                                      await launchUrlString(
                                           'https://sandrokl.net/playlistmerger4spotify/add-to-noinclude-list/');
                                     },
                                   )
