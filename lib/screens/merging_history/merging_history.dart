@@ -76,7 +76,7 @@ class _MergingHistoryState extends State<MergingHistory> {
                 value: _selectedFilter),
             Expanded(
               child: Scrollbar(
-                thumbVisibility: true,
+                trackVisibility: true,
                 thickness: 1.0,
                 child: ListView.separated(
                   padding: const EdgeInsets.only(right: 8.0),

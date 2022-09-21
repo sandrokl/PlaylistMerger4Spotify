@@ -482,7 +482,7 @@ class _MergingDefinitionState extends State<MergingDefinition> {
                         return Padding(
                           padding: const EdgeInsets.only(top: 8.0),
                           child: Scrollbar(
-                            thumbVisibility: true,
+                            trackVisibility: true,
                             thickness: 1.0,
                             child: SingleChildScrollView(
                               child: Column(
@@ -542,7 +542,7 @@ class _MergingDefinitionState extends State<MergingDefinition> {
                 visible: _selectedTab == 1,
                 child: Expanded(
                   child: Scrollbar(
-                    thumbVisibility: true,
+                    trackVisibility: true,
                     thickness: 1.0,
                     child: SingleChildScrollView(
                       child: Padding(

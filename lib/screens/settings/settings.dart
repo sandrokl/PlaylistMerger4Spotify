@@ -88,7 +88,7 @@ class _SettingsState extends State<Settings> {
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Scrollbar(
-          thumbVisibility: true,
+          trackVisibility: true,
           thickness: 1.0,
           child: SingleChildScrollView(
             child: Column(

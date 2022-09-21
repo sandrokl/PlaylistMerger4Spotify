@@ -210,7 +210,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                   child: Padding(
                                     padding: const EdgeInsets.only(right: 12.0),
                                     child: Scrollbar(
-                                      thumbVisibility: true,
+                                      trackVisibility: true,
                                       thickness: 1.0,
                                       child: ListView.builder(
                                         itemCount: snapshot.data!.length,
