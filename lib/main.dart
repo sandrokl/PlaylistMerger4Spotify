@@ -11,10 +11,12 @@ import 'package:playlistmerger4spotify/store/theme_store.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:workmanager/workmanager.dart';
+
 import 'generated/l10n.dart';
 
 late bool isFirstTime;
 
+@pragma('vm:entry-point')
 void callbackDispatcher() {
   Workmanager().executeTask(WorkManagerHelper().handleTaskRequest);
 }
