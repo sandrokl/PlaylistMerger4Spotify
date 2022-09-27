@@ -50,7 +50,7 @@ android {
     defaultConfig {
         applicationId "net.sandrokl.playlistmerger4spotify"
         minSdkVersion 23
-        targetSdkVersion 30
+        targetSdkVersion 31
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }
@@ -65,8 +65,9 @@ android {
    }
    buildTypes {
        release {
-           minifyEnabled false
-           shrinkResources false      
+           minifyEnabled true
+           shrinkResources false
+           proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
            signingConfig signingConfigs.release
        }
    }

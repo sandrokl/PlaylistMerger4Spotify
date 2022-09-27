@@ -32,7 +32,7 @@ class SpotifyClient {
           customUriScheme: secrets.spotify_customUriScheme,
           redirectUri: secrets.spotify_redirectUri,
         ),
-        grantType: OAuth2Helper.AUTHORIZATION_CODE,
+        grantType: OAuth2Helper.authorizationCode,
         clientId: secrets.spotify_clientId,
         clientSecret: secrets.spotify_clientSecret,
         scopes: secrets.spotify_scopes);
