@@ -6,7 +6,8 @@ import 'package:playlistmerger4spotify/database/models/tracks_new_distinct.dart'
 part 'tracks_new_distinct_dao.g.dart';
 
 @DriftAccessor(tables: [TracksNewDistinct])
-class TracksNewDistinctDao extends DatabaseAccessor<AppDatabase> with _$TracksNewDistinctDaoMixin {
+class TracksNewDistinctDao extends DatabaseAccessor<AppDatabase>
+    with _$TracksNewDistinctDaoMixin {
   TracksNewDistinctDao(AppDatabase db) : super(db);
 
   Future<void> deleteAll(int jobId) async {
@@ -14,7 +15,11 @@ class TracksNewDistinctDao extends DatabaseAccessor<AppDatabase> with _$TracksNe
   }
 
   Future<void> deleteByIds(int jobId, List<String?> trackIds) async {
-    await (delete(tracksNewDistinct)..where((t) => t.jobId.equals(jobId) & t.trackId.isIn(trackIds))).go();
+    await (delete(tracksNewDistinct)
+          ..where((t) =>
+              t.jobId.equals(jobId) &
+              t.trackId.isIn(trackIds as Iterable<String>)))
+        .go();
   }
 
   Future<void> insertAll(List<Track> tracks) async {
@@ -28,30 +33,40 @@ class TracksNewDistinctDao extends DatabaseAccessor<AppDatabase> with _$TracksNe
 
   Future<List<Track>> getTracksNotInCurrent(int jobId) async {
     var currentTracksIds = await db.tracksCurrentDao.getAllTracksIds(jobId);
-    return (select(tracksNewDistinct)..where((t) => t.jobId.equals(jobId) & t.trackId.isNotIn(currentTracksIds))).get();
+    return (select(tracksNewDistinct)
+          ..where((t) =>
+              t.jobId.equals(jobId) &
+              t.trackId.isNotIn(currentTracksIds as Iterable<String>)))
+        .get();
   }
 
   Future<List<String?>> getAllTracksIds(int jobId) async {
     var queryTracksIds = selectOnly(tracksNewDistinct, distinct: true)
       ..addColumns([tracksNewDistinct.trackId])
       ..where(tracksNewDistinct.jobId.equals(jobId));
-    var values = await queryTracksIds.map((t) => t.read(tracksNewDistinct.trackId)).get();
+    var values = await queryTracksIds
+        .map((t) => t.read(tracksNewDistinct.trackId))
+        .get();
     return values;
   }
 
   Future<List<String?>> getTracksToIgnore(int jobId) async {
-    var queryTracksIds = selectOnly(tracksNewDistinct, distinct: true, includeJoinedTableColumns: false)
+    var queryTracksIds = selectOnly(tracksNewDistinct, distinct: true)
       ..addColumns([tracksNewDistinct.trackId])
       ..join([
         innerJoin(
           db.tracksToExclude,
           tracksNewDistinct.name.equalsExp(db.tracksToExclude.name) &
-              tracksNewDistinct.trackArtists.equalsExp(db.tracksToExclude.trackArtists) &
+              tracksNewDistinct.trackArtists
+                  .equalsExp(db.tracksToExclude.trackArtists) &
               tracksNewDistinct.jobId.equalsExp(db.tracksToExclude.jobId),
+          useColumns: false,
         ),
       ])
       ..where(tracksNewDistinct.jobId.equals(jobId));
-    var values = await queryTracksIds.map((t) => t.read(tracksNewDistinct.trackId)).get();
+    var values = await queryTracksIds
+        .map((t) => t.read(tracksNewDistinct.trackId))
+        .get();
     return values;
   }
 }

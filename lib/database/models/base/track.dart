@@ -21,6 +21,20 @@ class Track extends DataClass implements Insertable<Track> {
     required this.addedAt,
   });
 
+  factory Track.fromMap(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return Track(
+      jobId: data['${effectivePrefix}job_id'] as int,
+      playlistId: data['${effectivePrefix}playlist_id'] as String,
+      trackId: data['${effectivePrefix}track_id'] as String,
+      name: data['${effectivePrefix}name'] as String,
+      trackArtists: data['${effectivePrefix}track_artists'] as String,
+      trackUri: data['${effectivePrefix}track_uri'] as String,
+      durationMs: data['${effectivePrefix}duration_ms'] as int,
+      addedAt: data['${effectivePrefix}added_at'] as DateTime,
+    );
+  }
+
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -35,7 +49,8 @@ class Track extends DataClass implements Insertable<Track> {
     return map;
   }
 
-  factory Track.fromJson(Map<String, dynamic> json, {ValueSerializer? serializer}) {
+  factory Track.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return Track(
       jobId: serializer.fromJson<int>(json['jobId']),
@@ -80,7 +95,8 @@ class Track extends DataClass implements Insertable<Track> {
   }
 
   @override
-  int get hashCode => Object.hash(jobId, playlistId, trackId, name, trackArtists, trackUri, durationMs, addedAt);
+  int get hashCode => Object.hash(jobId, playlistId, trackId, name,
+      trackArtists, trackUri, durationMs, addedAt);
 
   @override
   bool operator ==(Object other) =>
