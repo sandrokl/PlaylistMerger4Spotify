@@ -23,7 +23,7 @@ List<PopupMenuItem<String>> getPopUpMenuItems(BuildContext context) {
                   padding: const EdgeInsets.only(right: 8.0),
                   child: Icon(
                     item.icon,
-                    color: Theme.of(context).textTheme.bodyText1!.color,
+                    color: Theme.of(context).textTheme.bodyLarge!.color,
                   ),
                 ),
                 Text(

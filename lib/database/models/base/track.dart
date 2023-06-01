@@ -21,20 +21,6 @@ class Track extends DataClass implements Insertable<Track> {
     required this.addedAt,
   });
 
-  factory Track.fromData(Map<String, dynamic> data, {String? prefix}) {
-    final effectivePrefix = prefix ?? '';
-    return Track(
-      jobId: const IntType().mapFromDatabaseResponse(data['${effectivePrefix}job_id'])!,
-      playlistId: const StringType().mapFromDatabaseResponse(data['${effectivePrefix}playlist_id'])!,
-      trackId: const StringType().mapFromDatabaseResponse(data['${effectivePrefix}track_id'])!,
-      name: const StringType().mapFromDatabaseResponse(data['${effectivePrefix}name'])!,
-      trackArtists: const StringType().mapFromDatabaseResponse(data['${effectivePrefix}track_artists'])!,
-      trackUri: const StringType().mapFromDatabaseResponse(data['${effectivePrefix}track_uri'])!,
-      durationMs: const IntType().mapFromDatabaseResponse(data['${effectivePrefix}duration_ms'])!,
-      addedAt: const DateTimeType().mapFromDatabaseResponse(data['${effectivePrefix}added_at'])!,
-    );
-  }
-
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};

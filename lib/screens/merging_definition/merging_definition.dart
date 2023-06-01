@@ -63,7 +63,7 @@ class _MergingDefinitionState extends State<MergingDefinition> {
               children: [
                 Text(
                   S.of(context).createNewPlaylist,
-                  style: Theme.of(context).textTheme.headline6,
+                  style: Theme.of(context).textTheme.titleLarge,
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 12.0),
@@ -141,7 +141,7 @@ class _MergingDefinitionState extends State<MergingDefinition> {
                         padding: const EdgeInsets.only(bottom: 12.0),
                         child: Text(
                           S.of(context).excludeTitle,
-                          style: Theme.of(context).textTheme.headline6,
+                          style: Theme.of(context).textTheme.titleLarge,
                         ),
                       ),
                       Row(
@@ -309,7 +309,7 @@ class _MergingDefinitionState extends State<MergingDefinition> {
                             controlAffinity: ListTileControlAffinity.leading,
                             title: Text(
                               S.of(context).doNotShowAgain,
-                              style: Theme.of(context).textTheme.subtitle1,
+                              style: Theme.of(context).textTheme.titleMedium,
                             ),
                             value: _doNotShowAgainChecked,
                             onChanged: (newValue) {
@@ -405,7 +405,7 @@ class _MergingDefinitionState extends State<MergingDefinition> {
             children: [
               Text(
                 S.of(context).destinationPlaylist,
-                style: Theme.of(context).textTheme.headline6,
+                style: Theme.of(context).textTheme.titleLarge,
               ),
               FutureBuilder<List<Playlist>>(
                 future: _destinationPlaylistOptions,
@@ -465,7 +465,7 @@ class _MergingDefinitionState extends State<MergingDefinition> {
                         padding: const EdgeInsets.only(top: 12.0),
                         child: Text(
                           S.of(context).sourcePlaylists,
-                          style: Theme.of(context).textTheme.headline6,
+                          style: Theme.of(context).textTheme.titleLarge,
                         ),
                       ),
                     ],
@@ -528,7 +528,7 @@ class _MergingDefinitionState extends State<MergingDefinition> {
                   children: [
                     Text(
                       S.of(context).playlistIgnoreList,
-                      style: Theme.of(context).textTheme.headline6,
+                      style: Theme.of(context).textTheme.titleLarge,
                     ),
                     IconButton(
                       padding: const EdgeInsets.fromLTRB(8.0, 8.0, 0.0, 8.0),
@@ -586,7 +586,7 @@ class _MergingDefinitionState extends State<MergingDefinition> {
                                           title: Text(S.of(context).confirm),
                                           content: RichText(
                                             text: TextSpan(
-                                              style: Theme.of(context).textTheme.bodyText2,
+                                              style: Theme.of(context).textTheme.bodyMedium,
                                               text: S.of(context).excludeList_AreYouSureDelete,
                                               children: <TextSpan>[
                                                 TextSpan(
