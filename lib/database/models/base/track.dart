@@ -23,16 +23,20 @@ class Track extends DataClass implements Insertable<Track> {
 
   factory Track.fromMap(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    // ignore: invalid_use_of_internal_member
+    const sqlTypes = SqlTypes(false);
+
     return Track(
-      jobId: data['${effectivePrefix}job_id'] as int,
-      playlistId: data['${effectivePrefix}playlist_id'] as String,
-      trackId: data['${effectivePrefix}track_id'] as String,
-      name: data['${effectivePrefix}name'] as String,
-      trackArtists: data['${effectivePrefix}track_artists'] as String,
-      trackUri: data['${effectivePrefix}track_uri'] as String,
-      durationMs: data['${effectivePrefix}duration_ms'] as int,
-      addedAt: data['${effectivePrefix}added_at'] as DateTime,
-    );
+        jobId:
+            sqlTypes.read(DriftSqlType.int, data['${effectivePrefix}job_id'])!,
+        playlistId: data['${effectivePrefix}playlist_id'] as String,
+        trackId: data['${effectivePrefix}track_id'] as String,
+        name: data['${effectivePrefix}name'] as String,
+        trackArtists: data['${effectivePrefix}track_artists'] as String,
+        trackUri: data['${effectivePrefix}track_uri'] as String,
+        durationMs: data['${effectivePrefix}duration_ms'] as int,
+        addedAt: sqlTypes.read(
+            DriftSqlType.dateTime, data['${effectivePrefix}added_at'])!);
   }
 
   @override
