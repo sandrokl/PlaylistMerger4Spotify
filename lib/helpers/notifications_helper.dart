@@ -13,8 +13,15 @@ class NotificationsHelper {
 
   late FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin;
 
-  Future<void> initialize() async {
+  Future<void> initialize({bool askForPermission = true}) async {
     _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+
+    if (askForPermission) {
+      await _flutterLocalNotificationsPlugin
+          .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
+          ?.requestPermission();
+    }
+
     const AndroidInitializationSettings initializationSettingsAndroid = AndroidInitializationSettings(
       'res_ic_notif',
     );

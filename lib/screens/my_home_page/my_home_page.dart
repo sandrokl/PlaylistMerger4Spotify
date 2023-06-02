@@ -62,6 +62,8 @@ class _MyHomePageState extends State<MyHomePage> {
       var currentTheme = sharedPrefs.getString("appTheme") ?? AppThemes.system.name;
       final theme = AppThemes.values.firstWhere((t) => t.name == currentTheme);
       Provider.of<ThemeStore>(context, listen: false).setTheme(theme);
+
+      await NotificationsHelper().initialize();
     });
   }
 
@@ -201,7 +203,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                       padding: const EdgeInsets.all(30.0),
                                       child: Text(
                                         S.of(context).nothingHereForNow,
-                                        style: Theme.of(context).textTheme.headline6,
+                                        style: Theme.of(context).textTheme.titleLarge,
                                       ),
                                     ),
                                   ),
@@ -227,7 +229,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                                     title: Text(S.of(context).confirm),
                                                     content: RichText(
                                                       text: TextSpan(
-                                                        style: Theme.of(context).textTheme.bodyText2,
+                                                        style: Theme.of(context).textTheme.bodyMedium,
                                                         text: S.of(context).areYouSureYouWishToDelete_start,
                                                         children: <TextSpan>[
                                                           TextSpan(
@@ -255,9 +257,9 @@ class _MyHomePageState extends State<MyHomePage> {
                                             secondaryBackground: Container(
                                               color: Colors.red,
                                               padding: const EdgeInsets.only(right: 10.0),
-                                              child: Row(
+                                              child: const Row(
                                                 mainAxisAlignment: MainAxisAlignment.end,
-                                                children: const [
+                                                children: [
                                                   Icon(
                                                     Icons.delete,
                                                     color: Colors.white,
@@ -268,9 +270,9 @@ class _MyHomePageState extends State<MyHomePage> {
                                             background: Container(
                                               color: Colors.red,
                                               padding: const EdgeInsets.only(left: 10.0),
-                                              child: Row(
+                                              child: const Row(
                                                 mainAxisAlignment: MainAxisAlignment.start,
-                                                children: const [
+                                                children: [
                                                   Icon(
                                                     Icons.delete,
                                                     color: Colors.white,
@@ -336,7 +338,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                                               },
                                                               title: Text(
                                                                 S.of(context).updateThisInSpotify,
-                                                                style: Theme.of(context).textTheme.bodyText2,
+                                                                style: Theme.of(context).textTheme.bodyMedium,
                                                               ),
                                                               leading: const Icon(
                                                                 Icons.call_merge,
@@ -353,7 +355,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                                               },
                                                               title: Text(
                                                                 S.of(context).openInSpotify,
-                                                                style: Theme.of(context).textTheme.bodyText2,
+                                                                style: Theme.of(context).textTheme.bodyMedium,
                                                               ),
                                                               leading: const Icon(Icons.play_circle_fill_outlined),
                                                             ),
@@ -369,7 +371,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                                                       title: Text(S.of(context).confirm),
                                                                       content: RichText(
                                                                         text: TextSpan(
-                                                                          style: Theme.of(context).textTheme.bodyText2,
+                                                                          style: Theme.of(context).textTheme.bodyMedium,
                                                                           text: S
                                                                               .of(context)
                                                                               .areYouSureYouWishToDelete_start,
@@ -408,7 +410,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                                               },
                                                               title: Text(
                                                                 S.of(context).deleteThisMergingRule,
-                                                                style: Theme.of(context).textTheme.bodyText2,
+                                                                style: Theme.of(context).textTheme.bodyMedium,
                                                               ),
                                                               leading: const Icon(Icons.delete),
                                                             ),
@@ -430,7 +432,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                                               },
                                                               title: Text(
                                                                 S.of(context).modifyThisMergingRule,
-                                                                style: Theme.of(context).textTheme.bodyText2,
+                                                                style: Theme.of(context).textTheme.bodyMedium,
                                                               ),
                                                               leading: const Icon(Icons.edit_rounded),
                                                             ),
@@ -466,7 +468,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                 padding: const EdgeInsets.all(30.0),
                                 child: Text(
                                   S.of(context).nothingHereForNow,
-                                  style: Theme.of(context).textTheme.headline6,
+                                  style: Theme.of(context).textTheme.titleLarge,
                                 ),
                               ),
                             ),

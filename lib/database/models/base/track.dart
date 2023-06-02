@@ -21,18 +21,22 @@ class Track extends DataClass implements Insertable<Track> {
     required this.addedAt,
   });
 
-  factory Track.fromData(Map<String, dynamic> data, {String? prefix}) {
-    final effectivePrefix = prefix ?? '';
+  factory Track.fromMap(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    // ignore: invalid_use_of_internal_member
+    const sqlTypes = SqlTypes(false);
+
     return Track(
-      jobId: const IntType().mapFromDatabaseResponse(data['${effectivePrefix}job_id'])!,
-      playlistId: const StringType().mapFromDatabaseResponse(data['${effectivePrefix}playlist_id'])!,
-      trackId: const StringType().mapFromDatabaseResponse(data['${effectivePrefix}track_id'])!,
-      name: const StringType().mapFromDatabaseResponse(data['${effectivePrefix}name'])!,
-      trackArtists: const StringType().mapFromDatabaseResponse(data['${effectivePrefix}track_artists'])!,
-      trackUri: const StringType().mapFromDatabaseResponse(data['${effectivePrefix}track_uri'])!,
-      durationMs: const IntType().mapFromDatabaseResponse(data['${effectivePrefix}duration_ms'])!,
-      addedAt: const DateTimeType().mapFromDatabaseResponse(data['${effectivePrefix}added_at'])!,
-    );
+        jobId:
+            sqlTypes.read(DriftSqlType.int, data['${effectivePrefix}job_id'])!,
+        playlistId: data['${effectivePrefix}playlist_id'] as String,
+        trackId: data['${effectivePrefix}track_id'] as String,
+        name: data['${effectivePrefix}name'] as String,
+        trackArtists: data['${effectivePrefix}track_artists'] as String,
+        trackUri: data['${effectivePrefix}track_uri'] as String,
+        durationMs: data['${effectivePrefix}duration_ms'] as int,
+        addedAt: sqlTypes.read(
+            DriftSqlType.dateTime, data['${effectivePrefix}added_at'])!);
   }
 
   @override
@@ -49,7 +53,8 @@ class Track extends DataClass implements Insertable<Track> {
     return map;
   }
 
-  factory Track.fromJson(Map<String, dynamic> json, {ValueSerializer? serializer}) {
+  factory Track.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return Track(
       jobId: serializer.fromJson<int>(json['jobId']),
@@ -94,7 +99,8 @@ class Track extends DataClass implements Insertable<Track> {
   }
 
   @override
-  int get hashCode => Object.hash(jobId, playlistId, trackId, name, trackArtists, trackUri, durationMs, addedAt);
+  int get hashCode => Object.hash(jobId, playlistId, trackId, name,
+      trackArtists, trackUri, durationMs, addedAt);
 
   @override
   bool operator ==(Object other) =>

@@ -14,7 +14,8 @@ class TracksNewDistinctDao extends DatabaseAccessor<AppDatabase> with _$TracksNe
   }
 
   Future<void> deleteByIds(int jobId, List<String?> trackIds) async {
-    await (delete(tracksNewDistinct)..where((t) => t.jobId.equals(jobId) & t.trackId.isIn(trackIds))).go();
+    await (delete(tracksNewDistinct)..where((t) => t.jobId.equals(jobId) & t.trackId.isIn(trackIds.map((e) => e!))))
+        .go();
   }
 
   Future<void> insertAll(List<Track> tracks) async {
@@ -28,7 +29,9 @@ class TracksNewDistinctDao extends DatabaseAccessor<AppDatabase> with _$TracksNe
 
   Future<List<Track>> getTracksNotInCurrent(int jobId) async {
     var currentTracksIds = await db.tracksCurrentDao.getAllTracksIds(jobId);
-    return (select(tracksNewDistinct)..where((t) => t.jobId.equals(jobId) & t.trackId.isNotIn(currentTracksIds))).get();
+    return (select(tracksNewDistinct)
+          ..where((t) => t.jobId.equals(jobId) & t.trackId.isNotIn(currentTracksIds.map((e) => e!))))
+        .get();
   }
 
   Future<List<String?>> getAllTracksIds(int jobId) async {
@@ -40,7 +43,7 @@ class TracksNewDistinctDao extends DatabaseAccessor<AppDatabase> with _$TracksNe
   }
 
   Future<List<String?>> getTracksToIgnore(int jobId) async {
-    var queryTracksIds = selectOnly(tracksNewDistinct, distinct: true, includeJoinedTableColumns: false)
+    var queryTracksIds = selectOnly(tracksNewDistinct, distinct: true)
       ..addColumns([tracksNewDistinct.trackId])
       ..join([
         innerJoin(
@@ -48,6 +51,7 @@ class TracksNewDistinctDao extends DatabaseAccessor<AppDatabase> with _$TracksNe
           tracksNewDistinct.name.equalsExp(db.tracksToExclude.name) &
               tracksNewDistinct.trackArtists.equalsExp(db.tracksToExclude.trackArtists) &
               tracksNewDistinct.jobId.equalsExp(db.tracksToExclude.jobId),
+          useColumns: false,
         ),
       ])
       ..where(tracksNewDistinct.jobId.equals(jobId));

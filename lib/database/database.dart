@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
 import 'package:path/path.dart' as p;
@@ -12,17 +13,17 @@ import 'package:playlistmerger4spotify/database/dao/tracks_new_distinct_dao.dart
 import 'package:playlistmerger4spotify/database/dao/tracks_to_add_dao.dart';
 import 'package:playlistmerger4spotify/database/dao/tracks_to_exclude_dao.dart';
 import 'package:playlistmerger4spotify/database/dao/tracks_to_remove_dao.dart';
+import 'package:playlistmerger4spotify/database/models/base/track.dart';
 import 'package:playlistmerger4spotify/database/models/merging_results.dart';
+import 'package:playlistmerger4spotify/database/models/playlists.dart';
 import 'package:playlistmerger4spotify/database/models/playlists_to_ignore.dart';
+import 'package:playlistmerger4spotify/database/models/playlists_to_merge.dart';
 import 'package:playlistmerger4spotify/database/models/tracks_current.dart';
 import 'package:playlistmerger4spotify/database/models/tracks_new_all.dart';
 import 'package:playlistmerger4spotify/database/models/tracks_new_distinct.dart';
-import 'package:playlistmerger4spotify/database/models/playlists.dart';
-import 'package:playlistmerger4spotify/database/models/playlists_to_merge.dart';
 import 'package:playlistmerger4spotify/database/models/tracks_to_add.dart';
 import 'package:playlistmerger4spotify/database/models/tracks_to_exclude.dart';
 import 'package:playlistmerger4spotify/database/models/tracks_to_remove.dart';
-import 'package:playlistmerger4spotify/database/models/base/track.dart';
 import 'package:sqflite/sqflite.dart' as sqflite;
 
 import 'old_database_helper.dart';

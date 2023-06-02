@@ -29,6 +29,8 @@ class TracksCurrentDao extends DatabaseAccessor<AppDatabase> with _$TracksCurren
 
   Future<List<Track>> getTracksNotNewDistinct(int jobId) async {
     var newDistinctTracksIds = await db.tracksNewDistinctDao.getAllTracksIds(jobId);
-    return (select(tracksCurrent)..where((t) => t.jobId.equals(jobId) & t.trackId.isNotIn(newDistinctTracksIds))).get();
+    return (select(tracksCurrent)
+          ..where((t) => t.jobId.equals(jobId) & t.trackId.isNotIn(newDistinctTracksIds.map((e) => e!))))
+        .get();
   }
 }

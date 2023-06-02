@@ -6,7 +6,8 @@ import 'package:playlistmerger4spotify/database/models/tracks_new_all.dart';
 part 'tracks_new_all_dao.g.dart';
 
 @DriftAccessor(tables: [TracksNewAll])
-class TracksNewAllDao extends DatabaseAccessor<AppDatabase> with _$TracksNewAllDaoMixin {
+class TracksNewAllDao extends DatabaseAccessor<AppDatabase>
+    with _$TracksNewAllDaoMixin {
   TracksNewAllDao(AppDatabase db) : super(db);
 
   Future<void> insertAll(List<Track> listToInsert) async {
@@ -26,7 +27,7 @@ class TracksNewAllDao extends DatabaseAccessor<AppDatabase> with _$TracksNewAllD
       variables: [Variable.withInt(jobId)],
       readsFrom: {db.tracksNewAll},
     ).get();
-    return rows.map((row) => Track.fromData(row.data)).toList();
+    return rows.map((row) => Track.fromMap(row.data)).toList();
   }
 
   Future<void> deleteAll(int jobId) async {
