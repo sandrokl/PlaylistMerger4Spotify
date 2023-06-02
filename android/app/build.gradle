@@ -46,6 +46,7 @@ android {
     }
 
     compileSdkVersion 33
+    namespace "net.sandrokl.playlistmerger4spotify"
 
     defaultConfig {
         applicationId "net.sandrokl.playlistmerger4spotify"
