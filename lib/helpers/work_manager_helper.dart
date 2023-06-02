@@ -49,7 +49,7 @@ class WorkManagerHelper {
   }
 
   Future<bool> handleTaskRequest(String task, Map<String, dynamic>? inputData) async {
-    NotificationsHelper().initialize();
+    NotificationsHelper().initialize(askForPermission: false);
 
     final String notificationInProgressChannelId = inputData?["notificationInProgressChannelId"];
     final String notificationInProgressChannelName = inputData?["notificationInProgressChannelName"];

@@ -62,6 +62,8 @@ class _MyHomePageState extends State<MyHomePage> {
       var currentTheme = sharedPrefs.getString("appTheme") ?? AppThemes.system.name;
       final theme = AppThemes.values.firstWhere((t) => t.name == currentTheme);
       Provider.of<ThemeStore>(context, listen: false).setTheme(theme);
+
+      await NotificationsHelper().initialize();
     });
   }
 
