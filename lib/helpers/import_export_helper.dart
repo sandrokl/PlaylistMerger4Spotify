@@ -58,7 +58,8 @@ Future<void> exportMergingDefinitions(BuildContext context) async {
   final stringContent = jsonEncoder.convert(backupInfo.toJson());
   await file.writeAsString(stringContent);
 
-  await Share.shareFiles([file.path], mimeTypes: ["application/json"], subject: fileName);
+  final fileToSend = XFile(file.path, mimeType: "application/json");
+  await Share.shareXFiles([fileToSend], subject: fileName);
 }
 
 Future<void> importMergingDefinitions(BuildContext context) async {

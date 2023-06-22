@@ -34,6 +34,8 @@ class MergingHelper {
     try {
       var mergingPlaylists = await _db.playlistsToMergeDao.getCurrentDestinationPlaylistsIds();
       if (mergingPlaylists.isNotEmpty) {
+        bool hasFailure = false;
+
         for (var id in mergingPlaylists) {
           if (id != null) {
             bool shouldUpdate = true;
@@ -63,10 +65,14 @@ class MergingHelper {
                 isAutomaticUpdate: isAutomaticUpdate,
               );
               if (!result) {
-                throw Exception("FAILED");
+                hasFailure = true;
               }
             }
           }
+        }
+
+        if (hasFailure) {
+          throw Exception("FAILED");
         }
       }
 
@@ -161,6 +167,11 @@ class MergingHelper {
 
       // STEP 5: generate list of tracks to add
       var tracksToAdd = await _db.tracksNewDistinctDao.getTracksNotInCurrent(jobId);
+
+      // STEP 5.1: remove local tracks from tracks to add (not supported in the API)
+      tracksToAdd = tracksToAdd.where((e) => !e.trackUri.startsWith("spotify:local:")).toList();
+
+      // STEP 5.2: add to database
       await _db.tracksToAddDao.insertAll(tracksToAdd);
 
       // STEP 6: generate list of tracks to remove
