@@ -34,6 +34,8 @@ class MergingHelper {
     try {
       var mergingPlaylists = await _db.playlistsToMergeDao.getCurrentDestinationPlaylistsIds();
       if (mergingPlaylists.isNotEmpty) {
+        bool hasFailure = false;
+
         for (var id in mergingPlaylists) {
           if (id != null) {
             bool shouldUpdate = true;
@@ -63,10 +65,14 @@ class MergingHelper {
                 isAutomaticUpdate: isAutomaticUpdate,
               );
               if (!result) {
-                throw Exception("FAILED");
+                hasFailure = true;
               }
             }
           }
+        }
+
+        if (hasFailure) {
+          throw Exception("FAILED");
         }
       }
 
