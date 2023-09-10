@@ -36,7 +36,8 @@ class _MergingDefinitionState extends State<MergingDefinition> {
   final _formKeyAddExclude = GlobalKey<FormState>();
   final _newPlaylistNameController = TextEditingController();
   final _playlinkLinkController = TextEditingController();
-  final _playlistLinkRegex = RegExp(r'(?<=\/playlist\/).*?(?=\?|$)', caseSensitive: false);
+  final _playlistLinkRegex =
+      RegExp(r'(?<=\/playlist\/).*?(?=\?|$)', caseSensitive: false);
 
   PlaylistInfoForExclusion? _tempPlaylistForExclusion;
 
@@ -82,7 +83,8 @@ class _MergingDefinitionState extends State<MergingDefinition> {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                  padding: EdgeInsets.only(
+                      bottom: MediaQuery.of(context).viewInsets.bottom),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
@@ -96,7 +98,8 @@ class _MergingDefinitionState extends State<MergingDefinition> {
                       TextButton(
                         onPressed: () async {
                           if (_formKeyCreate.currentState!.validate()) {
-                            await _createNewPlaylist(_newPlaylistNameController.text);
+                            await _createNewPlaylist(
+                                _newPlaylistNameController.text);
                             _newPlaylistNameController.text = "";
                             Navigator.of(context).pop();
                           }
@@ -151,10 +154,13 @@ class _MergingDefinitionState extends State<MergingDefinition> {
                               controller: _playlinkLinkController,
                               keyboardType: TextInputType.url,
                               decoration: InputDecoration(
-                                labelText: S.of(context).excludePasteLinkToThePlaylist,
+                                labelText:
+                                    S.of(context).excludePasteLinkToThePlaylist,
                               ),
                               validator: (value) {
-                                if (value == null || value.isEmpty || !_playlistLinkRegex.hasMatch(value)) {
+                                if (value == null ||
+                                    value.isEmpty ||
+                                    !_playlistLinkRegex.hasMatch(value)) {
                                   return S.of(context).validationPlaylistLink;
                                 }
                                 return null;
@@ -165,8 +171,10 @@ class _MergingDefinitionState extends State<MergingDefinition> {
                             icon: const Icon(Icons.keyboard_double_arrow_right),
                             onPressed: () async {
                               if (_formKeyAddExclude.currentState!.validate()) {
-                                final id = _playlistLinkRegex.stringMatch(_playlinkLinkController.text)!;
-                                var playlist = await SpotifyClient().getPlaylistInfo(id);
+                                final id = _playlistLinkRegex
+                                    .stringMatch(_playlinkLinkController.text)!;
+                                var playlist =
+                                    await SpotifyClient().getPlaylistInfo(id);
                                 setState(() {
                                   _tempPlaylistForExclusion = playlist;
                                 });
@@ -183,7 +191,8 @@ class _MergingDefinitionState extends State<MergingDefinition> {
                             contentPadding: const EdgeInsets.only(top: 16.0),
                             leading: SizedBox.fromSize(
                               size: const Size(50.0, 50.0),
-                              child: Image.network(_tempPlaylistForExclusion!.playlistCoverArt),
+                              child: Image.network(
+                                  _tempPlaylistForExclusion!.playlistCoverArt),
                             ),
                             title: Text(
                               _tempPlaylistForExclusion!.name,
@@ -226,14 +235,19 @@ class _MergingDefinitionState extends State<MergingDefinition> {
   Future<void> _createNewPlaylist(String playlistName) async {
     final userId = _userStore.user!.id;
     var spotifyClient = SpotifyClient();
-    var createdPlaylist = await spotifyClient.createNewPlaylist(context, userId, playlistName);
-    await Provider.of<AppDatabase>(context, listen: false).playlistsDao.insertAll([createdPlaylist]);
+    var createdPlaylist =
+        await spotifyClient.createNewPlaylist(context, userId, playlistName);
+    await Provider.of<AppDatabase>(context, listen: false)
+        .playlistsDao
+        .insertAll([createdPlaylist]);
     _loadPlaylistsForScreen();
     _selectedDestinationPlaylist = createdPlaylist.playlistId;
   }
 
   void _addToExcludeList() {
-    if (_playlistsToExclude.where((p) => p.playlistId == _tempPlaylistForExclusion!.playlistId).isEmpty) {
+    if (_playlistsToExclude
+        .where((p) => p.playlistId == _tempPlaylistForExclusion!.playlistId)
+        .isEmpty) {
       setState(() {
         _playlistsToExclude.add(PlaylistToIgnore(
           destinationPlaylistId: '',
@@ -243,7 +257,8 @@ class _MergingDefinitionState extends State<MergingDefinition> {
           ownerName: _tempPlaylistForExclusion!.ownerName,
           openUrl: _tempPlaylistForExclusion!.openUrl,
         ));
-        _playlistsToExclude.sort((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
+        _playlistsToExclude.sort(
+            (a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
       });
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -260,16 +275,24 @@ class _MergingDefinitionState extends State<MergingDefinition> {
     final userId = _userStore.user!.id;
 
     if (widget.editingPlaylistId == null) {
-      _destinationPlaylistOptions = db.playlistsDao.getPossibleNewMergingPlaylists(userId);
+      _destinationPlaylistOptions =
+          db.playlistsDao.getPossibleNewMergingPlaylists(userId);
     } else {
       _selectedDestinationPlaylist = widget.editingPlaylistId!;
-      _destinationPlaylistOptions = db.playlistsDao.getPlaylistsByIdList([widget.editingPlaylistId!]);
-      db.playlistsToMergeDao.getPlaylistsToMergeByDestinationId(widget.editingPlaylistId!).then((list) async {
-        final pToIgnore = (await db.playlistsToIgnoreDao.getByDestinationId(_selectedDestinationPlaylist!));
+      _destinationPlaylistOptions =
+          db.playlistsDao.getPlaylistsByIdList([widget.editingPlaylistId!]);
+      db.playlistsToMergeDao
+          .getPlaylistsToMergeByDestinationId(widget.editingPlaylistId!)
+          .then((list) async {
+        final pToIgnore = (await db.playlistsToIgnoreDao
+            .getByDestinationId(_selectedDestinationPlaylist!));
 
         setState(() {
-          _selectedSourcePlaylists = list.map((p) => p.sourcePlaylistId).toList();
-          _playlistsToExclude = pToIgnore..sort((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
+          _selectedSourcePlaylists =
+              list.map((p) => p.sourcePlaylistId).toList();
+          _playlistsToExclude = pToIgnore
+            ..sort(
+                (a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
         });
       });
     }
@@ -302,7 +325,9 @@ class _MergingDefinitionState extends State<MergingDefinition> {
                       content: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Text(S.of(context).makeSureToChooseAPlaylistYouDontDirectlyAdd),
+                          Text(S
+                              .of(context)
+                              .makeSureToChooseAPlaylistYouDontDirectlyAdd),
                           CheckboxListTile(
                             visualDensity: VisualDensity.compact,
                             contentPadding: EdgeInsets.zero,
@@ -344,8 +369,10 @@ class _MergingDefinitionState extends State<MergingDefinition> {
   Future<void> saveChanges() async {
     var db = Provider.of<AppDatabase>(context, listen: false);
     if (_selectedDestinationPlaylist != null) {
-      await db.playlistsToMergeDao.updateMergedPlaylist(_selectedDestinationPlaylist!, _selectedSourcePlaylists);
-      await db.playlistsToIgnoreDao.updateIgnoredPlaylists(_selectedDestinationPlaylist!, _playlistsToExclude);
+      await db.playlistsToMergeDao.updateMergedPlaylist(
+          _selectedDestinationPlaylist!, _selectedSourcePlaylists);
+      await db.playlistsToIgnoreDao.updateIgnoredPlaylists(
+          _selectedDestinationPlaylist!, _playlistsToExclude);
     }
   }
 
@@ -410,7 +437,8 @@ class _MergingDefinitionState extends State<MergingDefinition> {
               FutureBuilder<List<Playlist>>(
                 future: _destinationPlaylistOptions,
                 builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.done && snapshot.hasData) {
+                  if (snapshot.connectionState == ConnectionState.done &&
+                      snapshot.hasData) {
                     return Padding(
                       padding: const EdgeInsets.only(top: 8.0),
                       child: Row(
@@ -428,7 +456,8 @@ class _MergingDefinitionState extends State<MergingDefinition> {
                                   ? null
                                   : Text(
                                       S.of(context).selectAPlaylist,
-                                      style: const TextStyle(color: Colors.grey),
+                                      style:
+                                          const TextStyle(color: Colors.grey),
                                       textAlign: TextAlign.start,
                                     ),
                               value: _selectedDestinationPlaylist,
@@ -436,15 +465,19 @@ class _MergingDefinitionState extends State<MergingDefinition> {
                                   ? (newValue) {
                                       setState(() {
                                         _selectedDestinationPlaylist = newValue;
-                                        _selectedSourcePlaylists.remove(newValue);
+                                        _selectedSourcePlaylists
+                                            .remove(newValue);
                                       });
                                     }
                                   : null,
                             ),
                           ),
                           IconButton(
-                            padding: const EdgeInsets.fromLTRB(8.0, 8.0, 0.0, 8.0),
-                            onPressed: widget.editingPlaylistId != null ? null : _showCreateNewPlaylist,
+                            padding:
+                                const EdgeInsets.fromLTRB(8.0, 8.0, 0.0, 8.0),
+                            onPressed: widget.editingPlaylistId != null
+                                ? null
+                                : _showCreateNewPlaylist,
                             icon: const Icon(Icons.add_circle_outline),
                           ),
                         ],
@@ -478,7 +511,8 @@ class _MergingDefinitionState extends State<MergingDefinition> {
                   child: FutureBuilder<List<Playlist>>(
                     future: _sourcePlaylistsOptions,
                     builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.done && snapshot.hasData) {
+                      if (snapshot.connectionState == ConnectionState.done &&
+                          snapshot.hasData) {
                         return Padding(
                           padding: const EdgeInsets.only(top: 8.0),
                           child: Scrollbar(
@@ -488,20 +522,27 @@ class _MergingDefinitionState extends State<MergingDefinition> {
                               child: Column(
                                 children: snapshot.data!.map((e) {
                                   return CheckboxListTile(
-                                    contentPadding: const EdgeInsets.only(right: 0.0, left: 0.0),
+                                    contentPadding: const EdgeInsets.only(
+                                        right: 0.0, left: 0.0),
                                     visualDensity: VisualDensity.compact,
-                                    value: (e.playlistId != _selectedDestinationPlaylist &&
-                                        _selectedSourcePlaylists.contains(e.playlistId)),
+                                    value: (e.playlistId !=
+                                            _selectedDestinationPlaylist &&
+                                        _selectedSourcePlaylists
+                                            .contains(e.playlistId)),
                                     title: Text(e.name),
-                                    onChanged: _selectedDestinationPlaylist != e.playlistId
+                                    onChanged: _selectedDestinationPlaylist !=
+                                            e.playlistId
                                         ? (newValue) {
-                                            if (e.playlistId != _selectedDestinationPlaylist) {
+                                            if (e.playlistId !=
+                                                _selectedDestinationPlaylist) {
                                               setState(() {
                                                 if (newValue != null) {
                                                   if (newValue) {
-                                                    _selectedSourcePlaylists.add(e.playlistId);
+                                                    _selectedSourcePlaylists
+                                                        .add(e.playlistId);
                                                   } else {
-                                                    _selectedSourcePlaylists.remove(e.playlistId);
+                                                    _selectedSourcePlaylists
+                                                        .remove(e.playlistId);
                                                   }
                                                 }
                                               });
@@ -557,15 +598,20 @@ class _MergingDefinitionState extends State<MergingDefinition> {
                                   Flexible(
                                     child: Text(
                                       S.of(context).howToAddToExcludeList,
-                                      style: Theme.of(context).textTheme.labelMedium,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .labelMedium,
                                       textAlign: TextAlign.left,
                                     ),
                                   ),
                                   IconButton(
-                                    icon: const Icon(Icons.open_in_new_outlined),
+                                    icon:
+                                        const Icon(Icons.open_in_new_outlined),
                                     onPressed: () async {
                                       await launchUrlString(
-                                          'https://sandrokl.net/playlistmerger4spotify/add-to-noinclude-list/');
+                                        'https://sandrokl.net/playlistmerger4spotify/add-to-noinclude-list/',
+                                        mode: LaunchMode.externalApplication,
+                                      );
                                     },
                                   )
                                 ],
@@ -586,12 +632,18 @@ class _MergingDefinitionState extends State<MergingDefinition> {
                                           title: Text(S.of(context).confirm),
                                           content: RichText(
                                             text: TextSpan(
-                                              style: Theme.of(context).textTheme.bodyMedium,
-                                              text: S.of(context).excludeList_AreYouSureDelete,
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyMedium,
+                                              text: S
+                                                  .of(context)
+                                                  .excludeList_AreYouSureDelete,
                                               children: <TextSpan>[
                                                 TextSpan(
                                                   text: e.name,
-                                                  style: const TextStyle(fontWeight: FontWeight.bold),
+                                                  style: const TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold),
                                                 ),
                                                 const TextSpan(text: ' ?'),
                                               ],
@@ -599,7 +651,8 @@ class _MergingDefinitionState extends State<MergingDefinition> {
                                           ),
                                           actions: <Widget>[
                                             TextButton(
-                                              onPressed: () => Navigator.of(context).pop(),
+                                              onPressed: () =>
+                                                  Navigator.of(context).pop(),
                                               child: Text(S.of(context).cancel),
                                             ),
                                             TextButton(
