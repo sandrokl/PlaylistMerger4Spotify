@@ -19,12 +19,11 @@ class NotificationsHelper {
     if (askForPermission) {
       await _flutterLocalNotificationsPlugin
           .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
-          ?.requestPermission();
+          ?.requestNotificationsPermission();
     }
 
-    const AndroidInitializationSettings initializationSettingsAndroid = AndroidInitializationSettings(
-      'res_ic_notif',
-    );
+    const AndroidInitializationSettings initializationSettingsAndroid =
+        AndroidInitializationSettings('res_ic_notif');
     const InitializationSettings initializationSettings = InitializationSettings(
       android: initializationSettingsAndroid,
     );
@@ -43,19 +42,41 @@ class NotificationsHelper {
       color: Colors.green,
       channelShowBadge: true,
       playSound: false,
-      styleInformation: const BigTextStyleInformation('', htmlFormatTitle: true, htmlFormatContent: true),
+      styleInformation: const BigTextStyleInformation(
+        '',
+        htmlFormatTitle: true,
+        htmlFormatContent: true,
+      ),
     );
-    final platformNotificationsDetails = NotificationDetails(android: androidPlatformChannelSpecifics);
+    final platformNotificationsDetails = NotificationDetails(
+      android: androidPlatformChannelSpecifics,
+    );
     return platformNotificationsDetails;
   }
 
-  Future<void> showNotification(String channelId, String channelName, String title, String message) async {
-    final platformNotificationsDetails = _createPlatformNotificationsDetails(channelId, channelName);
-    await _flutterLocalNotificationsPlugin.show(_generateId(), title, message, platformNotificationsDetails,
-        payload: null);
+  Future<void> showNotification(
+    String channelId,
+    String channelName,
+    String title,
+    String message,
+  ) async {
+    final platformNotificationsDetails = _createPlatformNotificationsDetails(
+      channelId,
+      channelName,
+    );
+    await _flutterLocalNotificationsPlugin.show(
+      _generateId(),
+      title,
+      message,
+      platformNotificationsDetails,
+      payload: null,
+    );
   }
 
-  NotificationDetails _createPlatformPersistentNotificationsDetails(String channelId, String channelName) {
+  NotificationDetails _createPlatformPersistentNotificationsDetails(
+    String channelId,
+    String channelName,
+  ) {
     final androidPlatformChannelSpecifics = AndroidNotificationDetails(
       channelId,
       channelName,
@@ -68,13 +89,22 @@ class NotificationsHelper {
       ongoing: true,
       styleInformation: const DefaultStyleInformation(true, true),
     );
-    final platformNotificationsDetails = NotificationDetails(android: androidPlatformChannelSpecifics);
+    final platformNotificationsDetails = NotificationDetails(
+      android: androidPlatformChannelSpecifics,
+    );
     return platformNotificationsDetails;
   }
 
   Future<void> showPersistentNotification(
-      int notificationid, String channelId, String channelName, String message) async {
-    final platformNotificationsDetails = _createPlatformPersistentNotificationsDetails(channelId, channelName);
+    int notificationid,
+    String channelId,
+    String channelName,
+    String message,
+  ) async {
+    final platformNotificationsDetails = _createPlatformPersistentNotificationsDetails(
+      channelId,
+      channelName,
+    );
     await _flutterLocalNotificationsPlugin.show(
       notificationid,
       null,

@@ -6,7 +6,7 @@ part 'merging_results_dao.g.dart';
 
 @DriftAccessor(tables: [MergingResults])
 class MergingResultsDao extends DatabaseAccessor<AppDatabase> with _$MergingResultsDaoMixin {
-  MergingResultsDao(AppDatabase db) : super(db);
+  MergingResultsDao(super.db);
 
   Future<void> insert(MergingResult mr) async {
     await into(mergingResults).insert(mr);
@@ -15,7 +15,9 @@ class MergingResultsDao extends DatabaseAccessor<AppDatabase> with _$MergingResu
   Future<List<MergingResult>> getAll({int? limit, bool? mostRecentFirst}) async {
     var query = select(mergingResults);
     if (limit != null) query.limit(limit);
-    if (mostRecentFirst != null) query.orderBy([(p) => OrderingTerm(expression: p.runDate, mode: OrderingMode.desc)]);
+    if (mostRecentFirst != null) {
+      query.orderBy([(p) => OrderingTerm(expression: p.runDate, mode: OrderingMode.desc)]);
+    }
     return query.get();
   }
 

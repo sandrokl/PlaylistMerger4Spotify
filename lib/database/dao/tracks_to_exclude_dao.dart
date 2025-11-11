@@ -7,7 +7,7 @@ part 'tracks_to_exclude_dao.g.dart';
 
 @DriftAccessor(tables: [TracksToExclude])
 class TracksToExcludeDao extends DatabaseAccessor<AppDatabase> with _$TracksToExcludeDaoMixin {
-  TracksToExcludeDao(AppDatabase db) : super(db);
+  TracksToExcludeDao(super.db);
 
   Future<void> insertAll(List<Track> listToInsert) async {
     await batch((batch) {

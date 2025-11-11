@@ -7,7 +7,7 @@ part 'tracks_to_add_dao.g.dart';
 
 @DriftAccessor(tables: [TracksToAdd])
 class TracksToAddDao extends DatabaseAccessor<AppDatabase> with _$TracksToAddDaoMixin {
-  TracksToAddDao(AppDatabase db) : super(db);
+  TracksToAddDao(super.db);
 
   Future<void> insertAll(List<Track> listToInsert) async {
     await batch((batch) {

@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:playlistmerger4spotify/database/database.dart';
 import 'package:playlistmerger4spotify/helpers/work_manager_helper.dart';
 import 'package:playlistmerger4spotify/screens/my_home_page/my_home_page.dart';
 import 'package:playlistmerger4spotify/screens/onboarding/onboarding.dart';
-import 'package:playlistmerger4spotify/store/spotify_user_store.dart';
-import 'package:playlistmerger4spotify/store/theme_store.dart';
+import 'package:playlistmerger4spotify/stores/spotify_user_store.dart';
+import 'package:playlistmerger4spotify/stores/theme_store.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:workmanager/workmanager.dart';
@@ -31,16 +30,9 @@ void main() async {
   runApp(
     MultiProvider(
       providers: [
-        Provider<ThemeStore>(
-          create: (_) => ThemeStore(),
-        ),
-        Provider<SpotifyUserStore>(
-          create: (_) => SpotifyUserStore(),
-        ),
-        Provider<AppDatabase>(
-          create: (_) => AppDatabase(),
-          dispose: (_, db) => db.close(),
-        ),
+        ChangeNotifierProvider<ThemeStore>(create: (_) => ThemeStore()),
+        ChangeNotifierProvider<SpotifyUserStore>(create: (_) => SpotifyUserStore()),
+        Provider<AppDatabase>(create: (_) => AppDatabase(), dispose: (_, db) => db.close()),
       ],
       child: const MyApp(),
     ),
@@ -48,14 +40,12 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    var themeStore = Provider.of<ThemeStore>(context);
-
-    return Observer(
-      builder: (context) {
+    return Consumer<ThemeStore>(
+      builder: (context, themeStore, child) {
         return MaterialApp(
           localizationsDelegates: const [
             S.delegate,
@@ -66,12 +56,14 @@ class MyApp extends StatelessWidget {
           supportedLocales: S.delegate.supportedLocales,
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
+            colorSchemeSeed: Colors.green,
+            useMaterial3: false,
             brightness: Brightness.light,
-            primarySwatch: Colors.green,
           ),
           darkTheme: ThemeData(
+            colorSchemeSeed: Colors.green,
+            useMaterial3: false,
             brightness: Brightness.dark,
-            primarySwatch: Colors.green,
           ),
           themeMode: themeStore.theme.name == "dark"
               ? ThemeMode.dark
