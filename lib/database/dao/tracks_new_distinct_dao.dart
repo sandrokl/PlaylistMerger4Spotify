@@ -7,30 +7,29 @@ part 'tracks_new_distinct_dao.g.dart';
 
 @DriftAccessor(tables: [TracksNewDistinct])
 class TracksNewDistinctDao extends DatabaseAccessor<AppDatabase> with _$TracksNewDistinctDaoMixin {
-  TracksNewDistinctDao(AppDatabase db) : super(db);
+  TracksNewDistinctDao(super.db);
 
   Future<void> deleteAll(int jobId) async {
     await (delete(tracksNewDistinct)..where((t) => t.jobId.equals(jobId))).go();
   }
 
   Future<void> deleteByIds(int jobId, List<String?> trackIds) async {
-    await (delete(tracksNewDistinct)..where((t) => t.jobId.equals(jobId) & t.trackId.isIn(trackIds.map((e) => e!))))
-        .go();
+    await (delete(
+      tracksNewDistinct,
+    )..where((t) => t.jobId.equals(jobId) & t.trackId.isIn(trackIds.map((e) => e!)))).go();
   }
 
   Future<void> insertAll(List<Track> tracks) async {
     await batch((batch) async {
-      batch.insertAllOnConflictUpdate(
-        tracksNewDistinct,
-        tracks,
-      );
+      batch.insertAllOnConflictUpdate(tracksNewDistinct, tracks);
     });
   }
 
   Future<List<Track>> getTracksNotInCurrent(int jobId) async {
     var currentTracksIds = await db.tracksCurrentDao.getAllTracksIds(jobId);
-    return (select(tracksNewDistinct)
-          ..where((t) => t.jobId.equals(jobId) & t.trackId.isNotIn(currentTracksIds.map((e) => e!))))
+    return (select(
+          tracksNewDistinct,
+        )..where((t) => t.jobId.equals(jobId) & t.trackId.isNotIn(currentTracksIds.map((e) => e!))))
         .get();
   }
 

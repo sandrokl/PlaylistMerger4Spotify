@@ -7,7 +7,7 @@ part 'tracks_to_remove_dao.g.dart';
 
 @DriftAccessor(tables: [TracksToRemove])
 class TracksToRemoveDao extends DatabaseAccessor<AppDatabase> with _$TracksToRemoveDaoMixin {
-  TracksToRemoveDao(AppDatabase db) : super(db);
+  TracksToRemoveDao(super.db);
 
   Future<void> insertAll(List<Track> listToInsert) async {
     await batch((batch) {

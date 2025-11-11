@@ -10,7 +10,7 @@ import 'package:playlistmerger4spotify/generated/l10n.dart';
 import 'package:provider/provider.dart';
 
 class MergingHistory extends StatefulWidget {
-  const MergingHistory({Key? key}) : super(key: key);
+  const MergingHistory({super.key});
 
   @override
   _MergingHistoryState createState() => _MergingHistoryState();
@@ -37,7 +37,9 @@ class _MergingHistoryState extends State<MergingHistory> {
       final db = Provider.of<AppDatabase>(context, listen: false);
       final merged = await db.playlistsDao.getMergedPlaylists();
       var history = await db.mergingResultsDao.getAll(limit: 500, mostRecentFirst: true);
-      history = history.where((h) => merged.where((m) => m.playlistId == h.playlistId).isNotEmpty).toList();
+      history = history
+          .where((h) => merged.where((m) => m.playlistId == h.playlistId).isNotEmpty)
+          .toList();
 
       setState(() {
         _listMergedPlaylists.addAll(merged);
@@ -55,25 +57,23 @@ class _MergingHistoryState extends State<MergingHistory> {
         child: Column(
           children: [
             DropdownButton<String>(
-                items: <DropdownMenuItem<String>>[
-                  DropdownMenuItem<String>(
-                    value: "",
-                    child: Text(S.of(context).historyViewAllPlaylistsHistory),
-                  ),
-                  ..._listMergedPlaylists
-                      .map((e) => DropdownMenuItem<String>(
-                            value: e.playlistId,
-                            child: Text(e.name),
-                          ))
-                      .toList(),
-                ],
-                onChanged: (newValue) {
-                  setState(() {
-                    if (newValue != null) _selectedFilter = newValue;
-                  });
-                },
-                isExpanded: true,
-                value: _selectedFilter),
+              items: <DropdownMenuItem<String>>[
+                DropdownMenuItem<String>(
+                  value: "",
+                  child: Text(S.of(context).historyViewAllPlaylistsHistory),
+                ),
+                ..._listMergedPlaylists.map(
+                  (e) => DropdownMenuItem<String>(value: e.playlistId, child: Text(e.name)),
+                ),
+              ],
+              onChanged: (newValue) {
+                setState(() {
+                  if (newValue != null) _selectedFilter = newValue;
+                });
+              },
+              isExpanded: true,
+              value: _selectedFilter,
+            ),
             Expanded(
               child: Scrollbar(
                 trackVisibility: true,
@@ -86,31 +86,40 @@ class _MergingHistoryState extends State<MergingHistory> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          _listMergedPlaylists.firstWhere((p) => p.playlistId == item.playlistId).name,
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                          ),
+                          _listMergedPlaylists
+                              .firstWhere((p) => p.playlistId == item.playlistId)
+                              .name,
+                          style: const TextStyle(fontWeight: FontWeight.bold),
                         ),
                         Text(DateFormat.yMd().add_jms().format(item.runDate)),
-                        Text(S.of(context).historyResult +
-                            (item.successed ? S.of(context).historySuccess : S.of(context).historyFail)),
                         Text(
-                          S.of(context).historyTracksAddedRemoved(
-                              item.tracksAdded?.toString() ?? S.of(context).historyNA,
-                              item.tracksRemoved?.toString() ?? S.of(context).historyNA),
+                          S.of(context).historyResult +
+                              (item.successed
+                                  ? S.of(context).historySuccess
+                                  : S.of(context).historyFail),
                         ),
                         Text(
-                          S.of(context).historyPromptedBy(item.triggeredBy == TriggeredBy.user
-                              ? S.of(context).historyYou
-                              : S.of(context).historyAutomaticUpdate),
+                          S
+                              .of(context)
+                              .historyTracksAddedRemoved(
+                                item.tracksAdded?.toString() ?? S.of(context).historyNA,
+                                item.tracksRemoved?.toString() ?? S.of(context).historyNA,
+                              ),
+                        ),
+                        Text(
+                          S
+                              .of(context)
+                              .historyPromptedBy(
+                                item.triggeredBy == TriggeredBy.user
+                                    ? S.of(context).historyYou
+                                    : S.of(context).historyAutomaticUpdate,
+                              ),
                         ),
                       ],
                     );
                   }),
-                  separatorBuilder: (_, __) {
-                    return Divider(
-                      color: Theme.of(context).primaryColor,
-                    );
+                  separatorBuilder: (_, _) {
+                    return Divider(color: Theme.of(context).primaryColor);
                   },
                   itemCount: _filteredList.length,
                 ),

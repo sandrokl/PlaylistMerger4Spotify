@@ -7,7 +7,7 @@ part 'tracks_current_dao.g.dart';
 
 @DriftAccessor(tables: [TracksCurrent])
 class TracksCurrentDao extends DatabaseAccessor<AppDatabase> with _$TracksCurrentDaoMixin {
-  TracksCurrentDao(AppDatabase db) : super(db);
+  TracksCurrentDao(super.db);
 
   Future<void> insertAll(List<Track> listToInsert) async {
     await batch((batch) {
@@ -29,8 +29,9 @@ class TracksCurrentDao extends DatabaseAccessor<AppDatabase> with _$TracksCurren
 
   Future<List<Track>> getTracksNotNewDistinct(int jobId) async {
     var newDistinctTracksIds = await db.tracksNewDistinctDao.getAllTracksIds(jobId);
-    return (select(tracksCurrent)
-          ..where((t) => t.jobId.equals(jobId) & t.trackId.isNotIn(newDistinctTracksIds.map((e) => e!))))
+    return (select(tracksCurrent)..where(
+          (t) => t.jobId.equals(jobId) & t.trackId.isNotIn(newDistinctTracksIds.map((e) => e!)),
+        ))
         .get();
   }
 }

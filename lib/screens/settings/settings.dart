@@ -8,13 +8,13 @@ import 'package:playlistmerger4spotify/generated/l10n.dart';
 import 'package:playlistmerger4spotify/helpers/notifications_helper.dart';
 import 'package:playlistmerger4spotify/helpers/work_manager_helper.dart';
 import 'package:playlistmerger4spotify/screens/merging_history/merging_history.dart';
-import 'package:playlistmerger4spotify/store/theme_store.dart';
+import 'package:playlistmerger4spotify/stores/theme_store.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 class Settings extends StatefulWidget {
-  const Settings({Key? key}) : super(key: key);
+  const Settings({super.key});
 
   @override
   _SettingsState createState() => _SettingsState();
@@ -82,9 +82,7 @@ class _SettingsState extends State<Settings> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(S.of(context).settings),
-      ),
+      appBar: AppBar(title: Text(S.of(context).settings)),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Scrollbar(
@@ -109,21 +107,19 @@ class _SettingsState extends State<Settings> {
                     ),
                     DropdownButton<String>(
                       value: _currentTheme,
-                      underline: Container(
-                        height: 1,
-                        color: Theme.of(context).primaryColor,
-                      ),
+                      underline: Container(height: 1, color: Theme.of(context).primaryColor),
                       onChanged: _changeTheme,
-                      items: <Map<String, String>>[
-                        {'value': 'system', 'text': S.of(context).settingsUseSystemTheme},
-                        {'value': 'light', 'text': S.of(context).settingsUseLightTheme},
-                        {'value': 'dark', 'text': S.of(context).settingsUseDarkTheme},
-                      ].map<DropdownMenuItem<String>>((Map<String, String> value) {
-                        return DropdownMenuItem<String>(
-                          value: value['value'],
-                          child: Text(value['text']!),
-                        );
-                      }).toList(),
+                      items:
+                          <Map<String, String>>[
+                            {'value': 'system', 'text': S.of(context).settingsUseSystemTheme},
+                            {'value': 'light', 'text': S.of(context).settingsUseLightTheme},
+                            {'value': 'dark', 'text': S.of(context).settingsUseDarkTheme},
+                          ].map<DropdownMenuItem<String>>((Map<String, String> value) {
+                            return DropdownMenuItem<String>(
+                              value: value['value'],
+                              child: Text(value['text']!),
+                            );
+                          }).toList(),
                     ),
                   ],
                 ),
@@ -136,27 +132,27 @@ class _SettingsState extends State<Settings> {
                     ),
                     DropdownButton<String>(
                       value: _currentLanguage ?? 'en',
-                      underline: Container(
-                        height: 1,
-                        color: Theme.of(context).primaryColor,
-                      ),
+                      underline: Container(height: 1, color: Theme.of(context).primaryColor),
                       onChanged: _changeLanguage,
-                      items: <Map<String, String>>[
-                        {'value': 'en', 'text': 'English'},
-                        {'value': 'fr', 'text': 'Français'},
-                        {'value': 'pt', 'text': 'Português'},
-                      ].map<DropdownMenuItem<String>>((Map<String, String> value) {
-                        return DropdownMenuItem<String>(
-                          value: value['value'],
-                          child: Text(value['text']!),
-                        );
-                      }).toList(),
+                      items:
+                          <Map<String, String>>[
+                            {'value': 'en', 'text': 'English'},
+                            {'value': 'fr', 'text': 'Français'},
+                            {'value': 'pt', 'text': 'Português'},
+                          ].map<DropdownMenuItem<String>>((Map<String, String> value) {
+                            return DropdownMenuItem<String>(
+                              value: value['value'],
+                              child: Text(value['text']!),
+                            );
+                          }).toList(),
                     ),
                   ],
                 ),
                 ListTile(
                   onTap: () {
-                    Navigator.of(context).push(MaterialPageRoute(builder: (_) => const MergingHistory()));
+                    Navigator.of(
+                      context,
+                    ).push(MaterialPageRoute(builder: (_) => const MergingHistory()));
                   },
                   contentPadding: const EdgeInsets.all(0),
                   title: Text(S.of(context).settingsMergingHistory),

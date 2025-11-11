@@ -6,17 +6,21 @@ part 'playlists_to_merge_dao.g.dart';
 
 @DriftAccessor(tables: [PlaylistsToMerge])
 class PlaylistsToMergeDao extends DatabaseAccessor<AppDatabase> with _$PlaylistsToMergeDaoMixin {
-  PlaylistsToMergeDao(AppDatabase db) : super(db);
+  PlaylistsToMergeDao(super.db);
 
   Future<List<String?>> getCurrentDestinationPlaylistsIds() async {
     var queryDestinationPlaylists = selectOnly(db.playlistsToMerge, distinct: true)
       ..addColumns([db.playlistsToMerge.destinationPlaylistId]);
-    var values = await queryDestinationPlaylists.map((p) => p.read(db.playlistsToMerge.destinationPlaylistId)).get();
+    var values = await queryDestinationPlaylists
+        .map((p) => p.read(db.playlistsToMerge.destinationPlaylistId))
+        .get();
     return values;
   }
 
   Future<List<PlaylistToMerge>> getPlaylistsToMergeByDestinationId(String destinationPlaylistId) {
-    return (select(playlistsToMerge)..where((tbl) => tbl.destinationPlaylistId.equals(destinationPlaylistId))).get();
+    return (select(
+      playlistsToMerge,
+    )..where((tbl) => tbl.destinationPlaylistId.equals(destinationPlaylistId))).get();
   }
 
   Future<void> deleteMergedPlaylist(String playlistId) async {
@@ -36,7 +40,9 @@ class PlaylistsToMergeDao extends DatabaseAccessor<AppDatabase> with _$Playlists
           // import sources
           if (deleteBeforeInsert) {
             batch.deleteWhere(
-                playlistsToMerge, (_) => playlistsToMerge.destinationPlaylistId.equals(destinationPlaylistId));
+              playlistsToMerge,
+              (_) => playlistsToMerge.destinationPlaylistId.equals(destinationPlaylistId),
+            );
           }
           batch.insertAllOnConflictUpdate(
             playlistsToMerge,

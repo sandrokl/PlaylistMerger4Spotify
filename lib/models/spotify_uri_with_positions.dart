@@ -3,7 +3,7 @@ import 'package:playlistmerger4spotify/models/spotify_uri.dart';
 class SpotifyUriWithPositions extends SpotifyUri {
   List<int> positions;
 
-  SpotifyUriWithPositions(String uri, this.positions) : super(uri);
+  SpotifyUriWithPositions(super.uri, this.positions);
 
   @override
   Map<String, dynamic> toMap() {

@@ -17,8 +17,11 @@ import 'package:share_plus/share_plus.dart';
 
 Future<void> exportMergingDefinitions(BuildContext context) async {
   final info = await PackageInfo.fromPlatform();
-  var backupInfo =
-      BackupInfo(appId: info.packageName, version: info.version, date: DateTime.now().toUtc().toIso8601String());
+  var backupInfo = BackupInfo(
+    appId: info.packageName,
+    version: info.version,
+    date: DateTime.now().toUtc().toIso8601String(),
+  );
   backupInfo.rules = [];
 
   final db = Provider.of<AppDatabase>(context, listen: false);
@@ -29,27 +32,34 @@ Future<void> exportMergingDefinitions(BuildContext context) async {
     r.sources = [];
     r.exclusions = [];
 
-    var sourcesId = await db.playlistsToMergeDao.getPlaylistsToMergeByDestinationId(destination.playlistId);
-    var sources = await db.playlistsDao.getPlaylistsByIdList(sourcesId.map((e) => e.sourcePlaylistId).toList());
+    var sourcesId = await db.playlistsToMergeDao.getPlaylistsToMergeByDestinationId(
+      destination.playlistId,
+    );
+    var sources = await db.playlistsDao.getPlaylistsByIdList(
+      sourcesId.map((e) => e.sourcePlaylistId).toList(),
+    );
     for (var source in sources) {
       r.sources!.add(Source(id: source.playlistId, name: source.name, owner: source.ownerId));
     }
 
     var exclusions = await db.playlistsToIgnoreDao.getByDestinationId(destination.playlistId);
     for (var exclusion in exclusions) {
-      r.exclusions!.add(Exclusion(
-        playlistId: exclusion.playlistId,
-        name: exclusion.name,
-        ownerId: exclusion.ownerId,
-        ownerName: exclusion.ownerName,
-        openUrl: exclusion.openUrl,
-      ));
+      r.exclusions!.add(
+        Exclusion(
+          playlistId: exclusion.playlistId,
+          name: exclusion.name,
+          ownerId: exclusion.ownerId,
+          ownerName: exclusion.ownerName,
+          openUrl: exclusion.openUrl,
+        ),
+      );
     }
 
     backupInfo.rules!.add(r);
   }
 
-  final fileName = "playlistmerger4spotify-${DateFormat('yyyyMMdd-HHmm').format(DateTime.now())}.json";
+  final fileName =
+      "playlistmerger4spotify-${DateFormat('yyyyMMdd-HHmm').format(DateTime.now())}.json";
   final directory = await getTemporaryDirectory();
   final destinationFile = join(directory.path, fileName);
 
@@ -59,12 +69,17 @@ Future<void> exportMergingDefinitions(BuildContext context) async {
   await file.writeAsString(stringContent);
 
   final fileToSend = XFile(file.path, mimeType: "application/json");
-  await Share.shareXFiles([fileToSend], subject: fileName);
+  final params = ShareParams(text: fileName, files: [fileToSend]);
+  await SharePlus.instance.share(params);
 }
 
 Future<void> importMergingDefinitions(BuildContext context) async {
   var result = await FilePicker.platform.pickFiles(
-      allowMultiple: false, type: FileType.custom, allowedExtensions: ["json"], dialogTitle: "Choose file to import");
+    allowMultiple: false,
+    type: FileType.custom,
+    allowedExtensions: ["json"],
+    dialogTitle: "Choose file to import",
+  );
   if (result != null) {
     var file = File(result.files.first.path!);
     var jsonString = await file.readAsString();
@@ -103,10 +118,8 @@ Future<void> importMergingDefinitions(BuildContext context) async {
         }
       }
     }
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(S.of(context).mergingDefinitionsImportedSuccessfully),
-      ),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(S.of(context).mergingDefinitionsImportedSuccessfully)));
   }
 }

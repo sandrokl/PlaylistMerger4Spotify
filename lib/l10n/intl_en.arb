@@ -1,4 +1,5 @@
 {
+  "@@locale": "en",
   "appTitle": "PlaylistMerger 4 Spotify",
   "spotifyUser": "Spotify user",
   "ok": "OK",
