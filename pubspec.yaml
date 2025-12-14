@@ -2,7 +2,7 @@ name: playlistmerger4spotify
 description: "PlaylistMerger 4 Spotify"
 publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
-version: 2.8.2512141-1+202512141
+version: 2.8.251214-2+202512142
 
 environment:
   sdk: ^3.9.0
